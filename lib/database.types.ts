@@ -113,5 +113,3 @@ export interface Database {
     Enums: {};
   };
 }
-
-

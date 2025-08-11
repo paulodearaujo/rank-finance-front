@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -8,8 +9,20 @@ export default function Home() {
         <p className="text-sm text-muted-foreground">
           Next.js + Supabase + shadcn/ui
         </p>
-        <div className="pt-2">
-          <Button className="w-full">Começar</Button>
+        <div className="pt-4 grid gap-2">
+          <Link href="/blog/articles" className="underline text-sm">
+            Ver artigos
+          </Link>
+          <Link href="/blog/articles/metrics" className="underline text-sm">
+            Ver métricas
+          </Link>
+          <Link href="/blog/clusters" className="underline text-sm">
+            Ver clusters
+          </Link>
+          <Link href="/blog/embeddings" className="underline text-sm">
+            Ver embeddings
+          </Link>
+          <Button className="w-full mt-2">Começar</Button>
         </div>
       </div>
     </main>

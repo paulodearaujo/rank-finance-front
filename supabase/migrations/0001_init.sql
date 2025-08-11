@@ -102,5 +102,3 @@ create table if not exists public.blog_embeddings (
 
 create unique index if not exists blog_embeddings_url_key on public.blog_embeddings (url);
 create index if not exists idx_blog_embeddings_url on public.blog_embeddings (url);
-
-
