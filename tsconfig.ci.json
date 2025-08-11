@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "skipLibCheck": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "incremental": false
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["components/ui/**", "node_modules", ".next", "dist", "build"]
+}

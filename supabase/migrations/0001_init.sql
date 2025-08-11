@@ -1,6 +1,4 @@
--- Schema baseline for blog tables
--- Extensions required
-create extension if not exists "uuid-ossp";
+create extension if not exists pgcrypto;
 
 set role postgres;
 set search_path to public;
@@ -25,7 +23,7 @@ create index if not exists idx_blog_articles_url on public.blog_articles (url);
 
 -- Table: blog_articles_metrics
 create table if not exists public.blog_articles_metrics (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   url text not null,
   week_ending date not null,
   gsc_clicks integer null default 0,
@@ -47,7 +45,7 @@ create index if not exists idx_blog_metrics_week_ending on public.blog_articles_
 
 -- Table: blog_cluster_metrics
 create table if not exists public.blog_cluster_metrics (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   run_id text not null,
   cluster_id integer not null,
   cluster_size integer not null,
@@ -69,7 +67,7 @@ create index if not exists idx_blog_cluster_metrics_run_id on public.blog_cluste
 
 -- Table: blog_clusters
 create table if not exists public.blog_clusters (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   run_id text not null,
   url text not null,
   cluster_id integer not null,
@@ -90,7 +88,7 @@ create index if not exists idx_blog_clusters_url on public.blog_clusters (url);
 
 -- Table: blog_embeddings
 create table if not exists public.blog_embeddings (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   url text not null,
   embedding real[] not null,
   model text not null default 'text-embedding-005',

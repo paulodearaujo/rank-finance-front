@@ -5,10 +5,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck:edge": "tsc -p tsconfig.edge.json --noEmit",
+    "typecheck:ci": "tsc -p tsconfig.ci.json --noEmit",
+    "db:types:local": "npx -y supabase gen types typescript --local -s public > lib/database.types.ts",
+    "db:types:linked": "npx -y supabase gen types typescript --linked -s public > lib/database.types.ts",
+    "db:reset:local": "npx -y supabase db reset --force",
+    "db:sync-types:local": "pnpm db:reset:local && pnpm db:types:local"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.2.1",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -40,7 +46,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.511.0",
@@ -54,19 +59,18 @@
     "recharts": "^2.15.4",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.0",
-    "vaul": "^1.1.2",
-    "zod": "^4.0.17"
+    "vaul": "^1.1.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.4",
     "@tailwindcss/postcss": "^4.1.11",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "autoprefixer": "^10.4.20",
+    "@types/lodash": "^4.17.20",
+    "@types/node": "^24.2.1",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.0.0",
-    "typescript": "^5"
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.9.2"
   },
   "packageManager": "pnpm@10.14.0"
 }
