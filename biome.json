@@ -10,17 +10,26 @@
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "tab"
+    "indentStyle": "space",
+    "indentSize": 2,
+    "lineWidth": 100
 	},
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+      "recommended": true,
+      "a11y": "all",
+      "complexity": "all",
+      "correctness": "all",
+      "performance": "all",
+      "security": "all",
+      "style": "all",
+      "suspicious": "all"
 		}
 	},
 	"javascript": {
 		"formatter": {
-			"quoteStyle": "double"
+      "quoteStyle": "double"
 		}
 	},
 	"assist": {
