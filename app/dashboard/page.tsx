@@ -148,36 +148,39 @@ async function CardsSection({ selectedWeeks }: { selectedWeeks: string[] }) {
   const earlySet = new Set(weeksSorted.slice(0, mid));
   const lateSet = new Set(weeksSorted.slice(mid));
 
-  const earlyTotals = (weeklyMetrics as WeeklyMetric[]).reduce(
+  // Calcular totais para early e late (para comparação/delta)
+  const periodTotals = (weeklyMetrics as WeeklyMetric[]).reduce(
     (acc, w) => {
-      if (!w.week_ending || !earlySet.has(w.week_ending)) return acc;
+      if (!w.week_ending) return acc;
       const impr = w.gsc_impressions || 0;
       const pos = w.gsc_position || 0;
-      acc.impressions += impr;
-      acc.clicks += w.gsc_clicks || 0;
-      acc.conversions += w.amplitude_conversions || 0;
-      acc._posWeighted += pos * impr;
+      const clicks = w.gsc_clicks || 0;
+      const conversions = w.amplitude_conversions || 0;
+      const posWeighted = pos * impr;
+
+      if (earlySet.has(w.week_ending)) {
+        acc.early.impressions += impr;
+        acc.early.clicks += clicks;
+        acc.early.conversions += conversions;
+        acc.early._posWeighted += posWeighted;
+      } else if (lateSet.has(w.week_ending)) {
+        acc.late.impressions += impr;
+        acc.late.clicks += clicks;
+        acc.late.conversions += conversions;
+        acc.late._posWeighted += posWeighted;
+      }
       return acc;
     },
-    { impressions: 0, clicks: 0, conversions: 0, _posWeighted: 0 },
-  );
-  const lateTotals = (weeklyMetrics as WeeklyMetric[]).reduce(
-    (acc, w) => {
-      if (!w.week_ending || !lateSet.has(w.week_ending)) return acc;
-      const impr = w.gsc_impressions || 0;
-      const pos = w.gsc_position || 0;
-      acc.impressions += impr;
-      acc.clicks += w.gsc_clicks || 0;
-      acc.conversions += w.amplitude_conversions || 0;
-      acc._posWeighted += pos * impr;
-      return acc;
+    {
+      early: { impressions: 0, clicks: 0, conversions: 0, _posWeighted: 0 },
+      late: { impressions: 0, clicks: 0, conversions: 0, _posWeighted: 0 },
     },
-    { impressions: 0, clicks: 0, conversions: 0, _posWeighted: 0 },
   );
+
   const earlyPosition =
-    earlyTotals.impressions > 0 ? earlyTotals._posWeighted / earlyTotals.impressions : 0;
-  const latePosition =
-    lateTotals.impressions > 0 ? lateTotals._posWeighted / lateTotals.impressions : 0;
+    periodTotals.early.impressions > 0
+      ? periodTotals.early._posWeighted / periodTotals.early.impressions
+      : 0;
 
   const allTimeImpressions = (weeklyMetrics as WeeklyMetric[]).reduce(
     (sum, week) => sum + (week.gsc_impressions || 0),
@@ -191,19 +194,18 @@ async function CardsSection({ selectedWeeks }: { selectedWeeks: string[] }) {
     (sum, week) => sum + (week.amplitude_conversions || 0),
     0,
   );
+  const allTimePositionWeighted = (weeklyMetrics as WeeklyMetric[]).reduce(
+    (acc, w) => acc + (w.gsc_position || 0) * (w.gsc_impressions || 0),
+    0,
+  );
+  const allTimePosition = allTimeImpressions > 0 ? allTimePositionWeighted / allTimeImpressions : 0;
 
   const averages =
     (weeklyMetrics as WeeklyMetric[]).length > 0
       ? {
           impressions: allTimeImpressions / weeklyMetrics.length,
           clicks: allTimeClicks / weeklyMetrics.length,
-          position:
-            allTimeImpressions > 0
-              ? (weeklyMetrics as WeeklyMetric[]).reduce(
-                  (acc, w) => acc + (w.gsc_position || 0) * (w.gsc_impressions || 0),
-                  0,
-                ) / allTimeImpressions
-              : 0,
+          position: allTimePosition,
           conversions: allTimeConversions / weeklyMetrics.length,
         }
       : undefined;
@@ -211,18 +213,12 @@ async function CardsSection({ selectedWeeks }: { selectedWeeks: string[] }) {
   const metricsData = {
     impressions: allTimeImpressions,
     clicks: allTimeClicks,
-    position:
-      allTimeImpressions > 0
-        ? (weeklyMetrics as WeeklyMetric[]).reduce(
-            (acc, w) => acc + (w.gsc_position || 0) * (w.gsc_impressions || 0),
-            0,
-          ) / allTimeImpressions
-        : 0,
+    position: allTimePosition,
     conversions: allTimeConversions,
     previousPeriod: {
-      impressions: earlyTotals.impressions,
-      clicks: earlyTotals.clicks,
-      conversions: earlyTotals.conversions,
+      impressions: periodTotals.early.impressions,
+      clicks: periodTotals.early.clicks,
+      conversions: periodTotals.early.conversions,
       position: earlyPosition,
     },
     averages: averages || undefined,
