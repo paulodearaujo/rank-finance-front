@@ -1,6 +1,18 @@
 import { IconChartBar } from "@tabler/icons-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Início",
+  description: "Dashboard para analisar clusters SEO e métricas semanais do blog.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    url: "/",
+  },
+};
 
 export default function Home() {
   return (

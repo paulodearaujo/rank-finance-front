@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar";
+import type { Metadata, ResolvingMetadata } from "next";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import {
   getAvailableWeeks,
@@ -39,6 +40,20 @@ interface PageProps {
 }
 
 type WeeklyMetric = Partial<Tables<"blog_articles_metrics">>;
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ id: string }> },
+  _parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { id } = await params;
+  const title = `Cluster ${id}`;
+  return {
+    title,
+    description: `Detalhes e métricas do cluster ${id}.`,
+    alternates: { canonical: `/clusters/${id}` },
+    openGraph: { url: `/clusters/${id}`, title },
+  };
+}
 
 export default async function Page({ params, searchParams }: PageProps) {
   const { id } = await params;

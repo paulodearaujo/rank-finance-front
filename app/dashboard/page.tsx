@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar";
+import type { Metadata } from "next";
 import { SectionCards } from "@/components/section-cards";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import {
@@ -12,6 +13,12 @@ import type { Tables } from "@/lib/database.types";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { DashboardWrapper } from "./dashboard-wrapper";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "Visualize clusters, métricas semanais e ranking de conteúdo.",
+  alternates: { canonical: "/dashboard" },
+};
 
 const CARD_SKELETON_KEYS = ["sk1", "sk2", "sk3", "sk4"] as const;
 
