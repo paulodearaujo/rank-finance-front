@@ -8,7 +8,7 @@ import {
   IconFileDescription,
   IconFlask,
   IconFolder,
-  IconInnerShadowTop,
+  IconPlant,
 } from "@tabler/icons-react";
 import type * as React from "react";
 
@@ -30,8 +30,8 @@ import {
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Paulinho Gatinho",
+    email: "boss@world.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
@@ -41,7 +41,7 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Projects",
+      title: "Projetos",
       url: "#",
       icon: IconFolder,
     },
@@ -112,8 +112,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
               <a href="/">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <IconPlant className="!size-5" />
+                <span className="text-base font-semibold">Inbound Team</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -139,20 +139,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <IconFlask className="size-5 text-primary" />
-                  <h4 className="text-sm font-semibold">Experimental Features</h4>
+                  <h4 className="text-sm font-semibold">InLab | TRSC</h4>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  This dashboard is currently in active development. Features may change or be
-                  unstable.
+                <p className="text-sm text-muted-foreground italic">
+                  "We choose to go to the Moon… not because it is easy, but because it is hard." —
+                  John F. Kennedy
                 </p>
-                <div className="space-y-2 text-xs text-muted-foreground">
-                  <div>🧪 Real-time metrics processing</div>
-                  <div>🔬 Advanced clustering algorithms</div>
-                  <div>⚗️ Predictive analytics (coming soon)</div>
-                </div>
-                <div className="text-xs text-muted-foreground pt-2 border-t">
-                  Last updated: January 2025
-                </div>
+                <div className="text-xs text-muted-foreground pt-2 border-t">Versão 1.0.0</div>
               </div>
             </HoverCardContent>
           </HoverCard>

@@ -1,13 +1,6 @@
 "use client";
 
 import {
-  IconClick,
-  IconEye,
-  IconInnerShadowTop,
-  IconShoppingCart,
-  IconSparkles,
-} from "@tabler/icons-react";
-import {
   Card,
   CardAction,
   CardDescription,
@@ -16,6 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Delta } from "@/components/ui/delta";
+import {
+  IconClick,
+  IconEye,
+  IconInnerShadowTop,
+  IconShoppingCart,
+  IconSparkles,
+} from "@tabler/icons-react";
 
 const THRESHOLDS = {
   PERFORMANCE_EXCELLENT: 20,

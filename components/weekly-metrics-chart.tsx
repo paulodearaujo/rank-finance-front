@@ -156,8 +156,8 @@ export function WeeklyMetricsChart({ data = [], selectedWeeks = [] }: WeeklyMetr
         <CardTitle>Métricas Semanais</CardTitle>
         <CardDescription>
           <span className="hidden @[540px]/card:block">
-            Conversões, Cliques, Impressões e Posição Média (indexado 0–100)
-            {selectedWeeks.length > 0 ? ` (${selectedWeeks.length} semanas)` : ""}
+            {selectedWeeks.length > 0 ? `${selectedWeeks.length} semanas` : "32 semanas"} | Indexado
+            em 0-100
             {filteredData.some((d) => d.gsc_clicks === null) && (
               <span className="ml-2 text-destructive">⚠️ Dados faltando em algumas semanas</span>
             )}

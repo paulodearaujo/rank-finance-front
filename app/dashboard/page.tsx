@@ -1,6 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SectionCards } from "@/components/section-cards";
-import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import {
   getAvailableWeeks,
@@ -12,22 +11,12 @@ import {
 import type { Tables } from "@/lib/database.types";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
+import { DashboardWrapper } from "./dashboard-wrapper";
 
 const CARD_SKELETON_KEYS = ["sk1", "sk2", "sk3", "sk4"] as const;
 
-const WeeklyMetricsChart = dynamic(
-  () =>
-    import("@/components/weekly-metrics-chart").then((m) => ({
-      default: m.WeeklyMetricsChart,
-    })),
-  {
-    ssr: true,
-    loading: () => (
-      <div className="px-4 lg:px-6">
-        <div className="h-[220px] sm:h-[250px] w-full rounded-lg bg-muted animate-pulse" />
-      </div>
-    ),
-  },
+const WeeklyMetricsChart = dynamic(() =>
+  import("@/components/weekly-metrics-chart.client").then((m) => ({ default: m.default })),
 );
 
 const ClusterLeaderboardTable = dynamic(
@@ -36,7 +25,6 @@ const ClusterLeaderboardTable = dynamic(
       default: m.ClusterLeaderboardTable,
     })),
   {
-    ssr: true,
     loading: () => (
       <div className="px-4 lg:px-6">
         <div className="h-64 w-full rounded-lg border animate-pulse" />
@@ -102,8 +90,7 @@ export default async function Page({ searchParams }: PageProps) {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader availableWeeks={availableWeeks as string[]} currentWeeks={selectedWeeks} />
-        <div className="flex flex-1 flex-col">
+        <DashboardWrapper availableWeeks={availableWeeks as string[]} currentWeeks={selectedWeeks}>
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <Suspense
@@ -140,7 +127,7 @@ export default async function Page({ searchParams }: PageProps) {
               </Suspense>
             </div>
           </div>
-        </div>
+        </DashboardWrapper>
       </SidebarInset>
     </SidebarProvider>
   );

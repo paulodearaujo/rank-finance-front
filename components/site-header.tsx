@@ -15,27 +15,27 @@ interface SiteHeaderProps {
   availableWeeks?: string[];
   currentWeeks?: string[];
   basePath?: string; // default "/dashboard"
+  onNavigationStateChange?: (isPending: boolean) => void;
 }
 
 export function SiteHeader({
   availableWeeks = [],
   currentWeeks = [],
   basePath = "/dashboard",
+  onNavigationStateChange,
 }: SiteHeaderProps) {
   const router = useRouter();
-  const [isNavigating, setIsNavigating] = React.useState(false);
-  const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [isPending, startTransition] = React.useTransition();
+
+  // Notify parent component when loading state changes
+  React.useEffect(() => {
+    onNavigationStateChange?.(isPending);
+  }, [isPending, onNavigationStateChange]);
 
   // Use currentWeeks directly as the initial value, or default to availableWeeks
   const defaultWeeks = currentWeeks.length > 0 ? currentWeeks : availableWeeks;
   const [selectedWeeks, setSelectedWeeks] = React.useState<string[]>(defaultWeeks);
-
-  // Reset states when props change (navigation/refresh completed)
-  React.useEffect(() => {
-    setIsNavigating(false);
-    setIsRefreshing(false);
-  }, []);
 
   const formatWeekDisplay = (weekEnding: string) => {
     const date = parseISO(weekEnding);
@@ -60,10 +60,16 @@ export function SiteHeader({
 
   const handleApplySelection = () => {
     if (selectedWeeks.length > 0) {
-      setIsNavigating(true);
+      const sortedWeeks = [...selectedWeeks].sort();
+      const weekParams = sortedWeeks.join(",");
+
+      // Close popover immediately
       setOpen(false);
-      const weekParams = selectedWeeks.join(",");
-      router.push(`${basePath}?weeks=${weekParams}`);
+
+      // Navigate with transition to show loading state
+      startTransition(() => {
+        router.push(`${basePath}?weeks=${weekParams}`);
+      });
     } else {
       setOpen(false);
     }
@@ -83,7 +89,7 @@ export function SiteHeader({
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
-        <h1 className="text-base font-medium">Dashboard SEO Clustering</h1>
+        <h1 className="text-base font-medium">Clusters Dashboard</h1>
         <div className="ml-auto flex items-center gap-2">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -91,9 +97,9 @@ export function SiteHeader({
                 variant="outline"
                 size="sm"
                 className="w-full sm:w-80 justify-start text-left font-normal"
-                disabled={isNavigating}
+                disabled={isPending}
               >
-                {isNavigating ? (
+                {isPending ? (
                   <>
                     <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground" />
                     <span className="truncate">Carregando...</span>
@@ -118,8 +124,12 @@ export function SiteHeader({
                 </div>
 
                 {/* Header checkbox para selecionar/desmarcar todas */}
-                <div className="flex items-center space-x-2 p-2 mb-2 bg-muted/50 rounded-md hover:bg-muted transition-colors w-full">
+                <label
+                  htmlFor="select-all-weeks"
+                  className="flex items-center space-x-2 p-2 mb-2 bg-muted/50 rounded-md hover:bg-muted transition-colors w-full cursor-pointer"
+                >
                   <Checkbox
+                    id="select-all-weeks"
                     checked={
                       selectedWeeks.length === availableWeeks.length && availableWeeks.length > 0
                     }
@@ -136,13 +146,8 @@ export function SiteHeader({
                       }
                     }}
                   />
-                  <label
-                    htmlFor="select-all-checkbox"
-                    className="text-sm font-medium flex-1 select-none cursor-pointer"
-                  >
-                    Todas as semanas
-                  </label>
-                </div>
+                  <span className="text-sm font-medium flex-1 select-none">Todas as semanas</span>
+                </label>
 
                 <Separator className="mb-2" />
 
@@ -154,21 +159,20 @@ export function SiteHeader({
                       </p>
                     ) : (
                       availableWeeks.map((week) => (
-                        <div
+                        <label
                           key={week}
-                          className="flex items-center space-x-2 p-2 hover:bg-muted rounded-md transition-colors w-full"
+                          htmlFor={`week-checkbox-${week}`}
+                          className="flex items-center space-x-2 p-2 hover:bg-muted rounded-md transition-colors w-full cursor-pointer"
                         >
                           <Checkbox
+                            id={`week-checkbox-${week}`}
                             checked={selectedWeeks.includes(week)}
                             onCheckedChange={() => handleWeekToggle(week)}
                           />
-                          <label
-                            htmlFor={`week-checkbox-${week}`}
-                            className="text-sm font-normal flex-1 select-none cursor-pointer"
-                          >
+                          <span className="text-sm font-normal flex-1 select-none">
                             {formatWeekDisplay(week)}
-                          </label>
-                        </div>
+                          </span>
+                        </label>
                       ))
                     )}
                   </div>
@@ -189,37 +193,17 @@ export function SiteHeader({
                   <Button
                     size="sm"
                     className="flex-1"
-                    onClick={() => {
-                      if (!isNavigating) {
-                        handleApplySelection();
-                      }
-                    }}
-                    disabled={selectedWeeks.length === 0 || isNavigating}
+                    onClick={handleApplySelection}
+                    disabled={selectedWeeks.length === 0}
                   >
-                    {isNavigating ? (
-                      <>
-                        <div className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                        Aplicando...
-                      </>
-                    ) : (
-                      "Aplicar"
-                    )}
+                    Aplicar
                   </Button>
                 </div>
               </div>
             </PopoverContent>
           </Popover>
-          <Button
-            variant="outline"
-            size="icon"
-            className="size-8"
-            onClick={() => {
-              setIsRefreshing(true);
-              router.refresh();
-            }}
-            disabled={isRefreshing}
-          >
-            <IconRefresh className={`size-4 ${isRefreshing ? "animate-spin" : ""}`} />
+          <Button variant="outline" size="icon" className="size-8" onClick={() => router.refresh()}>
+            <IconRefresh className="size-4" />
           </Button>
         </div>
       </div>

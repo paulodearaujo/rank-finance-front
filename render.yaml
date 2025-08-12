@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: dashboard-inbound
+    runtime: node
+    region: oregon  # oregon | frankfurt | ohio | singapore
+    plan: starter      # free | starter | standard | pro
+    branch: main
+    autoDeploy: true
+
+    # Comandos de build e start com pnpm via Corepack
+    buildCommand: |
+      corepack enable
+      corepack prepare pnpm@latest --activate
+      pnpm install --frozen-lockfile
+      pnpm build
+
+    startCommand: |
+      corepack enable
+      corepack prepare pnpm@latest --activate
+      pnpm start
+
+    # Variáveis de ambiente
+    envVars:
+      # Node.js 22 LTS para Next.js 15
+      - key: NODE_VERSION
+        value: "22"
+
+      # Configuração de produção (seguro commitar)
+      - key: NODE_ENV
+        value: production
+
+      # Credenciais do Supabase (configurar via dashboard do Render)
+      # sync: false significa que o valor deve ser configurado manualmente no dashboard
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+
+      # Opcional: URL de conexão direta ao banco (se necessário)
+      - key: DATABASE_URL
+        sync: false
+
+    # Health check endpoint
+    healthCheckPath: /

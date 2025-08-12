@@ -1,12 +1,23 @@
+import type { Database, Tables } from "@/lib/database.types";
 import { createClient as createSbClient, type SupabaseClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
-import type { Database, Tables } from "@/lib/database.types";
 
 // Reuse TCP connections to Supabase (lower TTFB) when running in Node with Undici available.
 // Avoid static imports so bundlers don't require 'undici'.
 try {
   // @ts-ignore - Next.js internal hook for Undici agent
-  const maybeUndici = (globalThis as any)?.fetch?.["__next_internal_get_undici_agent"];
+  const maybeUndici = (
+    globalThis as unknown as {
+      fetch?: {
+        __next_internal_get_undici_agent?: { setGlobalDispatcher?: unknown; Agent?: unknown };
+      };
+    }
+  )?.fetch?.["__next_internal_get_undici_agent"] as
+    | {
+        setGlobalDispatcher?: (d: unknown) => void;
+        Agent?: new (opts: Record<string, number>) => unknown;
+      }
+    | undefined;
   if (maybeUndici?.setGlobalDispatcher && maybeUndici?.Agent) {
     const { setGlobalDispatcher, Agent } = maybeUndici;
     setGlobalDispatcher(
@@ -231,6 +242,7 @@ function aggregateWeekly(allData: BlogArticlesMetrics[]): WeeklyAggregateRow[] {
 }
 
 export async function getLatestRunId() {
+  const devBypass = process.env.NODE_ENV !== "production" ? String(Date.now()) : "";
   return unstable_cache(
     async () => {
       const supabase = createPublicClient();
@@ -243,12 +255,13 @@ export async function getLatestRunId() {
       if (error) return null;
       return data?.run_id as string | null;
     },
-    ["data:getLatestRunId"],
+    ["data:getLatestRunId", devBypass],
     { revalidate: WEEKLY_REVALIDATE_SECONDS },
   )();
 }
 
 export async function getRunMetadata(runId: string) {
+  const devBypass = process.env.NODE_ENV !== "production" ? String(Date.now()) : "";
   return unstable_cache(
     async () => {
       const supabase = createPublicClient();
@@ -265,7 +278,7 @@ export async function getRunMetadata(runId: string) {
         createdAt: data?.created_at as string | undefined,
       };
     },
-    ["data:getRunMetadata", runId],
+    ["data:getRunMetadata", runId, devBypass],
     { revalidate: WEEKLY_REVALIDATE_SECONDS },
   )();
 }
@@ -322,6 +335,7 @@ export async function getClusterMetrics(runId: string) {
 
 export async function getAvailableWeeks() {
   const version = await getWeeksVersion();
+  const devBypass = process.env.NODE_ENV !== "production" ? String(Date.now()) : "";
   return unstable_cache(
     async () => {
       const supabase = createPublicClient();
@@ -352,7 +366,7 @@ export async function getAvailableWeeks() {
       const weeksArray = Array.from(uniqueWeeks).sort((a, b) => b.localeCompare(a));
       return weeksArray as string[];
     },
-    ["data:getAvailableWeeks", version],
+    ["data:getAvailableWeeks", version, devBypass],
     { revalidate: DAILY_REVALIDATE_SECONDS },
   )();
 }
@@ -360,29 +374,63 @@ export async function getAvailableWeeks() {
 export async function getWeeklyMetrics(selectedWeeks?: string[]) {
   const version = await getWeeksVersion();
   const weeksKey = weeksKeyOf(selectedWeeks);
+  const devBypass = process.env.NODE_ENV !== "production" ? String(Date.now()) : "";
   return unstable_cache(
     async () => {
       const allData = await fetchArticleMetrics(selectedWeeks);
       return aggregateWeekly(allData);
     },
-    ["data:getWeeklyMetrics", weeksKey, version],
+    ["data:getWeeklyMetrics", weeksKey, version, devBypass],
     { revalidate: WEEKLY_REVALIDATE_SECONDS },
   )();
 }
 
 export async function getClusterLeaderboard(runId: string, selectedWeeks?: string[]) {
   const version = await getWeeksVersion();
+  const devBypass = process.env.NODE_ENV !== "production" ? String(Date.now()) : "";
   return unstable_cache(
     async () => {
       const supabase = createPublicClient();
-      const [{ data: clusterMetrics }, { data: clusters }] = await Promise.all([
+      const [{ data: clusterMetrics }, clusters] = await Promise.all([
         supabase.from("blog_cluster_metrics").select("*").eq("run_id", runId),
-        supabase.from("blog_clusters").select("cluster_id, cluster_name, url").eq("run_id", runId),
+        (async () => {
+          // Read ALL cluster rows for the run (Supabase returns max 1k rows per page)
+          const rows: Array<{ cluster_id: number; cluster_name: string | null; url: string }> = [];
+          let offset = 0;
+          const page = BATCH_SIZE;
+          // Explicit order for stable pagination
+          for (;;) {
+            const { data, error } = await supabase
+              .from("blog_clusters")
+              .select("cluster_id, cluster_name, url")
+              .eq("run_id", runId)
+              .order("url", { ascending: true })
+              .range(offset, offset + page - 1);
+            if (error) break;
+            if (!data || data.length === 0) break;
+            rows.push(...(data as typeof rows));
+            if (data.length < page) break;
+            offset += page;
+          }
+          return rows;
+        })(),
       ]);
       if (!clusters || !clusterMetrics) return [] as ClusterLeaderboardRow[];
-      const urlsFromRun = Array.from(new Set(clusters.map((c) => c.url)));
-      const articleMetrics = await fetchArticleMetrics(selectedWeeks, urlsFromRun);
+
+      // Map URL -> cluster_id for the current run to avoid any mismatches
+      const urlToClusterId = new Map<string, number>();
+      for (const c of clusters) {
+        urlToClusterId.set(c.url, c.cluster_id);
+      }
+
+      // Fetch all metrics without URL filtering to ensure complete data retrieval
+      // This avoids pagination issues that could occur with large URL lists
+      // Filtering by cluster URLs is done in-memory during aggregation below
+      const articleMetrics = await fetchArticleMetrics(selectedWeeks);
+
       const { early: earlyWeeksSet, late: lateWeeksSet } = splitWeeksSets(selectedWeeks);
+
+      // Prepare cluster containers with metadata
       const clusterMap = new Map<
         number,
         {
@@ -402,63 +450,69 @@ export async function getClusterLeaderboard(runId: string, selectedWeeks?: strin
           _late: Accumulator;
         }
       >();
-      clusters.forEach(
-        (cluster: { cluster_id: number; cluster_name: string | null; url: string }) => {
-          if (!clusterMap.has(cluster.cluster_id)) {
-            const meta = clusterMetrics.find(
-              (m: BlogClusterMetrics) => m.cluster_id === cluster.cluster_id,
-            );
-            clusterMap.set(cluster.cluster_id, {
-              cluster_id: cluster.cluster_id,
-              cluster_name:
-                cluster.cluster_name ||
-                (cluster.cluster_id === OUTLIER_CLUSTER_ID
-                  ? "Outliers"
-                  : `Cluster ${cluster.cluster_id}`),
-              cluster_size: meta?.cluster_size || 0,
-              cluster_coherence: meta?.cluster_coherence || 0,
-              cluster_density: meta?.cluster_density || 0,
-              avg_similarity: meta?.avg_similarity || 0,
-              min_similarity: meta?.min_similarity || 0,
-              urls: [],
-              gsc_clicks: 0,
-              gsc_impressions: 0,
-              amplitude_conversions: 0,
-              _pos_weighted: 0,
-              _early: createAccum(),
-              _late: createAccum(),
-            });
-          }
-          const clusterData = clusterMap.get(cluster.cluster_id);
-          if (clusterData) clusterData.urls.push(cluster.url);
-        },
-      );
-      const urlToClusterId = new Map<string, number>();
-      clusters.forEach((c) => urlToClusterId.set(c.url, c.cluster_id));
-      for (const metric of articleMetrics) {
-        const cid = metric.url ? urlToClusterId.get(metric.url) : undefined;
-        if (cid === undefined) continue;
-        const clusterData = clusterMap.get(cid);
-        if (!clusterData) continue;
-        clusterData.gsc_clicks += metric.gsc_clicks || 0;
-        clusterData.gsc_impressions += metric.gsc_impressions || 0;
-        clusterData.amplitude_conversions += metric.amplitude_conversions || 0;
-        clusterData._pos_weighted += (metric.gsc_position || 0) * (metric.gsc_impressions || 0);
-        const week = metric.week_ending as string;
-        if (week && earlyWeeksSet.has(week)) {
-          clusterData._early.clicks += metric.gsc_clicks || 0;
-          clusterData._early.impressions += metric.gsc_impressions || 0;
-          clusterData._early.conversions += metric.amplitude_conversions || 0;
-          clusterData._early.posWeighted +=
-            (metric.gsc_position || 0) * (metric.gsc_impressions || 0);
-        } else if (week && lateWeeksSet.has(week)) {
-          clusterData._late.clicks += metric.gsc_clicks || 0;
-          clusterData._late.impressions += metric.gsc_impressions || 0;
-          clusterData._late.conversions += metric.amplitude_conversions || 0;
-          clusterData._late.posWeighted +=
-            (metric.gsc_position || 0) * (metric.gsc_impressions || 0);
+      for (const c of clusters) {
+        if (!clusterMap.has(c.cluster_id)) {
+          const meta = clusterMetrics.find(
+            (m: BlogClusterMetrics) => m.cluster_id === c.cluster_id,
+          );
+          clusterMap.set(c.cluster_id, {
+            cluster_id: c.cluster_id,
+            cluster_name:
+              c.cluster_name ||
+              (c.cluster_id === OUTLIER_CLUSTER_ID ? "Outliers" : `Cluster ${c.cluster_id}`),
+            cluster_size: meta?.cluster_size || 0,
+            cluster_coherence: meta?.cluster_coherence || 0,
+            cluster_density: meta?.cluster_density || 0,
+            avg_similarity: meta?.avg_similarity || 0,
+            min_similarity: meta?.min_similarity || 0,
+            urls: [],
+            gsc_clicks: 0,
+            gsc_impressions: 0,
+            amplitude_conversions: 0,
+            _pos_weighted: 0,
+            _early: createAccum(),
+            _late: createAccum(),
+          });
+        }
+        const entry = clusterMap.get(c.cluster_id);
+        if (entry) {
+          entry.urls.push(c.url);
         }
       }
+
+      // Single pass over article metrics – attribute each row to the correct cluster
+      for (const m of articleMetrics) {
+        const url = m.url as string | undefined;
+        if (!url) continue;
+        const cid = urlToClusterId.get(url);
+        if (cid === undefined) continue; // Should not happen; defensive
+        const target = clusterMap.get(cid);
+        if (!target) continue;
+
+        const clicks = m.gsc_clicks || 0;
+        const impr = m.gsc_impressions || 0;
+        const conv = m.amplitude_conversions || 0;
+        const posWeighted = (m.gsc_position || 0) * impr;
+
+        target.gsc_clicks += clicks;
+        target.gsc_impressions += impr;
+        target.amplitude_conversions += conv;
+        target._pos_weighted += posWeighted;
+
+        const w = m.week_ending as string | undefined;
+        if (w && earlyWeeksSet.has(w)) {
+          target._early.clicks += clicks;
+          target._early.impressions += impr;
+          target._early.conversions += conv;
+          target._early.posWeighted += posWeighted;
+        } else if (w && lateWeeksSet.has(w)) {
+          target._late.clicks += clicks;
+          target._late.impressions += impr;
+          target._late.conversions += conv;
+          target._late.posWeighted += posWeighted;
+        }
+      }
+
       const leaderboard: ClusterLeaderboardRow[] = Array.from(clusterMap.values()).map(
         (cluster) => {
           const gsc_ctr =
@@ -483,6 +537,7 @@ export async function getClusterLeaderboard(runId: string, selectedWeeks?: strin
           const position_delta_pct = earlyPos > 0 ? position_delta / earlyPos : 0;
           return {
             ...cluster,
+            // Prefer metric cluster_size; fallback to collected URL count if missing
             cluster_size: cluster.cluster_size || (cluster.urls ? cluster.urls.length : 0),
             gsc_ctr,
             gsc_position,
@@ -499,7 +554,7 @@ export async function getClusterLeaderboard(runId: string, selectedWeeks?: strin
       );
       return leaderboard.sort((a, b) => b.gsc_clicks - a.gsc_clicks);
     },
-    ["data:getClusterLeaderboard", runId, version, weeksKeyOf(selectedWeeks)],
+    ["data:getClusterLeaderboard", "v2.1", runId, version, weeksKeyOf(selectedWeeks), devBypass],
     { revalidate: WEEKLY_REVALIDATE_SECONDS },
   )();
 }
@@ -599,9 +654,17 @@ export async function getClusterWeeklyMetrics(
       >
     >;
   const allData = await fetchArticleMetrics(selectedWeeks, urls);
+  const devBypass = process.env.NODE_ENV !== "production" ? String(Date.now()) : "";
   return unstable_cache(
     async () => aggregateWeekly(allData),
-    ["data:getClusterWeeklyMetrics", runId, String(clusterId), weeksKeyOf(selectedWeeks), version],
+    [
+      "data:getClusterWeeklyMetrics",
+      runId,
+      String(clusterId),
+      weeksKeyOf(selectedWeeks),
+      version,
+      devBypass,
+    ],
     { revalidate: WEEKLY_REVALIDATE_SECONDS },
   )();
 }
@@ -747,6 +810,7 @@ export async function getClusterUrlsMetrics(
     rows = rows.map((r) => ({ ...r, name: nameMap.get(r.url) ?? r.name }));
   }
 
+  const devBypass = process.env.NODE_ENV !== "production" ? String(Date.now()) : "";
   return unstable_cache(
     async () => rows,
     [
@@ -757,6 +821,7 @@ export async function getClusterUrlsMetrics(
       `l:${limit}`,
       `o:${offset}`,
       version,
+      devBypass,
     ],
     { revalidate: WEEKLY_REVALIDATE_SECONDS },
   )();

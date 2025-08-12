@@ -1,6 +1,6 @@
 "use client";
 
-import { type Icon, IconCirclePlusFilled, IconMail } from "@tabler/icons-react";
+import { type Icon, IconCirclePlusFilled, IconPencil } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -41,8 +41,8 @@ export function NavMain({
               className="size-8 group-data-[collapsible=icon]:opacity-0"
               variant="outline"
             >
-              <IconMail />
-              <span className="sr-only">Caixa de entrada</span>
+              <IconPencil />
+              <span className="sr-only">Editar</span>
             </Button>
           </SidebarMenuItem>
         </SidebarMenu>

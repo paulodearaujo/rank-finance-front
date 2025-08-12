@@ -1,10 +1,9 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { IconArrowLeft } from "@tabler/icons-react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function ClusterHeader({
   name,
@@ -65,12 +64,6 @@ export function ClusterHeader({
           </TooltipTrigger>
           <TooltipContent>Menor similaridade observada no cluster (0-1).</TooltipContent>
         </Tooltip>
-        {meta.runDate && (
-          <>
-            <Separator orientation="vertical" className="mx-1 h-4" />
-            <span className="text-muted-foreground">Gerado em {meta.runDate}</span>
-          </>
-        )}
       </div>
     </div>
   );
