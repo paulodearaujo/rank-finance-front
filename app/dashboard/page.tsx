@@ -1,5 +1,4 @@
 import { AppSidebar } from "@/components/app-sidebar";
-import type { Metadata } from "next";
 import { SectionCards } from "@/components/section-cards";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import {
@@ -10,6 +9,7 @@ import {
   getWeeklyMetrics,
 } from "@/lib/data/metrics-queries";
 import type { Tables } from "@/lib/database.types";
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { DashboardWrapper } from "./dashboard-wrapper";

@@ -5,9 +5,11 @@ const APP_NAME = "Dashboard SEO Clustering";
 const APP_DESCRIPTION = "Análise de performance e agrupamento de conteúdo do blog";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` :
-   process.env.RENDER_EXTERNAL_URL ? `https://${process.env.RENDER_EXTERNAL_URL}` :
-   "http://localhost:3000");
+  (process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : process.env.RENDER_EXTERNAL_URL
+      ? `https://${process.env.RENDER_EXTERNAL_URL}`
+      : "http://localhost:3000");
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -17,14 +19,7 @@ export const metadata: Metadata = {
   },
   description: APP_DESCRIPTION,
   applicationName: APP_NAME,
-  keywords: [
-    "SEO",
-    "clustering",
-    "analytics",
-    "conteúdo",
-    "dashboard",
-    "marketing",
-  ],
+  keywords: ["SEO", "clustering", "analytics", "conteúdo", "dashboard", "marketing"],
   alternates: {
     canonical: "/",
   },
@@ -42,14 +37,18 @@ export const metadata: Metadata = {
     description: APP_DESCRIPTION,
   },
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
+    noarchive: true,
+    nosnippet: true,
+    noimageindex: true,
+    nocache: true,
     googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
+      index: false,
+      follow: false,
+      noarchive: true,
+      nosnippet: true,
+      noimageindex: true,
     },
   },
   icons: {
