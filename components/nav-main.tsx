@@ -12,6 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function NavMain({
   items,
@@ -47,16 +48,44 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title} asChild isActive={pathname === item.url}>
-                <Link href={item.url}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          <TooltipProvider>
+            {items.map((item) => {
+              // Adiciona tooltip "Em breve" para Projetos
+              const isProjects = item.title === "Projetos";
+              const tooltipText = isProjects ? "Em breve" : item.title;
+
+              return (
+                <SidebarMenuItem key={item.title}>
+                  {isProjects ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <SidebarMenuButton asChild isActive={pathname === item.url}>
+                          <Link href={item.url}>
+                            {item.icon && <item.icon />}
+                            <span>{item.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p>{tooltipText}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    <SidebarMenuButton
+                      tooltip={item.title}
+                      asChild
+                      isActive={pathname === item.url}
+                    >
+                      <Link href={item.url}>
+                        {item.icon && <item.icon />}
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  )}
+                </SidebarMenuItem>
+              );
+            })}
+          </TooltipProvider>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

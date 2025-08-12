@@ -23,6 +23,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function NavUser({
   user,
@@ -87,20 +88,45 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconUserCircle />
-                Conta
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notificações
-              </DropdownMenuItem>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <IconUserCircle />
+                      Conta
+                    </DropdownMenuItem>
+                  </TooltipTrigger>
+                  <TooltipContent side="left">
+                    <p>Em breve</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <IconNotification />
+                      Notificações
+                    </DropdownMenuItem>
+                  </TooltipTrigger>
+                  <TooltipContent side="left">
+                    <p>Em breve</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <IconLogout />
-              Sair
-            </DropdownMenuItem>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    <IconLogout />
+                    Sair
+                  </DropdownMenuItem>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  <p>Você nem logado tá. Vai sair pra que?</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

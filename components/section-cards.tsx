@@ -9,21 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Delta } from "@/components/ui/delta";
-import {
-  IconClick,
-  IconEye,
-  IconInnerShadowTop,
-  IconShoppingCart,
-  IconSparkles,
-} from "@tabler/icons-react";
-
-const THRESHOLDS = {
-  PERFORMANCE_EXCELLENT: 20,
-  PERFORMANCE_GOOD: 5,
-  CVR_EXCELLENT: 3,
-  CVR_GOOD: 2,
-  CVR_FAIR: 1,
-} as const;
+import { IconClick, IconEye, IconInnerShadowTop, IconShoppingCart } from "@tabler/icons-react";
 
 // Tipo base para métricas agregadas
 type AggregatedMetrics = {
@@ -54,85 +40,6 @@ export function SectionCards({ metrics }: SectionCardsProps) {
     return previous - current;
   };
 
-  // Calculate insights for footer messages
-  const getPerformanceInsight = (current: number, average?: number, metricType?: string) => {
-    if (!average) return { message: "Coletando dados históricos", type: "neutral" };
-
-    const percentFromAverage = ((current - average) / average) * 100;
-
-    // Custom messages based on metric type
-    if (metricType === "impressions") {
-      if (percentFromAverage > THRESHOLDS.PERFORMANCE_EXCELLENT) {
-        return {
-          message: `Visibilidade excepcional! ${Math.abs(percentFromAverage).toFixed(0)}% acima do normal`,
-          type: "excellent",
-        };
-      } else if (percentFromAverage > THRESHOLDS.PERFORMANCE_GOOD) {
-        return { message: "Boa visibilidade nos resultados", type: "good" };
-      } else if (percentFromAverage < -THRESHOLDS.PERFORMANCE_EXCELLENT) {
-        return {
-          message: `Queda significativa: ${Math.abs(percentFromAverage).toFixed(0)}% menos impressões`,
-          type: "warning",
-        };
-      } else if (percentFromAverage < -THRESHOLDS.PERFORMANCE_GOOD) {
-        return { message: "Visibilidade em queda", type: "caution" };
-      }
-      return { message: "Performance típica do período", type: "neutral" };
-    }
-
-    if (metricType === "clicks") {
-      if (percentFromAverage > THRESHOLDS.PERFORMANCE_EXCELLENT) {
-        return {
-          message: `Cliques excelentes! ${Math.abs(percentFromAverage).toFixed(0)}% acima do padrão`,
-          type: "excellent",
-        };
-      } else if (percentFromAverage > THRESHOLDS.PERFORMANCE_GOOD) {
-        return { message: "Cliques acima do esperado", type: "good" };
-      } else if (percentFromAverage < -THRESHOLDS.PERFORMANCE_EXCELLENT) {
-        return {
-          message: `Alerta: ${Math.abs(percentFromAverage).toFixed(0)}% menos cliques`,
-          type: "warning",
-        };
-      } else if (percentFromAverage < -THRESHOLDS.PERFORMANCE_GOOD) {
-        return { message: "Cliques abaixo do ideal", type: "caution" };
-      }
-      return { message: "Volume de cliques normal", type: "neutral" };
-    }
-
-    if (metricType === "conversions") {
-      if (percentFromAverage > THRESHOLDS.PERFORMANCE_EXCELLENT) {
-        return {
-          message: `Conversões excepcionais! ${Math.abs(percentFromAverage).toFixed(0)}% acima`,
-          type: "excellent",
-        };
-      } else if (percentFromAverage > THRESHOLDS.PERFORMANCE_GOOD) {
-        return { message: "Conversões acima da meta", type: "good" };
-      } else if (percentFromAverage < -THRESHOLDS.PERFORMANCE_EXCELLENT) {
-        return {
-          message: `Atenção urgente: ${Math.abs(percentFromAverage).toFixed(0)}% menos conversões`,
-          type: "warning",
-        };
-      } else if (percentFromAverage < -THRESHOLDS.PERFORMANCE_GOOD) {
-        return { message: "Conversões precisam melhorar", type: "caution" };
-      }
-      return { message: "Conversões dentro do esperado", type: "neutral" };
-    }
-
-    // Default generic message
-    if (percentFromAverage > THRESHOLDS.PERFORMANCE_EXCELLENT) {
-      return {
-        message: `Performance excelente: +${Math.abs(percentFromAverage).toFixed(0)}%`,
-        type: "excellent",
-      };
-    } else if (percentFromAverage < -THRESHOLDS.PERFORMANCE_EXCELLENT) {
-      return {
-        message: `Requer atenção: -${Math.abs(percentFromAverage).toFixed(0)}%`,
-        type: "warning",
-      };
-    }
-    return { message: "Performance estável", type: "neutral" };
-  };
-
   // Calculate changes for each metric
   const impressionsChange = calculateChange(
     metrics.impressions,
@@ -143,19 +50,6 @@ export function SectionCards({ metrics }: SectionCardsProps) {
   const conversionsChange = calculateChange(
     metrics.conversions,
     metrics.previousPeriod?.conversions,
-  );
-
-  // Get insights for each metric
-  const impressionsInsight = getPerformanceInsight(
-    metrics.impressions,
-    metrics.averages?.impressions,
-    "impressions",
-  );
-  const clicksInsight = getPerformanceInsight(metrics.clicks, metrics.averages?.clicks, "clicks");
-  const conversionsInsight = getPerformanceInsight(
-    metrics.conversions,
-    metrics.averages?.conversions,
-    "conversions",
   );
 
   // Helper function to format large numbers
@@ -190,23 +84,8 @@ export function SectionCards({ metrics }: SectionCardsProps) {
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="flex items-center gap-2 font-medium">
-            {conversionsInsight.type === "excellent" && (
-              <IconSparkles className="size-4 text-primary" />
-            )}
-            {conversionsInsight.message}
-          </div>
-          <div className="text-muted-foreground">
-            {metrics.clicks > 0
-              ? (() => {
-                  const cvr = (metrics.conversions / metrics.clicks) * 100;
-                  if (cvr > THRESHOLDS.CVR_EXCELLENT) return `CVR ${cvr.toFixed(1)}% - Excelente!`;
-                  if (cvr > THRESHOLDS.CVR_GOOD) return `CVR ${cvr.toFixed(1)}% - Bom desempenho`;
-                  if (cvr > THRESHOLDS.CVR_FAIR) return `CVR ${cvr.toFixed(1)}% - Pode melhorar`;
-                  return `CVR ${cvr.toFixed(1)}% - Revisar funil`;
-                })()
-              : "Aguardando dados de conversão"}
-          </div>
+          <div className="flex items-center gap-2 font-medium">Lorem ipsum dolor sit amet</div>
+          <div className="text-muted-foreground">Consectetur adipiscing elit sed do</div>
         </CardFooter>
       </Card>
 
@@ -225,19 +104,8 @@ export function SectionCards({ metrics }: SectionCardsProps) {
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="flex items-center gap-2 font-medium">
-            {impressionsInsight.type === "excellent" && (
-              <IconSparkles className="size-4 text-primary" />
-            )}
-            {impressionsInsight.message}
-          </div>
-          <div className="text-muted-foreground">
-            {impressionsInsight.type === "warning"
-              ? "Revisar SEO e conteúdo"
-              : impressionsInsight.type === "excellent"
-                ? "Estratégia de conteúdo funcionando!"
-                : "Potencial de busca orgânica"}
-          </div>
+          <div className="flex items-center gap-2 font-medium">Lorem ipsum dolor sit amet</div>
+          <div className="text-muted-foreground">Eiusmod tempor incididunt ut labore</div>
         </CardFooter>
       </Card>
 
@@ -256,17 +124,8 @@ export function SectionCards({ metrics }: SectionCardsProps) {
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="flex items-center gap-2 font-medium">
-            {clicksInsight.type === "excellent" && <IconSparkles className="size-4 text-primary" />}
-            {clicksInsight.message}
-          </div>
-          <div className="text-muted-foreground">
-            {clicksInsight.type === "warning"
-              ? "CTR pode estar baixo - revisar títulos"
-              : clicksInsight.type === "excellent"
-                ? "Títulos e descrições eficazes!"
-                : "Cliques via busca orgânica"}
-          </div>
+          <div className="flex items-center gap-2 font-medium">Lorem ipsum dolor sit amet</div>
+          <div className="text-muted-foreground">Ut enim ad minim veniam quis</div>
         </CardFooter>
       </Card>
 
@@ -285,21 +144,8 @@ export function SectionCards({ metrics }: SectionCardsProps) {
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="flex items-center gap-2 font-medium">
-            {(metrics.position ?? 99) <= 5 ? (
-              <>
-                <IconSparkles className="size-4 text-primary" />
-                Top 5 da SERP
-              </>
-            ) : (metrics.position ?? 99) <= 10 ? (
-              "Top 10 da SERP"
-            ) : (metrics.position ?? 99) <= 20 ? (
-              "Competitivo (Top 20)"
-            ) : (
-              "Melhorar ranqueamento"
-            )}
-          </div>
-          <div className="text-muted-foreground">Quanto menor, melhor</div>
+          <div className="flex items-center gap-2 font-medium">Lorem ipsum dolor sit amet</div>
+          <div className="text-muted-foreground">Nostrud exercitation ullamco laboris</div>
         </CardFooter>
       </Card>
     </div>

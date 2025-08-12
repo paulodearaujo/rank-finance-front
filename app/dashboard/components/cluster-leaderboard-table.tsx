@@ -136,10 +136,10 @@ export function ClusterLeaderboardTable({
         accessorKey: "cluster_name",
         header: "Cluster",
         cell: ({ row }: { row: Row<ClusterData> }) => (
-          <div className="font-medium">
+          <div className="font-medium truncate">
             <Link
               href={`/clusters/${row.original.cluster_id}${weeksParam}`}
-              className="hover:underline cursor-pointer"
+              className="hover:underline cursor-pointer truncate block"
             >
               {row.original.cluster_name || `Cluster ${row.original.cluster_id}`}
             </Link>
@@ -267,23 +267,31 @@ export function ClusterLeaderboardTable({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-lg border">
-        <Table className="table-fixed">
-          <TableHeader className="bg-muted">
+      <div
+        ref={useVirtual ? containerRef : undefined}
+        className={`rounded-lg border ${useVirtual ? "max-h-[640px] overflow-auto" : "overflow-hidden"}`}
+      >
+        <Table className="table-fixed w-full">
+          <TableHeader className="bg-muted sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup: HeaderGroup<ClusterData>) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header: HeaderGroup<ClusterData>["headers"][0]) => {
                   const id = header.column.id as string;
+                  // Larguras fixas: name=35%, size=10%, conversões/impressões/cliques=15% cada, posição=10%
                   const cls =
                     id === "cluster_size"
-                      ? "text-center w-[5.5rem]"
+                      ? "text-center w-[10%] px-4"
                       : id === "gsc_position"
-                        ? "text-right w-[6.5rem] md:w-[7rem]"
-                        : ["gsc_impressions", "gsc_clicks", "amplitude_conversions"].includes(id)
-                          ? "text-right w-[9.5rem] md:w-[10rem]"
-                          : id === "cluster_name"
-                            ? "text-left w-[38%] md:w-[34%] lg:w-[30%] pr-2 md:pr-4"
-                            : "text-left";
+                        ? "text-right w-[10%] px-4"
+                        : id === "amplitude_conversions"
+                          ? "text-right w-[15%] px-4"
+                          : id === "gsc_impressions"
+                            ? "text-right w-[15%] px-4"
+                            : id === "gsc_clicks"
+                              ? "text-right w-[15%] px-4"
+                              : id === "cluster_name"
+                                ? "text-left w-[35%] px-4"
+                                : "text-left";
                   return (
                     <TableHead key={header.id} className={cls}>
                       {header.isPlaceholder
@@ -298,60 +306,71 @@ export function ClusterLeaderboardTable({
           <TableBody>
             {rows.length ? (
               useVirtual ? (
-                <tr>
-                  <td colSpan={columns.length} className="p-0">
-                    <div ref={containerRef} className="max-h-[640px] overflow-auto">
-                      <div style={{ height: rowVirtualizer.getTotalSize() }} className="relative">
-                        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                          const row = rows[virtualRow.index] as Row<ClusterData>;
+                // Virtualização: padding superior, linhas visíveis, padding inferior
+                <>
+                  {/* Padding top */}
+                  {(() => {
+                    const firstItem = rowVirtualizer.getVirtualItems()[0];
+                    return firstItem && firstItem.start > 0 ? (
+                      <tr>
+                        <td colSpan={columns.length} style={{ height: firstItem.start }} />
+                      </tr>
+                    ) : null;
+                  })()}
+                  {/* Linhas visíveis */}
+                  {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                    const row = rows[virtualRow.index] as Row<ClusterData>;
+                    return (
+                      <TableRow
+                        key={row.id}
+                        data-index={virtualRow.index}
+                        data-state={row.getIsSelected() && "selected"}
+                        className="cursor-pointer hover:bg-muted/50"
+                        onClick={(e: React.MouseEvent<HTMLTableRowElement>) => {
+                          // Não navegar se clicar em um link
+                          if ((e.target as HTMLElement).closest("a")) return;
+                          const url = `/clusters/${row.original.cluster_id}${weeksParam}`;
+                          router.push(url);
+                        }}
+                      >
+                        {row.getVisibleCells().map((cell: Cell<ClusterData, unknown>) => {
+                          const id = cell.column.id as string;
+                          const cls =
+                            id === "cluster_size"
+                              ? "text-center w-[10%] px-4"
+                              : id === "gsc_position"
+                                ? "text-right w-[10%] px-4"
+                                : id === "amplitude_conversions"
+                                  ? "text-right w-[15%] px-4"
+                                  : id === "gsc_impressions"
+                                    ? "text-right w-[15%] px-4"
+                                    : id === "gsc_clicks"
+                                      ? "text-right w-[15%] px-4"
+                                      : id === "cluster_name"
+                                        ? "text-left w-[35%] px-4"
+                                        : "text-left";
                           return (
-                            <div
-                              key={row.id}
-                              data-index={virtualRow.index}
-                              ref={rowVirtualizer.measureElement}
-                              className="absolute top-0 left-0 w-full"
-                              style={{ transform: `translateY(${virtualRow.start}px)` }}
-                            >
-                              <TableRow
-                                data-state={row.getIsSelected() && "selected"}
-                                className="cursor-pointer hover:bg-muted/50"
-                                onClick={(e: React.MouseEvent<HTMLTableRowElement>) => {
-                                  // Não navegar se clicar em um link
-                                  if ((e.target as HTMLElement).closest("a")) return;
-                                  const url = `/clusters/${row.original.cluster_id}${weeksParam}`;
-                                  router.push(url);
-                                }}
-                              >
-                                {row.getVisibleCells().map((cell: Cell<ClusterData, unknown>) => {
-                                  const id = cell.column.id as string;
-                                  const cls =
-                                    id === "cluster_size"
-                                      ? "text-center w-[5.5rem]"
-                                      : id === "gsc_position"
-                                        ? "text-right w-[6.5rem] md:w-[7rem]"
-                                        : [
-                                              "gsc_impressions",
-                                              "gsc_clicks",
-                                              "amplitude_conversions",
-                                            ].includes(id)
-                                          ? "text-right w-[9.5rem] md:w-[10rem]"
-                                          : id === "cluster_name"
-                                            ? "text-left w-[38%] md:w-[34%] lg:w-[30%] pr-2 md:pr-4"
-                                            : "text-left";
-                                  return (
-                                    <TableCell key={cell.id} className={cls}>
-                                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </TableCell>
-                                  );
-                                })}
-                              </TableRow>
-                            </div>
+                            <TableCell key={cell.id} className={cls}>
+                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </TableCell>
                           );
                         })}
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+                      </TableRow>
+                    );
+                  })}
+                  {/* Padding bottom */}
+                  {(() => {
+                    const lastItem = rowVirtualizer.getVirtualItems().at(-1);
+                    const remainingHeight = lastItem
+                      ? rowVirtualizer.getTotalSize() - lastItem.end
+                      : 0;
+                    return remainingHeight > 0 ? (
+                      <tr>
+                        <td colSpan={columns.length} style={{ height: remainingHeight }} />
+                      </tr>
+                    ) : null;
+                  })()}
+                </>
               ) : (
                 rows.map((row: Row<ClusterData>) => (
                   <TableRow
@@ -370,16 +389,18 @@ export function ClusterLeaderboardTable({
                       const id = cell.column.id as string;
                       const cls =
                         id === "cluster_size"
-                          ? "text-center w-[5.5rem]"
+                          ? "text-center w-[10%] px-4"
                           : id === "gsc_position"
-                            ? "text-right w-[6.5rem] md:w-[7rem]"
-                            : ["gsc_impressions", "gsc_clicks", "amplitude_conversions"].includes(
-                                  id,
-                                )
-                              ? "text-right w-[9.5rem] md:w-[10rem]"
-                              : id === "cluster_name"
-                                ? "text-left w-[38%] md:w-[34%] lg:w-[30%] pr-2 md:pr-4"
-                                : "text-left";
+                            ? "text-right w-[10%] px-4"
+                            : id === "amplitude_conversions"
+                              ? "text-right w-[15%] px-4"
+                              : id === "gsc_impressions"
+                                ? "text-right w-[15%] px-4"
+                                : id === "gsc_clicks"
+                                  ? "text-right w-[15%] px-4"
+                                  : id === "cluster_name"
+                                    ? "text-left w-[35%] px-4"
+                                    : "text-left";
                       return (
                         <TableCell key={cell.id} className={cls}>
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}

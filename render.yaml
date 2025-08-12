@@ -25,7 +25,7 @@ services:
       - key: NODE_VERSION
         value: "22"
 
-      # Configuração de produção (seguro commitar)
+      # Configuração de produção
       - key: NODE_ENV
         value: production
 

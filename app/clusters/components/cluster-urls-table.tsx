@@ -63,10 +63,10 @@ const columns: ColumnDef<ClusterUrlAggregates>[] = [
                 href={url}
                 target="_blank"
                 rel="noreferrer"
-                className="font-medium hover:underline min-w-0 truncate"
+                className="font-medium hover:underline truncate block"
                 title={undefined}
               >
-                <span className="truncate block">{title}</span>
+                {title}
               </a>
             </TooltipTrigger>
             <TooltipContent side="top" sideOffset={6} className="max-w-[80vw]">
@@ -268,23 +268,30 @@ export function ClusterUrlsTable({ data = [] as ClusterUrlAggregates[] }) {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-lg border">
-        <Table className="table-fixed">
-          <TableHeader className="bg-muted">
+      <div
+        ref={useVirtual ? containerRef : undefined}
+        className={`rounded-lg border ${useVirtual ? "max-h-[640px] overflow-auto" : "overflow-hidden"}`}
+      >
+        <Table className="table-fixed w-full">
+          <TableHeader className="bg-muted sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup: HeaderGroup<ClusterUrlAggregates>) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(
                   (header: HeaderGroup<ClusterUrlAggregates>["headers"][0]) => {
                     const id = header.column.id as string;
-                    const cls = ["amplitude_conversions", "gsc_impressions", "gsc_clicks"].includes(
-                      id,
-                    )
-                      ? "text-right w-[9.5rem] md:w-[10rem]"
-                      : id === "gsc_position"
-                        ? "text-right w-[6.5rem] md:w-[7rem]"
-                        : id === "name"
-                          ? "text-left w-[44%] md:w-[40%] lg:w-[36%] pr-2 md:pr-4"
-                          : "text-left";
+                    // Larguras fixas: name=40%, conversões/impressões/cliques=15% cada, posição=15%
+                    const cls =
+                      id === "amplitude_conversions"
+                        ? "text-right w-[15%] px-4"
+                        : id === "gsc_impressions"
+                          ? "text-right w-[15%] px-4"
+                          : id === "gsc_clicks"
+                            ? "text-right w-[15%] px-4"
+                            : id === "gsc_position"
+                              ? "text-right w-[15%] px-4"
+                              : id === "name"
+                                ? "text-left w-[40%] px-4"
+                                : "text-left";
                     return (
                       <TableHead key={header.id} className={cls}>
                         {header.isPlaceholder
@@ -300,66 +307,75 @@ export function ClusterUrlsTable({ data = [] as ClusterUrlAggregates[] }) {
           <TableBody>
             {rows.length ? (
               useVirtual ? (
-                <tr>
-                  <td colSpan={columns.length} className="p-0">
-                    <div ref={containerRef} className="max-h-[640px] overflow-auto">
-                      <div style={{ height: rowVirtualizer.getTotalSize() }} className="relative">
-                        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                          const row = rows[virtualRow.index] as Row<ClusterUrlAggregates>;
+                // Virtualização: padding superior, linhas visíveis, padding inferior
+                <>
+                  {/* Padding top */}
+                  {(() => {
+                    const firstItem = rowVirtualizer.getVirtualItems()[0];
+                    return firstItem && firstItem.start > 0 ? (
+                      <tr>
+                        <td colSpan={columns.length} style={{ height: firstItem.start }} />
+                      </tr>
+                    ) : null;
+                  })()}
+                  {/* Linhas visíveis */}
+                  {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                    const row = rows[virtualRow.index] as Row<ClusterUrlAggregates>;
+                    return (
+                      <TableRow key={row.id} data-index={virtualRow.index}>
+                        {row.getVisibleCells().map((cell: Cell<ClusterUrlAggregates, unknown>) => {
+                          const id = cell.column.id as string;
+                          const cls =
+                            id === "amplitude_conversions"
+                              ? "text-right w-[15%] px-4"
+                              : id === "gsc_impressions"
+                                ? "text-right w-[15%] px-4"
+                                : id === "gsc_clicks"
+                                  ? "text-right w-[15%] px-4"
+                                  : id === "gsc_position"
+                                    ? "text-right w-[15%] px-4"
+                                    : id === "name"
+                                      ? "text-left w-[40%] px-4"
+                                      : "text-left";
                           return (
-                            <div
-                              key={row.id}
-                              data-index={virtualRow.index}
-                              ref={rowVirtualizer.measureElement}
-                              className="absolute top-0 left-0 w-full"
-                              style={{ transform: `translateY(${virtualRow.start}px)` }}
-                            >
-                              <TableRow>
-                                {row
-                                  .getVisibleCells()
-                                  .map((cell: Cell<ClusterUrlAggregates, unknown>) => {
-                                    const id = cell.column.id as string;
-                                    const cls = [
-                                      "amplitude_conversions",
-                                      "gsc_impressions",
-                                      "gsc_clicks",
-                                    ].includes(id)
-                                      ? "text-right w-[9.5rem] md:w-[10rem]"
-                                      : id === "gsc_position"
-                                        ? "text-right w-[6.5rem] md:w-[7rem]"
-                                        : id === "name"
-                                          ? "text-left w-[44%] md:w-[40%] lg:w-[36%] pr-2 md:pr-4"
-                                          : "text-left";
-                                    return (
-                                      <TableCell key={cell.id} className={cls}>
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                      </TableCell>
-                                    );
-                                  })}
-                              </TableRow>
-                            </div>
+                            <TableCell key={cell.id} className={cls}>
+                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </TableCell>
                           );
                         })}
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+                      </TableRow>
+                    );
+                  })}
+                  {/* Padding bottom */}
+                  {(() => {
+                    const lastItem = rowVirtualizer.getVirtualItems().at(-1);
+                    const remainingHeight = lastItem
+                      ? rowVirtualizer.getTotalSize() - lastItem.end
+                      : 0;
+                    return remainingHeight > 0 ? (
+                      <tr>
+                        <td colSpan={columns.length} style={{ height: remainingHeight }} />
+                      </tr>
+                    ) : null;
+                  })()}
+                </>
               ) : (
                 rows.map((row: Row<ClusterUrlAggregates>) => (
                   <TableRow key={row.id}>
                     {row.getVisibleCells().map((cell: Cell<ClusterUrlAggregates, unknown>) => {
                       const id = cell.column.id as string;
-                      const cls = [
-                        "amplitude_conversions",
-                        "gsc_impressions",
-                        "gsc_clicks",
-                      ].includes(id)
-                        ? "text-right w-[9.5rem] md:w-[10rem]"
-                        : id === "gsc_position"
-                          ? "text-right w-[6.5rem] md:w-[7rem]"
-                          : id === "name"
-                            ? "text-left w-[44%] md:w-[40%] lg:w-[36%] pr-2 md:pr-4"
-                            : "text-left";
+                      const cls =
+                        id === "amplitude_conversions"
+                          ? "text-right w-[15%] px-4"
+                          : id === "gsc_impressions"
+                            ? "text-right w-[15%] px-4"
+                            : id === "gsc_clicks"
+                              ? "text-right w-[15%] px-4"
+                              : id === "gsc_position"
+                                ? "text-right w-[15%] px-4"
+                                : id === "name"
+                                  ? "text-left w-[40%] px-4"
+                                  : "text-left";
                       return (
                         <TableCell key={cell.id} className={cls}>
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
