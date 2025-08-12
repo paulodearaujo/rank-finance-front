@@ -8,7 +8,38 @@ import {
   getWeeklyMetrics,
 } from "@/lib/data/metrics-queries";
 import type { Tables } from "@/lib/database.types";
-import { ChartAreaInteractive, DataTable, SectionCards, SiteHeader } from "./components";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import { SectionCards, SiteHeader } from "./components";
+
+const CARD_SKELETON_KEYS = ["sk1", "sk2", "sk3", "sk4"] as const;
+
+const ChartAreaInteractive = dynamic(
+  () =>
+    import("./components/chart-area-interactive").then((m) => ({
+      default: m.ChartAreaInteractive,
+    })),
+  {
+    ssr: true,
+    loading: () => (
+      <div className="px-4 lg:px-6">
+        <div className="h-[220px] sm:h-[250px] w-full rounded-lg bg-muted animate-pulse" />
+      </div>
+    ),
+  },
+);
+
+const DataTable = dynamic(
+  () => import("./components/data-table").then((m) => ({ default: m.DataTable })),
+  {
+    ssr: true,
+    loading: () => (
+      <div className="px-4 lg:px-6">
+        <div className="h-64 w-full rounded-lg border animate-pulse" />
+      </div>
+    ),
+  },
+);
 
 interface PageProps {
   searchParams: Promise<{ weeks?: string; week?: string }>;
@@ -60,16 +91,66 @@ export default async function Page({ searchParams }: PageProps) {
     // Default to ALL weeks if no param specified
     selectedWeeks = availableWeeks as string[];
   }
-
   // Weeks already selected and validated above; no explicit min/max needed
 
-  // Fetch all data in parallel
-  const [weeklyMetrics, clusterLeaderboard] = await Promise.all([
-    getWeeklyMetrics(selectedWeeks),
-    getClusterLeaderboard(runId, selectedWeeks),
-  ]);
+  return (
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "18rem",
+          "--header-height": "3rem",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        <SiteHeader availableWeeks={availableWeeks as string[]} currentWeeks={selectedWeeks} />
+        <div className="flex flex-1 flex-col">
+          <div className="@container/main flex flex-1 flex-col gap-2">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+              <Suspense
+                fallback={
+                  <div className="px-4 lg:px-6">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                      {CARD_SKELETON_KEYS.map((key) => (
+                        <div key={key} className="rounded-lg border p-4">
+                          <div className="h-4 w-24 mb-2 bg-muted animate-pulse rounded" />
+                          <div className="h-8 w-32 bg-muted animate-pulse rounded" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                }
+              >
+                {/* Cards stream separately */}
+                <CardsSection selectedWeeks={selectedWeeks} />
+              </Suspense>
 
-  // Split selected weeks into early/late and aggregate for cards deltas
+              <Suspense
+                fallback={
+                  <div className="px-4 lg:px-6 space-y-4">
+                    <div className="h-[250px] w-full rounded-lg bg-muted animate-pulse" />
+                    <div className="h-64 w-full rounded-lg border animate-pulse" />
+                  </div>
+                }
+              >
+                <ChartAndTable
+                  runId={runId}
+                  selectedWeeks={selectedWeeks}
+                  clusterCreatedAt={formattedClusterDate}
+                />
+              </Suspense>
+            </div>
+          </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
+
+async function CardsSection({ selectedWeeks }: { selectedWeeks: string[] }) {
+  const weeklyMetrics = await getWeeklyMetrics(selectedWeeks);
+
   const weeksSorted = [...selectedWeeks].sort((a, b) => a.localeCompare(b));
   const mid = Math.floor(weeksSorted.length / 2);
   const earlySet = new Set(weeksSorted.slice(0, mid));
@@ -106,7 +187,6 @@ export default async function Page({ searchParams }: PageProps) {
   const latePosition =
     lateTotals.impressions > 0 ? lateTotals._posWeighted / lateTotals.impressions : 0;
 
-  // Calculate averages for all available data
   const allTimeImpressions = (weeklyMetrics as WeeklyMetric[]).reduce(
     (sum, week) => sum + (week.gsc_impressions || 0),
     0,
@@ -136,7 +216,6 @@ export default async function Page({ searchParams }: PageProps) {
         }
       : undefined;
 
-  // Prepare metrics object for SectionCards
   const metricsData = {
     impressions: lateTotals.impressions,
     clicks: lateTotals.clicks,
@@ -150,35 +229,31 @@ export default async function Page({ searchParams }: PageProps) {
     },
     averages: averages || undefined,
   };
+  return <SectionCards metrics={metricsData} />;
+}
+
+async function ChartAndTable({
+  runId,
+  selectedWeeks,
+  clusterCreatedAt,
+}: {
+  runId: string;
+  selectedWeeks: string[];
+  clusterCreatedAt: string | null;
+}) {
+  const [weeklyMetrics, clusterLeaderboard] = await Promise.all([
+    getWeeklyMetrics(selectedWeeks),
+    getClusterLeaderboard(runId, selectedWeeks),
+  ]);
 
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "18rem",
-          "--header-height": "3rem",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant="inset" />
-      <SidebarInset>
-        <SiteHeader availableWeeks={availableWeeks as string[]} currentWeeks={selectedWeeks} />
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <SectionCards metrics={metricsData} />
-              <div className="px-4 lg:px-6">
-                <ChartAreaInteractive data={weeklyMetrics} selectedWeeks={selectedWeeks} />
-              </div>
-              <DataTable
-                data={clusterLeaderboard}
-                clusterCreatedAt={formattedClusterDate}
-                selectedWeeks={selectedWeeks}
-              />
-            </div>
-          </div>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+    <>
+      <ChartAreaInteractive data={weeklyMetrics} selectedWeeks={selectedWeeks} />
+      <DataTable
+        data={clusterLeaderboard}
+        clusterCreatedAt={clusterCreatedAt}
+        selectedWeeks={selectedWeeks}
+      />
+    </>
   );
 }

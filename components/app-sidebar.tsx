@@ -6,6 +6,7 @@ import {
   IconDatabase,
   IconFileAi,
   IconFileDescription,
+  IconFlask,
   IconFolder,
   IconInnerShadowTop,
 } from "@tabler/icons-react";
@@ -15,6 +16,8 @@ import { NavDocuments } from "@/components/nav-documents";
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -123,6 +126,37 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
+        <Separator className="my-2" />
+        <div className="flex justify-end px-2 pb-1">
+          <HoverCard openDelay={200}>
+            <HoverCardTrigger asChild>
+              <span className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-default">
+                InLab
+                <IconFlask className="!size-3" />
+              </span>
+            </HoverCardTrigger>
+              <HoverCardContent side="right" className="w-80">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <IconFlask className="size-5 text-primary" />
+                    <h4 className="text-sm font-semibold">Experimental Features</h4>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    This dashboard is currently in active development. Features may change or be
+                    unstable.
+                  </p>
+                  <div className="space-y-2 text-xs text-muted-foreground">
+                    <div>🧪 Real-time metrics processing</div>
+                    <div>🔬 Advanced clustering algorithms</div>
+                    <div>⚗️ Predictive analytics (coming soon)</div>
+                  </div>
+                  <div className="text-xs text-muted-foreground pt-2 border-t">
+                    Last updated: January 2025
+                  </div>
+                </div>
+              </HoverCardContent>
+          </HoverCard>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

@@ -19,6 +19,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
@@ -79,125 +80,131 @@ export function DataTable({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility] = React.useState<Record<string, boolean>>({});
   const [globalFilter, setGlobalFilter] = React.useState("");
+  const [inputValue, setInputValue] = React.useState("");
+  const deferredInput = React.useDeferredValue(inputValue);
+  React.useEffect(() => {
+    setGlobalFilter(deferredInput);
+  }, [deferredInput]);
 
   const weeksParam =
     selectedWeeks && selectedWeeks.length > 0 ? `?weeks=${selectedWeeks.join(",")}` : "";
 
   // Reusable sortable header (shadcn style)
-  const SortableHeader = ({ column, title }: { column: Column<ClusterData>; title: string }) => (
-    <Button
-      variant="ghost"
-      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      className="h-auto p-0 font-medium"
-    >
-      {title}
-      {column.getIsSorted() === "asc" && <IconArrowUp className="ml-1 size-3" />}
-      {column.getIsSorted() === "desc" && <IconArrowDown className="ml-1 size-3" />}
-    </Button>
+  const SortableHeader = React.useCallback(
+    ({ column, title }: { column: Column<ClusterData>; title: string }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="h-auto p-0 font-medium cursor-pointer"
+      >
+        {title}
+        {column.getIsSorted() === "asc" && <IconArrowUp className="ml-1 size-3" />}
+        {column.getIsSorted() === "desc" && <IconArrowDown className="ml-1 size-3" />}
+      </Button>
+    ),
+    [],
   );
 
-  const columns: ColumnDef<ClusterData>[] = [
-    {
-      accessorKey: "cluster_name",
-      header: "Cluster",
-      cell: ({ row }: { row: Row<ClusterData> }) => (
-        <div className="font-medium">
-          <Link
-            href={`/clusters/${row.original.cluster_id}${weeksParam}`}
-            className="hover:underline"
-          >
-            {row.original.cluster_name || `Cluster ${row.original.cluster_id}`}
-          </Link>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "cluster_size",
-      header: ({ column }: { column: Column<ClusterData> }) => (
-        <SortableHeader column={column} title="Páginas" />
-      ),
-      cell: ({ row }: { row: Row<ClusterData> }) => (
-        <div className="text-center">{row.getValue("cluster_size")}</div>
-      ),
-    },
-    // Ordem dos cards: Conversões, Impressões, Cliques, Posição
-    {
-      accessorKey: "amplitude_conversions",
-      header: ({ column }: { column: Column<ClusterData> }) => (
-        <SortableHeader column={column} title="Conversões" />
-      ),
-      cell: ({ row }: { row: Row<ClusterData> }) => {
-        const conversions = row.getValue("amplitude_conversions") as number;
-        const pct = row.original.amplitude_conversions_delta_pct ?? 0;
-        return (
-          <div className="flex flex-col items-end">
-            <div className="text-right font-medium">{conversions.toLocaleString("pt-BR")}</div>
-            <Delta value={pct} variant="percent" />
+  const columns: ColumnDef<ClusterData>[] = React.useMemo(
+    () => [
+      {
+        accessorKey: "cluster_name",
+        header: "Cluster",
+        cell: ({ row }: { row: Row<ClusterData> }) => (
+          <div className="font-medium">
+            <Link
+              href={`/clusters/${row.original.cluster_id}${weeksParam}`}
+              className="hover:underline cursor-pointer"
+            >
+              {row.original.cluster_name || `Cluster ${row.original.cluster_id}`}
+            </Link>
           </div>
-        );
+        ),
       },
-    },
-    {
-      accessorKey: "gsc_impressions",
-      header: ({ column }: { column: Column<ClusterData> }) => (
-        <SortableHeader column={column} title="Impressões" />
-      ),
-      cell: ({ row }: { row: Row<ClusterData> }) => {
-        const impressions = row.getValue("gsc_impressions") as number;
-        const pct = row.original.gsc_impressions_delta_pct ?? 0;
-        return (
-          <div className="flex flex-col items-end">
-            <div className="text-right">{impressions.toLocaleString("pt-BR")}</div>
-            <Delta value={pct} variant="percent" />
-          </div>
-        );
+      {
+        accessorKey: "cluster_size",
+        header: ({ column }: { column: Column<ClusterData> }) => (
+          <SortableHeader column={column} title="Páginas" />
+        ),
+        cell: ({ row }: { row: Row<ClusterData> }) => (
+          <div className="text-center">{row.getValue("cluster_size")}</div>
+        ),
       },
-    },
-    {
-      accessorKey: "gsc_clicks",
-      header: ({ column }: { column: Column<ClusterData> }) => (
-        <SortableHeader column={column} title="Cliques" />
-      ),
-      cell: ({ row }: { row: Row<ClusterData> }) => {
-        const clicks = row.getValue("gsc_clicks") as number;
-        const pct = row.original.gsc_clicks_delta_pct ?? 0;
-        return (
-          <div className="flex flex-col items-end">
-            <div className="text-right font-medium">{clicks.toLocaleString("pt-BR")}</div>
-            <Delta value={pct} variant="percent" />
-          </div>
-        );
+      // Ordem dos cards: Conversões, Impressões, Cliques, Posição
+      {
+        accessorKey: "amplitude_conversions",
+        header: ({ column }: { column: Column<ClusterData> }) => (
+          <SortableHeader column={column} title="Conversões" />
+        ),
+        cell: ({ row }: { row: Row<ClusterData> }) => {
+          const conversions = row.getValue("amplitude_conversions") as number;
+          const pct = row.original.amplitude_conversions_delta_pct ?? 0;
+          return (
+            <div className="flex flex-col items-end">
+              <div className="text-right font-medium">{conversions.toLocaleString("pt-BR")}</div>
+              <Delta value={pct} variant="percent" />
+            </div>
+          );
+        },
       },
-    },
-    {
-      accessorKey: "gsc_position",
-      header: ({ column }: { column: Column<ClusterData> }) => (
-        <SortableHeader column={column} title="Posição" />
-      ),
-      cell: ({ row }: { row: Row<ClusterData> }) => {
-        const pos = row.getValue("gsc_position") as number;
-        const delta = row.original.gsc_position_delta ?? 0;
-        return (
-          <div className="flex flex-col items-end">
-            <div className="text-right">{Number(pos).toFixed(1)}</div>
-            <Delta value={delta} variant="absolute" precision={1} positiveIcon="down" />
-          </div>
-        );
+      {
+        accessorKey: "gsc_impressions",
+        header: ({ column }: { column: Column<ClusterData> }) => (
+          <SortableHeader column={column} title="Impressões" />
+        ),
+        cell: ({ row }: { row: Row<ClusterData> }) => {
+          const impressions = row.getValue("gsc_impressions") as number;
+          const pct = row.original.gsc_impressions_delta_pct ?? 0;
+          return (
+            <div className="flex flex-col items-end">
+              <div className="text-right">{impressions.toLocaleString("pt-BR")}</div>
+              <Delta value={pct} variant="percent" />
+            </div>
+          );
+        },
       },
-    },
-    // CTR: importado/derivado mas não exibido no momento
-    // Coerência removida do leaderboard atual (mantida apenas no back)
-  ];
+      {
+        accessorKey: "gsc_clicks",
+        header: ({ column }: { column: Column<ClusterData> }) => (
+          <SortableHeader column={column} title="Cliques" />
+        ),
+        cell: ({ row }: { row: Row<ClusterData> }) => {
+          const clicks = row.getValue("gsc_clicks") as number;
+          const pct = row.original.gsc_clicks_delta_pct ?? 0;
+          return (
+            <div className="flex flex-col items-end">
+              <div className="text-right font-medium">{clicks.toLocaleString("pt-BR")}</div>
+              <Delta value={pct} variant="percent" />
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "gsc_position",
+        header: ({ column }: { column: Column<ClusterData> }) => (
+          <SortableHeader column={column} title="Posição" />
+        ),
+        cell: ({ row }: { row: Row<ClusterData> }) => {
+          const pos = row.getValue("gsc_position") as number;
+          const delta = row.original.gsc_position_delta ?? 0;
+          return (
+            <div className="flex flex-col items-end">
+              <div className="text-right">{Number(pos).toFixed(1)}</div>
+              <Delta value={delta} variant="absolute" precision={1} positiveIcon="down" />
+            </div>
+          );
+        },
+      },
+      // CTR: importado/derivado mas não exibido no momento
+      // Coerência removida do leaderboard atual (mantida apenas no back)
+    ],
+    [weeksParam, SortableHeader],
+  );
 
   const table = useReactTable({
     data,
     columns,
-    state: {
-      sorting,
-      columnFilters,
-      globalFilter,
-      columnVisibility,
-    },
+    state: { sorting, columnFilters, globalFilter, columnVisibility },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
@@ -205,6 +212,17 @@ export function DataTable({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
+  });
+
+  // Virtualization when many rows
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const rows = table.getRowModel().rows;
+  const useVirtual = rows.length > 100;
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => containerRef.current,
+    estimateSize: () => 44,
+    overscan: 8,
   });
 
   return (
@@ -216,8 +234,8 @@ export function DataTable({
             <IconSearch className="absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Buscar clusters..."
-              value={globalFilter ?? ""}
-              onChange={(event) => setGlobalFilter(event.target.value)}
+              value={inputValue}
+              onChange={(event) => setInputValue(event.target.value)}
               className="pl-8"
             />
           </div>
@@ -254,37 +272,95 @@ export function DataTable({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row: Row<ClusterData>) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => {
-                    router.push(`/clusters/${row.original.cluster_id}${weeksParam}`);
-                  }}
-                >
-                  {row.getVisibleCells().map((cell: Cell<ClusterData, unknown>) => (
-                    <TableCell
-                      key={cell.id}
-                      className={
-                        cell.column.id === "cluster_size"
-                          ? "text-center"
-                          : [
-                                "gsc_impressions",
-                                "gsc_clicks",
-                                "amplitude_conversions",
-                                "gsc_position",
-                              ].includes(cell.column.id as string)
-                            ? "text-right"
-                            : "text-left"
-                      }
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+            {rows.length ? (
+              useVirtual ? (
+                <tr>
+                  <td colSpan={columns.length} className="p-0">
+                    <div ref={containerRef} className="max-h-[640px] overflow-auto">
+                      <div style={{ height: rowVirtualizer.getTotalSize() }} className="relative">
+                        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                          const row = rows[virtualRow.index] as Row<ClusterData>;
+                          return (
+                            <div
+                              key={row.id}
+                              data-index={virtualRow.index}
+                              ref={rowVirtualizer.measureElement}
+                              className="absolute top-0 left-0 w-full"
+                              style={{ transform: `translateY(${virtualRow.start}px)` }}
+                            >
+                              <TableRow
+                                data-state={row.getIsSelected() && "selected"}
+                                className="cursor-pointer hover:bg-muted/50"
+                                onClick={(e: React.MouseEvent<HTMLTableRowElement>) => {
+                                  // Não navegar se clicar em um link
+                                  if ((e.target as HTMLElement).closest('a')) return;
+                                  const url = `/clusters/${row.original.cluster_id}${weeksParam}`;
+                                  router.push(url);
+                                }}
+                              >
+                                {row.getVisibleCells().map((cell: Cell<ClusterData, unknown>) => (
+                                  <TableCell
+                                    key={cell.id}
+                                    className={
+                                      cell.column.id === "cluster_size"
+                                        ? "text-center"
+                                        : [
+                                              "gsc_impressions",
+                                              "gsc_clicks",
+                                              "amplitude_conversions",
+                                              "gsc_position",
+                                            ].includes(cell.column.id as string)
+                                          ? "text-right"
+                                          : "text-left"
+                                    }
+                                  >
+                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                  </TableCell>
+                                ))}
+                              </TableRow>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                rows.map((row: Row<ClusterData>) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={(e: React.MouseEvent<HTMLTableRowElement>) => {
+                      // Não navegar se clicar em um link
+                      if ((e.target as HTMLElement).closest('a')) return;
+                      const url = `/clusters/${row.original.cluster_id}${weeksParam}`;
+                      console.log('Clicou na linha, navegando para:', url);
+                      router.push(url);
+                    }}
+                  >
+                    {row.getVisibleCells().map((cell: Cell<ClusterData, unknown>) => (
+                      <TableCell
+                        key={cell.id}
+                        className={
+                          cell.column.id === "cluster_size"
+                            ? "text-center"
+                            : [
+                                  "gsc_impressions",
+                                  "gsc_clicks",
+                                  "amplitude_conversions",
+                                  "gsc_position",
+                                ].includes(cell.column.id as string)
+                              ? "text-right"
+                              : "text-left"
+                        }
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              )
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">

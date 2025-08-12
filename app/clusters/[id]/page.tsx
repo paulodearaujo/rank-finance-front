@@ -9,9 +9,38 @@ import {
   getRunMetadata,
 } from "@/lib/data/metrics-queries";
 import type { Tables } from "@/lib/database.types";
-import { ChartAreaInteractive, SectionCards, SiteHeader } from "../../dashboard/components";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+const CARD_SKELETON_KEYS = ["sk1", "sk2", "sk3", "sk4"] as const;
+import { SectionCards, SiteHeader } from "../../dashboard/components";
 import { ClusterHeader } from "../components/cluster-header";
-import { ClusterUrlsTable } from "../components/urls-table";
+
+const ChartAreaInteractive = dynamic(
+  () =>
+    import("../../dashboard/components/chart-area-interactive").then((m) => ({
+      default: m.ChartAreaInteractive,
+    })),
+  {
+    ssr: true,
+    loading: () => (
+      <div className="px-4 lg:px-6">
+        <div className="h-[220px] sm:h-[250px] w-full rounded-lg bg-muted animate-pulse" />
+      </div>
+    ),
+  },
+);
+
+const ClusterUrlsTable = dynamic(
+  () => import("../components/urls-table").then((m) => ({ default: m.ClusterUrlsTable })),
+  {
+    ssr: true,
+    loading: () => (
+      <div className="px-4 lg:px-6">
+        <div className="h-64 w-full rounded-lg border animate-pulse" />
+      </div>
+    ),
+  },
+);
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -50,34 +79,9 @@ export default async function Page({ params, searchParams }: PageProps) {
     : (availableWeeks as string[]);
 
   const clusterId = Number.parseInt(id, 10);
-  const [info, weekly, urls] = await Promise.all([
-    getClusterInfo(runId, clusterId),
-    getClusterWeeklyMetrics(runId, clusterId, selectedWeeks),
-    getClusterUrlsMetrics(runId, clusterId, selectedWeeks, 200, 0),
-  ]);
+  const [info] = await Promise.all([getClusterInfo(runId, clusterId)]);
 
-  // Aggregate totals for KPIs
-  const totals = weekly.reduce(
-    (acc, w: WeeklyMetric) => {
-      acc.impressions += w.gsc_impressions || 0;
-      acc.clicks += w.gsc_clicks || 0;
-      acc.conversions += w.amplitude_conversions || 0;
-      return acc;
-    },
-    { impressions: 0, clicks: 0, conversions: 0 },
-  );
-  // Weighted average position for KPIs
-  const [sumWeightedPos, sumImpr] = weekly.reduce(
-    (acc, w) => {
-      const impressions = w.gsc_impressions || 0;
-      const pos = w.gsc_position || 0;
-      acc[0] += pos * impressions;
-      acc[1] += impressions;
-      return acc;
-    },
-    [0, 0] as [number, number],
-  );
-  const position = sumImpr > 0 ? sumWeightedPos / sumImpr : 0;
+  // Aggregate totals for KPIs will stream below
 
   return (
     <SidebarProvider
@@ -111,22 +115,101 @@ export default async function Page({ params, searchParams }: PageProps) {
                 }}
                 backHref={`/dashboard${selectedWeeks.length ? `?weeks=${selectedWeeks.join(",")}` : ""}`}
               />
-              <SectionCards
-                metrics={{
-                  impressions: totals.impressions,
-                  clicks: totals.clicks,
-                  conversions: totals.conversions,
-                  position,
-                }}
-              />
-              <div className="px-4 lg:px-6">
-                <ChartAreaInteractive data={weekly} selectedWeeks={selectedWeeks} />
-              </div>
-              <ClusterUrlsTable data={urls} />
+              <Suspense
+                fallback={
+                  <div className="px-4 lg:px-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {CARD_SKELETON_KEYS.map((key) => (
+                      <div key={key} className="rounded-lg border p-4">
+                        <div className="h-4 w-24 mb-2 bg-muted animate-pulse rounded" />
+                        <div className="h-8 w-32 bg-muted animate-pulse rounded" />
+                      </div>
+                    ))}
+                  </div>
+                }
+              >
+                <CardsSection clusterId={clusterId} selectedWeeks={selectedWeeks} />
+              </Suspense>
+
+              <Suspense
+                fallback={
+                  <div className="px-4 lg:px-6 space-y-4">
+                    <div className="h-[250px] w-full rounded-lg bg-muted animate-pulse" />
+                    <div className="h-64 w-full rounded-lg border animate-pulse" />
+                  </div>
+                }
+              >
+                <ChartAndUrls clusterId={clusterId} selectedWeeks={selectedWeeks} />
+              </Suspense>
             </div>
           </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
+  );
+}
+
+async function CardsSection({
+  clusterId,
+  selectedWeeks,
+}: {
+  clusterId: number;
+  selectedWeeks: string[];
+}) {
+  const runId = await getLatestRunId();
+  if (!runId) return null;
+  const weekly = await getClusterWeeklyMetrics(runId, clusterId, selectedWeeks);
+  const totals = weekly.reduce(
+    (acc, w: WeeklyMetric) => {
+      acc.impressions += w.gsc_impressions || 0;
+      acc.clicks += w.gsc_clicks || 0;
+      acc.conversions += w.amplitude_conversions || 0;
+      return acc;
+    },
+    { impressions: 0, clicks: 0, conversions: 0 },
+  );
+  const [sumWeightedPos, sumImpr] = weekly.reduce(
+    (acc, w) => {
+      const impressions = w.gsc_impressions || 0;
+      const pos = w.gsc_position || 0;
+      acc[0] += pos * impressions;
+      acc[1] += impressions;
+      return acc;
+    },
+    [0, 0] as [number, number],
+  );
+  const position = sumImpr > 0 ? sumWeightedPos / sumImpr : 0;
+  return (
+    <SectionCards
+      metrics={{
+        impressions: totals.impressions,
+        clicks: totals.clicks,
+        conversions: totals.conversions,
+        position,
+      }}
+    />
+  );
+}
+
+async function ChartAndUrls({
+  clusterId,
+  selectedWeeks,
+}: {
+  clusterId: number;
+  selectedWeeks: string[];
+}) {
+  const runId = await getLatestRunId();
+  if (!runId) return null;
+  const [weekly, urls] = await Promise.all([
+    getClusterWeeklyMetrics(runId, clusterId, selectedWeeks),
+    getClusterUrlsMetrics(runId, clusterId, selectedWeeks, 200, 0),
+  ]);
+
+  return (
+    <>
+      <div className="px-4 lg:px-6">
+        <ChartAreaInteractive data={weekly} selectedWeeks={selectedWeeks} />
+      </div>
+      <ClusterUrlsTable data={urls} />
+    </>
   );
 }

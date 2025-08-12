@@ -24,6 +24,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import * as React from "react";
 // removed column toggle UI per request
 import { Input } from "@/components/ui/input";
@@ -187,6 +188,11 @@ export function ClusterUrlsTable({ data = [] as ClusterUrlAggregates[] }) {
     { id: "amplitude_conversions", desc: true },
   ]);
   const [globalFilter, setGlobalFilter] = React.useState("");
+  const [inputValue, setInputValue] = React.useState("");
+  const deferredInput = React.useDeferredValue(inputValue);
+  React.useEffect(() => {
+    setGlobalFilter(deferredInput);
+  }, [deferredInput]);
   const [columnVisibility] = React.useState<Record<string, boolean>>({});
 
   const table = useReactTable({
@@ -201,6 +207,17 @@ export function ClusterUrlsTable({ data = [] as ClusterUrlAggregates[] }) {
     getSortedRowModel: getSortedRowModel(),
   });
 
+  // Virtualization when many rows
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const rows = table.getRowModel().rows;
+  const useVirtual = rows.length > 100;
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => containerRef.current,
+    estimateSize: () => 44,
+    overscan: 8,
+  });
+
   return (
     <div className="flex flex-col gap-4 px-4 lg:px-6">
       <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -210,8 +227,8 @@ export function ClusterUrlsTable({ data = [] as ClusterUrlAggregates[] }) {
             <IconSearch className="absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Buscar por título ou URL..."
-              value={globalFilter ?? ""}
-              onChange={(event) => setGlobalFilter(event.target.value)}
+              value={inputValue}
+              onChange={(event) => setInputValue(event.target.value)}
               className="pl-8"
             />
           </div>
@@ -248,28 +265,71 @@ export function ClusterUrlsTable({ data = [] as ClusterUrlAggregates[] }) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row: Row<ClusterUrlAggregates>) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell: Cell<ClusterUrlAggregates, unknown>) => (
-                    <TableCell
-                      key={cell.id}
-                      className={
-                        [
-                          "amplitude_conversions",
-                          "gsc_impressions",
-                          "gsc_clicks",
-                          "gsc_position",
-                        ].includes(cell.column.id as string)
-                          ? "text-right"
-                          : "text-left"
-                      }
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+            {rows.length ? (
+              useVirtual ? (
+                <tr>
+                  <td colSpan={columns.length} className="p-0">
+                    <div ref={containerRef} className="max-h-[640px] overflow-auto">
+                      <div style={{ height: rowVirtualizer.getTotalSize() }} className="relative">
+                        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                          const row = rows[virtualRow.index] as Row<ClusterUrlAggregates>;
+                          return (
+                            <div
+                              key={row.id}
+                              data-index={virtualRow.index}
+                              ref={rowVirtualizer.measureElement}
+                              className="absolute top-0 left-0 w-full"
+                              style={{ transform: `translateY(${virtualRow.start}px)` }}
+                            >
+                              <TableRow>
+                                {row.getVisibleCells().map((cell: Cell<ClusterUrlAggregates, unknown>) => (
+                                  <TableCell
+                                    key={cell.id}
+                                    className={
+                                      [
+                                        "amplitude_conversions",
+                                        "gsc_impressions",
+                                        "gsc_clicks",
+                                        "gsc_position",
+                                      ].includes(cell.column.id as string)
+                                        ? "text-right"
+                                        : "text-left"
+                                    }
+                                  >
+                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                  </TableCell>
+                                ))}
+                              </TableRow>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                rows.map((row: Row<ClusterUrlAggregates>) => (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell: Cell<ClusterUrlAggregates, unknown>) => (
+                      <TableCell
+                        key={cell.id}
+                        className={
+                          [
+                            "amplitude_conversions",
+                            "gsc_impressions",
+                            "gsc_clicks",
+                            "gsc_position",
+                          ].includes(cell.column.id as string)
+                            ? "text-right"
+                            : "text-left"
+                        }
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              )
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">

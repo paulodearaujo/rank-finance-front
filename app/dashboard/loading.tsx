@@ -13,7 +13,14 @@ const SKELETON_ROW_IDS = Array.from({ length: SKELETON_TABLE_ROWS }, (_, i) => `
 
 export default function DashboardLoading() {
   return (
-    <SidebarProvider>
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "18rem",
+          "--header-height": "3rem",
+        } as React.CSSProperties
+      }
+    >
       <AppSidebar />
       <SidebarInset>
         {/* Site Header Skeleton */}
