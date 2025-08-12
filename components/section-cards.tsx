@@ -4,7 +4,7 @@ import {
   Card,
   CardAction,
   CardDescription,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -83,10 +83,10 @@ export function SectionCards({ metrics }: SectionCardsProps) {
             <Delta value={conversionsChange / 100} variant="percent" />
           </CardAction>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex items-center gap-2 font-medium">Lorem ipsum dolor sit amet</div>
           <div className="text-muted-foreground">Consectetur adipiscing elit sed do</div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
 
       {/* Impressões Card */}
@@ -103,10 +103,10 @@ export function SectionCards({ metrics }: SectionCardsProps) {
             <Delta value={impressionsChange / 100} variant="percent" />
           </CardAction>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex items-center gap-2 font-medium">Lorem ipsum dolor sit amet</div>
           <div className="text-muted-foreground">Eiusmod tempor incididunt ut labore</div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
 
       {/* Cliques Card */}
@@ -123,10 +123,10 @@ export function SectionCards({ metrics }: SectionCardsProps) {
             <Delta value={clicksChange / 100} variant="percent" />
           </CardAction>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex items-center gap-2 font-medium">Lorem ipsum dolor sit amet</div>
           <div className="text-muted-foreground">Ut enim ad minim veniam quis</div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
 
       {/* Posição Média Card */}
@@ -143,10 +143,10 @@ export function SectionCards({ metrics }: SectionCardsProps) {
             <Delta value={positionChange} variant="absolute" precision={1} positiveIcon="down" />
           </CardAction>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex items-center gap-2 font-medium">Lorem ipsum dolor sit amet</div>
           <div className="text-muted-foreground">Nostrud exercitation ullamco laboris</div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
     </div>
   );

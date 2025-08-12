@@ -381,7 +381,6 @@ export function ClusterLeaderboardTable({
                       // Não navegar se clicar em um link
                       if ((e.target as HTMLElement).closest("a")) return;
                       const url = `/clusters/${row.original.cluster_id}${weeksParam}`;
-                      console.log("Clicou na linha, navegando para:", url);
                       router.push(url);
                     }}
                   >
