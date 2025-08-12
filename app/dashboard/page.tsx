@@ -209,10 +209,15 @@ async function CardsSection({ selectedWeeks }: { selectedWeeks: string[] }) {
       : undefined;
 
   const metricsData = {
-    impressions: lateTotals.impressions,
-    clicks: lateTotals.clicks,
-    position: latePosition,
-    conversions: lateTotals.conversions,
+    impressions: allTimeImpressions,
+    clicks: allTimeClicks,
+    position: allTimeImpressions > 0 
+      ? (weeklyMetrics as WeeklyMetric[]).reduce(
+          (acc, w) => acc + (w.gsc_position || 0) * (w.gsc_impressions || 0),
+          0,
+        ) / allTimeImpressions
+      : 0,
+    conversions: allTimeConversions,
     previousPeriod: {
       impressions: earlyTotals.impressions,
       clicks: earlyTotals.clicks,
