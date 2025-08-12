@@ -11,14 +11,17 @@ import {
 import type { Tables } from "@/lib/database.types";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
+
 const CARD_SKELETON_KEYS = ["sk1", "sk2", "sk3", "sk4"] as const;
-import { SectionCards, SiteHeader } from "../../dashboard/components";
+
+import { SectionCards } from "@/components/section-cards";
+import { SiteHeader } from "@/components/site-header";
 import { ClusterHeader } from "../components/cluster-header";
 
-const ChartAreaInteractive = dynamic(
+const WeeklyMetricsChart = dynamic(
   () =>
-    import("../../dashboard/components/chart-area-interactive").then((m) => ({
-      default: m.ChartAreaInteractive,
+    import("@/components/weekly-metrics-chart").then((m) => ({
+      default: m.WeeklyMetricsChart,
     })),
   {
     ssr: true,
@@ -31,7 +34,7 @@ const ChartAreaInteractive = dynamic(
 );
 
 const ClusterUrlsTable = dynamic(
-  () => import("../components/urls-table").then((m) => ({ default: m.ClusterUrlsTable })),
+  () => import("../components/cluster-urls-table").then((m) => ({ default: m.ClusterUrlsTable })),
   {
     ssr: true,
     loading: () => (
@@ -64,13 +67,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const runMetadata = await getRunMetadata(runId);
   const formattedClusterDate = runMetadata?.createdAt
-    ? new Date(runMetadata.createdAt).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
+    ? new Date(runMetadata.createdAt).toISOString()
     : null;
 
   const availableWeeks = await getAvailableWeeks();
@@ -207,7 +204,7 @@ async function ChartAndUrls({
   return (
     <>
       <div className="px-4 lg:px-6">
-        <ChartAreaInteractive data={weekly} selectedWeeks={selectedWeeks} />
+        <WeeklyMetricsChart data={weekly} selectedWeeks={selectedWeeks} />
       </div>
       <ClusterUrlsTable data={urls} />
     </>

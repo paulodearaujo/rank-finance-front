@@ -27,7 +27,7 @@ type NormalizedMetric = WeeklyMetric & {
   gsc_position_n: number;
 };
 
-interface ChartAreaInteractiveProps {
+interface WeeklyMetricsChartProps {
   data?: WeeklyMetric[];
   selectedWeeks?: string[];
 }
@@ -39,10 +39,12 @@ const chartConfig = {
   gsc_position: { label: "Posição Média", color: "var(--chart-4)" },
 } satisfies ChartConfig;
 
-export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAreaInteractiveProps) {
+export function WeeklyMetricsChart({ data = [], selectedWeeks = [] }: WeeklyMetricsChartProps) {
   const [selectedMetrics, setSelectedMetrics] = React.useState<string[]>([
     "amplitude_conversions",
     "gsc_clicks",
+    "gsc_impressions",
+    "gsc_position",
   ]);
   // KISS: sempre mostramos escala indexada (0–100). Tooltip mostra valores absolutos.
 
@@ -206,7 +208,9 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
               tickFormatter={(value: string) => {
                 const date = new Date(value);
                 // Format as "Sem DD/MM" for week ending dates
-                return `Sem ${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1).toString().padStart(2, "0")}`;
+                return `Sem ${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1)
+                  .toString()
+                  .padStart(2, "0")}`;
               }}
             />
             {/* Single Y-axis for all metrics */}

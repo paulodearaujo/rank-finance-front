@@ -1,6 +1,6 @@
-import type { Database, Tables } from "@/lib/database.types";
 import { createClient as createSbClient, type SupabaseClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
+import type { Database, Tables } from "@/lib/database.types";
 
 // Reuse TCP connections to Supabase (lower TTFB) when running in Node with Undici available.
 // Avoid static imports so bundlers don't require 'undici'.
@@ -10,7 +10,12 @@ try {
   if (maybeUndici?.setGlobalDispatcher && maybeUndici?.Agent) {
     const { setGlobalDispatcher, Agent } = maybeUndici;
     setGlobalDispatcher(
-      new Agent({ keepAliveTimeout: 30_000, keepAliveMaxTimeout: 30_000, connections: 128, pipelining: 1 }),
+      new Agent({
+        keepAliveTimeout: 30_000,
+        keepAliveMaxTimeout: 30_000,
+        connections: 128,
+        pipelining: 1,
+      }),
     );
   }
 } catch {

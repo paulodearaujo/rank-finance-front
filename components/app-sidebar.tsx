@@ -135,26 +135,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <IconFlask className="!size-3" />
               </span>
             </HoverCardTrigger>
-              <HoverCardContent side="right" className="w-80">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <IconFlask className="size-5 text-primary" />
-                    <h4 className="text-sm font-semibold">Experimental Features</h4>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    This dashboard is currently in active development. Features may change or be
-                    unstable.
-                  </p>
-                  <div className="space-y-2 text-xs text-muted-foreground">
-                    <div>🧪 Real-time metrics processing</div>
-                    <div>🔬 Advanced clustering algorithms</div>
-                    <div>⚗️ Predictive analytics (coming soon)</div>
-                  </div>
-                  <div className="text-xs text-muted-foreground pt-2 border-t">
-                    Last updated: January 2025
-                  </div>
+            <HoverCardContent side="right" className="w-80">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <IconFlask className="size-5 text-primary" />
+                  <h4 className="text-sm font-semibold">Experimental Features</h4>
                 </div>
-              </HoverCardContent>
+                <p className="text-sm text-muted-foreground">
+                  This dashboard is currently in active development. Features may change or be
+                  unstable.
+                </p>
+                <div className="space-y-2 text-xs text-muted-foreground">
+                  <div>🧪 Real-time metrics processing</div>
+                  <div>🔬 Advanced clustering algorithms</div>
+                  <div>⚗️ Predictive analytics (coming soon)</div>
+                </div>
+                <div className="text-xs text-muted-foreground pt-2 border-t">
+                  Last updated: January 2025
+                </div>
+              </div>
+            </HoverCardContent>
           </HoverCard>
         </div>
       </SidebarFooter>

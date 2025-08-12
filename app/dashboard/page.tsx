@@ -1,4 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
+import { SectionCards } from "@/components/section-cards";
+import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import {
   getAvailableWeeks,
@@ -10,14 +12,13 @@ import {
 import type { Tables } from "@/lib/database.types";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import { SectionCards, SiteHeader } from "./components";
 
 const CARD_SKELETON_KEYS = ["sk1", "sk2", "sk3", "sk4"] as const;
 
-const ChartAreaInteractive = dynamic(
+const WeeklyMetricsChart = dynamic(
   () =>
-    import("./components/chart-area-interactive").then((m) => ({
-      default: m.ChartAreaInteractive,
+    import("@/components/weekly-metrics-chart").then((m) => ({
+      default: m.WeeklyMetricsChart,
     })),
   {
     ssr: true,
@@ -29,8 +30,11 @@ const ChartAreaInteractive = dynamic(
   },
 );
 
-const DataTable = dynamic(
-  () => import("./components/data-table").then((m) => ({ default: m.DataTable })),
+const ClusterLeaderboardTable = dynamic(
+  () =>
+    import("./components/cluster-leaderboard-table").then((m) => ({
+      default: m.ClusterLeaderboardTable,
+    })),
   {
     ssr: true,
     loading: () => (
@@ -67,13 +71,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   // Format date on server to avoid hydration mismatch
   const formattedClusterDate = runMetadata?.createdAt
-    ? new Date(runMetadata.createdAt).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
+    ? new Date(runMetadata.createdAt).toISOString()
     : null;
 
   // Get available weeks
@@ -248,8 +246,10 @@ async function ChartAndTable({
 
   return (
     <>
-      <ChartAreaInteractive data={weeklyMetrics} selectedWeeks={selectedWeeks} />
-      <DataTable
+      <div className="px-4 lg:px-6">
+        <WeeklyMetricsChart data={weeklyMetrics} selectedWeeks={selectedWeeks} />
+      </div>
+      <ClusterLeaderboardTable
         data={clusterLeaderboard}
         clusterCreatedAt={clusterCreatedAt}
         selectedWeeks={selectedWeeks}

@@ -1,7 +1,7 @@
-import type { Database } from "@/lib/database.types";
 import { createServerClient } from "@supabase/ssr";
 import type { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
+import type { Database } from "@/lib/database.types";
 
 /**
  * Especially important if using Fluid compute: Don't put this client in a

@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import { cn } from "@/lib/utils";
 
 interface DeltaProps {
   value?: number | null; // percent as decimal if variant="percent"; else absolute units

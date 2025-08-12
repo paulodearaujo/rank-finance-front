@@ -101,7 +101,9 @@ export function SiteHeader({
                 ) : (
                   <>
                     <IconCalendar className="mr-2 h-4 w-4" />
-                    <span className="truncate">{displayText}</span>
+                    <span className="truncate" suppressHydrationWarning>
+                      {displayText}
+                    </span>
                   </>
                 )}
               </Button>

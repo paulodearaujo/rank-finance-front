@@ -1,0 +1,79 @@
+   ▲ Next.js 15.4.6 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.2.153:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Compiled middleware in 200ms
+ ✓ Ready in 1240ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 3.2s
+(node:40615) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /dashboard 200 in 5109ms
+ GET /dashboard?weeks=2025-08-10%2C2025-08-03%2C2025-07-27%2C2025-07-20%2C2025-07-13%2C2025-07-06%2C2025-06-29%2C2025-06-22%2C2025-06-15%2C2025-06-08%2C2025-06-01%2C2025-05-25%2C2025-05-18%2C2025-05-11%2C2025-05-04%2C2025-04-27%2C2025-04-20%2C2025-04-13%2C2025-04-06%2C2025-03-30%2C2025-03-23%2C2025-03-16%2C2025-03-09%2C2025-03-02%2C2025-02-23%2C2025-02-16%2C2025-02-09%2C2025-02-02%2C2025-01-26%2C2025-01-19%2C2025-01-12%2C2025-01-05 200 in 1027ms
+ ✓ Compiled /favicon.ico in 282ms
+ GET /avatars/shadcn.jpg 404 in 324ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 526ms
+ ○ Compiling /clusters/[id] ...
+ ✓ Compiled /clusters/[id] in 503ms
+(node:41269) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /avatars/shadcn.jpg 404 in 278ms
+(node:41274) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /avatars/shadcn.jpg 404 in 94ms
+ GET /clusters/5?weeks=2025-08-10%2C2025-08-03%2C2025-07-27%2C2025-07-20%2C2025-07-13%2C2025-07-06%2C2025-06-29%2C2025-06-22%2C2025-06-15%2C2025-06-08%2C2025-06-01%2C2025-05-25%2C2025-05-18%2C2025-05-11%2C2025-05-04%2C2025-04-27%2C2025-04-20%2C2025-04-13%2C2025-04-06%2C2025-03-30%2C2025-03-23%2C2025-03-16%2C2025-03-09%2C2025-03-02%2C2025-02-23%2C2025-02-16%2C2025-02-09%2C2025-02-02%2C2025-01-26%2C2025-01-19%2C2025-01-12%2C2025-01-05 200 in 3696ms
+ ✓ Compiled in 96ms
+ GET /clusters/5?weeks=2025-08-10%2C2025-08-03%2C2025-07-27%2C2025-07-20%2C2025-07-13%2C2025-07-06%2C2025-06-29%2C2025-06-22%2C2025-06-15%2C2025-06-08%2C2025-06-01%2C2025-05-25%2C2025-05-18%2C2025-05-11%2C2025-05-04%2C2025-04-27%2C2025-04-20%2C2025-04-13%2C2025-04-06%2C2025-03-30%2C2025-03-23%2C2025-03-16%2C2025-03-09%2C2025-03-02%2C2025-02-23%2C2025-02-16%2C2025-02-09%2C2025-02-02%2C2025-01-26%2C2025-01-19%2C2025-01-12%2C2025-01-05 200 in 78ms
+(node:41475) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled in 98ms
+ ✓ Compiled in 336ms
+ ✓ Compiled /dashboard in 27ms
+ GET /avatars/shadcn.jpg 404 in 266ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 405ms
+ GET /dashboard 200 in 1085ms
+ GET /avatars/shadcn.jpg 404 in 48ms
+ GET /avatars/shadcn.jpg 404 in 40ms
+ GET /avatars/shadcn.jpg 404 in 254ms
+(node:42207) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /avatars/shadcn.jpg 404 in 53ms
+ GET /clusters/5?weeks=2025-08-10%2C2025-08-03%2C2025-07-27%2C2025-07-20%2C2025-07-13%2C2025-07-06%2C2025-06-29%2C2025-06-22%2C2025-06-15%2C2025-06-08%2C2025-06-01%2C2025-05-25%2C2025-05-18%2C2025-05-11%2C2025-05-04%2C2025-04-27%2C2025-04-20%2C2025-04-13%2C2025-04-06%2C2025-03-30%2C2025-03-23%2C2025-03-16%2C2025-03-09%2C2025-03-02%2C2025-02-23%2C2025-02-16%2C2025-02-09%2C2025-02-02%2C2025-01-26%2C2025-01-19%2C2025-01-12%2C2025-01-05 200 in 1474ms
+ GET /avatars/shadcn.jpg 404 in 222ms
+ GET /avatars/shadcn.jpg 404 in 42ms
+ GET /dashboard?weeks=2025-08-10%2C2025-08-03%2C2025-07-27%2C2025-07-20%2C2025-07-13%2C2025-07-06%2C2025-06-29%2C2025-06-22%2C2025-06-15%2C2025-06-08%2C2025-06-01%2C2025-05-25%2C2025-05-18%2C2025-05-11%2C2025-05-04%2C2025-04-27%2C2025-04-20%2C2025-04-13%2C2025-04-06%2C2025-03-30%2C2025-03-23%2C2025-03-16%2C2025-03-09%2C2025-03-02%2C2025-02-23%2C2025-02-16%2C2025-02-09%2C2025-02-02%2C2025-01-26%2C2025-01-19%2C2025-01-12%2C2025-01-05 200 in 839ms
+ ✓ Compiled in 152ms
+ ✓ Compiled in 124ms
+ ✓ Compiled in 176ms
+ ✓ Compiled in 309ms
+ ✓ Compiled in 112ms
+ ✓ Compiled in 232ms
+ GET /avatars/shadcn.jpg 404 in 132ms
+(node:43961) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /avatars/shadcn.jpg 404 in 48ms
+ GET /clusters/5?weeks=2025-08-10%2C2025-08-03%2C2025-07-27%2C2025-07-20%2C2025-07-13%2C2025-07-06%2C2025-06-29%2C2025-06-22%2C2025-06-15%2C2025-06-08%2C2025-06-01%2C2025-05-25%2C2025-05-18%2C2025-05-11%2C2025-05-04%2C2025-04-27%2C2025-04-20%2C2025-04-13%2C2025-04-06%2C2025-03-30%2C2025-03-23%2C2025-03-16%2C2025-03-09%2C2025-03-02%2C2025-02-23%2C2025-02-16%2C2025-02-09%2C2025-02-02%2C2025-01-26%2C2025-01-19%2C2025-01-12%2C2025-01-05 200 in 4046ms
+ GET /avatars/shadcn.jpg 404 in 205ms
+ GET /dashboard?weeks=2025-08-10%2C2025-08-03%2C2025-07-27%2C2025-07-20%2C2025-07-13%2C2025-07-06%2C2025-06-29%2C2025-06-22%2C2025-06-15%2C2025-06-08%2C2025-06-01%2C2025-05-25%2C2025-05-18%2C2025-05-11%2C2025-05-04%2C2025-04-27%2C2025-04-20%2C2025-04-13%2C2025-04-06%2C2025-03-30%2C2025-03-23%2C2025-03-16%2C2025-03-09%2C2025-03-02%2C2025-02-23%2C2025-02-16%2C2025-02-09%2C2025-02-02%2C2025-01-26%2C2025-01-19%2C2025-01-12%2C2025-01-05 200 in 1056ms
+ GET /avatars/shadcn.jpg 404 in 48ms
+ GET /avatars/shadcn.jpg 404 in 67ms
+ ✓ Compiled in 238ms
+ ✓ Compiled in 158ms
+ GET /avatars/shadcn.jpg 404 in 89ms
+(node:44513) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /avatars/shadcn.jpg 404 in 105ms
+ GET /clusters/5?weeks=2025-08-10%2C2025-08-03%2C2025-07-27%2C2025-07-20%2C2025-07-13%2C2025-07-06%2C2025-06-29%2C2025-06-22%2C2025-06-15%2C2025-06-08%2C2025-06-01%2C2025-05-25%2C2025-05-18%2C2025-05-11%2C2025-05-04%2C2025-04-27%2C2025-04-20%2C2025-04-13%2C2025-04-06%2C2025-03-30%2C2025-03-23%2C2025-03-16%2C2025-03-09%2C2025-03-02%2C2025-02-23%2C2025-02-16%2C2025-02-09%2C2025-02-02%2C2025-01-26%2C2025-01-19%2C2025-01-12%2C2025-01-05 200 in 3655ms
+ ✓ Compiled in 148ms
+ GET /avatars/shadcn.jpg 404 in 54ms
+ GET /dashboard?weeks=2025-08-10%2C2025-08-03%2C2025-07-27%2C2025-07-20%2C2025-07-13%2C2025-07-06%2C2025-06-29%2C2025-06-22%2C2025-06-15%2C2025-06-08%2C2025-06-01%2C2025-05-25%2C2025-05-18%2C2025-05-11%2C2025-05-04%2C2025-04-27%2C2025-04-20%2C2025-04-13%2C2025-04-06%2C2025-03-30%2C2025-03-23%2C2025-03-16%2C2025-03-09%2C2025-03-02%2C2025-02-23%2C2025-02-16%2C2025-02-09%2C2025-02-02%2C2025-01-26%2C2025-01-19%2C2025-01-12%2C2025-01-05 200 in 1005ms
+ GET /avatars/shadcn.jpg 404 in 52ms
+ GET /avatars/shadcn.jpg 404 in 60ms
+ GET /avatars/shadcn.jpg 404 in 78ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 252ms
+(node:44736) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /avatars/shadcn.jpg 404 in 41ms
+ GET /clusters/3?weeks=2025-08-10%2C2025-08-03%2C2025-07-27%2C2025-07-20%2C2025-07-13%2C2025-07-06%2C2025-06-29%2C2025-06-22%2C2025-06-15%2C2025-06-08%2C2025-06-01%2C2025-05-25%2C2025-05-18%2C2025-05-11%2C2025-05-04%2C2025-04-27%2C2025-04-20%2C2025-04-13%2C2025-04-06%2C2025-03-30%2C2025-03-23%2C2025-03-16%2C2025-03-09%2C2025-03-02%2C2025-02-23%2C2025-02-16%2C2025-02-09%2C2025-02-02%2C2025-01-26%2C2025-01-19%2C2025-01-12%2C2025-01-05 200 in 3381ms

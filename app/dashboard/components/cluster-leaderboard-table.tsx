@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Delta } from "@/components/ui/delta";
-import { IconArrowDown, IconArrowUp, IconSearch } from "@tabler/icons-react";
+import { IconArrowDown, IconArrowsUpDown, IconArrowUp, IconSearch } from "@tabler/icons-react";
 import type {
   Cell,
   Column,
@@ -64,7 +64,7 @@ interface ClusterData
   gsc_position_delta_pct?: number;
 }
 
-export function DataTable({
+export function ClusterLeaderboardTable({
   data = [],
   clusterCreatedAt,
   selectedWeeks,
@@ -91,17 +91,42 @@ export function DataTable({
 
   // Reusable sortable header (shadcn style)
   const SortableHeader = React.useCallback(
-    ({ column, title }: { column: Column<ClusterData>; title: string }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="h-auto p-0 font-medium cursor-pointer"
-      >
-        {title}
-        {column.getIsSorted() === "asc" && <IconArrowUp className="ml-1 size-3" />}
-        {column.getIsSorted() === "desc" && <IconArrowDown className="ml-1 size-3" />}
-      </Button>
-    ),
+    ({
+      column,
+      title,
+      align = "right",
+    }: {
+      column: Column<ClusterData>;
+      title: string;
+      align?: "left" | "center" | "right";
+    }) => {
+      const justifyClass =
+        align === "center"
+          ? "justify-center text-center"
+          : align === "left"
+            ? "justify-start text-left"
+            : "justify-end text-right";
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className={`h-auto p-0 font-medium cursor-pointer w-full ${justifyClass}`}
+        >
+          <span className="inline-flex items-center gap-1">
+            <span>{title}</span>
+            <span className="inline-flex w-4 justify-center">
+              {column.getIsSorted() === "asc" ? (
+                <IconArrowUp className="size-3" />
+              ) : column.getIsSorted() === "desc" ? (
+                <IconArrowDown className="size-3" />
+              ) : (
+                <IconArrowsUpDown className="size-3 opacity-50" />
+              )}
+            </span>
+          </span>
+        </Button>
+      );
+    },
     [],
   );
 
@@ -124,7 +149,7 @@ export function DataTable({
       {
         accessorKey: "cluster_size",
         header: ({ column }: { column: Column<ClusterData> }) => (
-          <SortableHeader column={column} title="Páginas" />
+          <SortableHeader column={column} title="Páginas" align="center" />
         ),
         cell: ({ row }: { row: Row<ClusterData> }) => (
           <div className="text-center">{row.getValue("cluster_size")}</div>
@@ -243,31 +268,30 @@ export function DataTable({
       </div>
 
       <div className="overflow-hidden rounded-lg border">
-        <Table>
+        <Table className="table-fixed">
           <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((headerGroup: HeaderGroup<ClusterData>) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header: HeaderGroup<ClusterData>["headers"][0]) => (
-                  <TableHead
-                    key={header.id}
-                    className={
-                      header.column.id === "cluster_size"
-                        ? "text-center"
-                        : [
-                              "gsc_impressions",
-                              "gsc_clicks",
-                              "amplitude_conversions",
-                              "gsc_position",
-                            ].includes(header.column.id as string)
-                          ? "text-right"
-                          : "text-left"
-                    }
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                ))}
+                {headerGroup.headers.map((header: HeaderGroup<ClusterData>["headers"][0]) => {
+                  const id = header.column.id as string;
+                  const cls =
+                    id === "cluster_size"
+                      ? "text-center w-[5.5rem]"
+                      : id === "gsc_position"
+                        ? "text-right w-[6.5rem] md:w-[7rem]"
+                        : ["gsc_impressions", "gsc_clicks", "amplitude_conversions"].includes(id)
+                          ? "text-right w-[9.5rem] md:w-[10rem]"
+                          : id === "cluster_name"
+                            ? "text-left w-[38%] md:w-[34%] lg:w-[30%] pr-2 md:pr-4"
+                            : "text-left";
+                  return (
+                    <TableHead key={header.id} className={cls}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
             ))}
           </TableHeader>
@@ -293,30 +317,33 @@ export function DataTable({
                                 className="cursor-pointer hover:bg-muted/50"
                                 onClick={(e: React.MouseEvent<HTMLTableRowElement>) => {
                                   // Não navegar se clicar em um link
-                                  if ((e.target as HTMLElement).closest('a')) return;
+                                  if ((e.target as HTMLElement).closest("a")) return;
                                   const url = `/clusters/${row.original.cluster_id}${weeksParam}`;
                                   router.push(url);
                                 }}
                               >
-                                {row.getVisibleCells().map((cell: Cell<ClusterData, unknown>) => (
-                                  <TableCell
-                                    key={cell.id}
-                                    className={
-                                      cell.column.id === "cluster_size"
-                                        ? "text-center"
+                                {row.getVisibleCells().map((cell: Cell<ClusterData, unknown>) => {
+                                  const id = cell.column.id as string;
+                                  const cls =
+                                    id === "cluster_size"
+                                      ? "text-center w-[5.5rem]"
+                                      : id === "gsc_position"
+                                        ? "text-right w-[6.5rem] md:w-[7rem]"
                                         : [
                                               "gsc_impressions",
                                               "gsc_clicks",
                                               "amplitude_conversions",
-                                              "gsc_position",
-                                            ].includes(cell.column.id as string)
-                                          ? "text-right"
-                                          : "text-left"
-                                    }
-                                  >
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                  </TableCell>
-                                ))}
+                                            ].includes(id)
+                                          ? "text-right w-[9.5rem] md:w-[10rem]"
+                                          : id === "cluster_name"
+                                            ? "text-left w-[38%] md:w-[34%] lg:w-[30%] pr-2 md:pr-4"
+                                            : "text-left";
+                                  return (
+                                    <TableCell key={cell.id} className={cls}>
+                                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </TableCell>
+                                  );
+                                })}
                               </TableRow>
                             </div>
                           );
@@ -333,31 +360,32 @@ export function DataTable({
                     className="cursor-pointer hover:bg-muted/50"
                     onClick={(e: React.MouseEvent<HTMLTableRowElement>) => {
                       // Não navegar se clicar em um link
-                      if ((e.target as HTMLElement).closest('a')) return;
+                      if ((e.target as HTMLElement).closest("a")) return;
                       const url = `/clusters/${row.original.cluster_id}${weeksParam}`;
-                      console.log('Clicou na linha, navegando para:', url);
+                      console.log("Clicou na linha, navegando para:", url);
                       router.push(url);
                     }}
                   >
-                    {row.getVisibleCells().map((cell: Cell<ClusterData, unknown>) => (
-                      <TableCell
-                        key={cell.id}
-                        className={
-                          cell.column.id === "cluster_size"
-                            ? "text-center"
-                            : [
-                                  "gsc_impressions",
-                                  "gsc_clicks",
-                                  "amplitude_conversions",
-                                  "gsc_position",
-                                ].includes(cell.column.id as string)
-                              ? "text-right"
-                              : "text-left"
-                        }
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
+                    {row.getVisibleCells().map((cell: Cell<ClusterData, unknown>) => {
+                      const id = cell.column.id as string;
+                      const cls =
+                        id === "cluster_size"
+                          ? "text-center w-[5.5rem]"
+                          : id === "gsc_position"
+                            ? "text-right w-[6.5rem] md:w-[7rem]"
+                            : ["gsc_impressions", "gsc_clicks", "amplitude_conversions"].includes(
+                                  id,
+                                )
+                              ? "text-right w-[9.5rem] md:w-[10rem]"
+                              : id === "cluster_name"
+                                ? "text-left w-[38%] md:w-[34%] lg:w-[30%] pr-2 md:pr-4"
+                                : "text-left";
+                      return (
+                        <TableCell key={cell.id} className={cls}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      );
+                    })}
                   </TableRow>
                 ))
               )
@@ -385,7 +413,14 @@ export function DataTable({
         </div>
         {clusterCreatedAt && (
           <div className="text-xs text-muted-foreground ml-auto">
-            Categorização de {clusterCreatedAt}
+            Categorização de{" "}
+            {new Date(clusterCreatedAt).toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </div>
         )}
       </div>

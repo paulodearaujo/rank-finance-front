@@ -1,10 +1,10 @@
 "use client";
 
+import { IconArrowLeft } from "@tabler/icons-react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { IconArrowLeft } from "@tabler/icons-react";
-import Link from "next/link";
 
 export function ClusterHeader({
   name,
