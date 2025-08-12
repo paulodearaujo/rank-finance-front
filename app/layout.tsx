@@ -19,7 +19,6 @@ export const metadata: Metadata = {
   },
   description: APP_DESCRIPTION,
   applicationName: APP_NAME,
-  keywords: ["SEO", "clustering", "analytics", "conteúdo", "dashboard", "marketing"],
   alternates: {
     canonical: "/",
   },
