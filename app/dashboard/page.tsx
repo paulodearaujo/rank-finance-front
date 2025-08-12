@@ -61,71 +61,50 @@ export default async function Page({ searchParams }: PageProps) {
     selectedWeeks = availableWeeks as string[];
   }
 
-  // Calculate date range based on selected weeks
-  const sortedWeeks = [...selectedWeeks].sort();
-  const earliestWeek = sortedWeeks[0];
-  const latestWeek = sortedWeeks[sortedWeeks.length - 1];
+  // Weeks already selected and validated above; no explicit min/max needed
 
   // Fetch all data in parallel
   const [weeklyMetrics, clusterLeaderboard] = await Promise.all([
-    getWeeklyMetrics(undefined, undefined, selectedWeeks), // Pass selected weeks for filtering
-    getClusterLeaderboard(runId, earliestWeek, latestWeek, selectedWeeks), // Filter leaderboard by selected weeks
+    getWeeklyMetrics(selectedWeeks),
+    getClusterLeaderboard(runId, selectedWeeks),
   ]);
 
-  // Calculate weekly changes (comparing last two weeks of selected period)
-  const sortedMetrics = [...(weeklyMetrics as WeeklyMetric[])]
-    .filter((item) => item.week_ending) // Ensure week_ending exists
-    .sort((a, b) => {
-      const dateA = a.week_ending ? new Date(a.week_ending).getTime() : 0;
-      const dateB = b.week_ending ? new Date(b.week_ending).getTime() : 0;
-      return dateA - dateB;
-    });
-  const previousWeek = sortedMetrics[sortedMetrics.length - 2];
+  // Split selected weeks into early/late and aggregate for cards deltas
+  const weeksSorted = [...selectedWeeks].sort((a, b) => a.localeCompare(b));
+  const mid = Math.floor(weeksSorted.length / 2);
+  const earlySet = new Set(weeksSorted.slice(0, mid));
+  const lateSet = new Set(weeksSorted.slice(mid));
 
-  // Calculate totals for selected weeks
-  const totalImpressions = (weeklyMetrics as WeeklyMetric[]).reduce(
-    (sum, week) => sum + (week.gsc_impressions || 0),
-    0,
+  const earlyTotals = (weeklyMetrics as WeeklyMetric[]).reduce(
+    (acc, w) => {
+      if (!w.week_ending || !earlySet.has(w.week_ending)) return acc;
+      const impr = w.gsc_impressions || 0;
+      const pos = w.gsc_position || 0;
+      acc.impressions += impr;
+      acc.clicks += w.gsc_clicks || 0;
+      acc.conversions += w.amplitude_conversions || 0;
+      acc._posWeighted += pos * impr;
+      return acc;
+    },
+    { impressions: 0, clicks: 0, conversions: 0, _posWeighted: 0 },
   );
-  const totalClicks = (weeklyMetrics as WeeklyMetric[]).reduce(
-    (sum, week) => sum + (week.gsc_clicks || 0),
-    0,
+  const lateTotals = (weeklyMetrics as WeeklyMetric[]).reduce(
+    (acc, w) => {
+      if (!w.week_ending || !lateSet.has(w.week_ending)) return acc;
+      const impr = w.gsc_impressions || 0;
+      const pos = w.gsc_position || 0;
+      acc.impressions += impr;
+      acc.clicks += w.gsc_clicks || 0;
+      acc.conversions += w.amplitude_conversions || 0;
+      acc._posWeighted += pos * impr;
+      return acc;
+    },
+    { impressions: 0, clicks: 0, conversions: 0, _posWeighted: 0 },
   );
-  const totalConversions = (weeklyMetrics as WeeklyMetric[]).reduce(
-    (sum, week) => sum + (week.amplitude_conversions || 0),
-    0,
-  );
-
-  // Calculate weighted CTR for the period
-  const totalCTR = totalImpressions > 0 ? totalClicks / totalImpressions : 0;
-
-  // Calculate previous period totals (if we have enough data)
-  let previousPeriodMetrics = null;
-  if (previousWeek) {
-    const previousPeriodWeeks = sortedMetrics.slice(
-      Math.max(0, sortedMetrics.length - selectedWeeks.length * 2),
-      sortedMetrics.length - selectedWeeks.length,
-    );
-
-    if (previousPeriodWeeks.length > 0) {
-      const prevImpressions = previousPeriodWeeks.reduce(
-        (sum, week) => sum + (week.gsc_impressions || 0),
-        0,
-      );
-      const prevClicks = previousPeriodWeeks.reduce((sum, week) => sum + (week.gsc_clicks || 0), 0);
-      const prevConversions = previousPeriodWeeks.reduce(
-        (sum, week) => sum + (week.amplitude_conversions || 0),
-        0,
-      );
-
-      previousPeriodMetrics = {
-        impressions: prevImpressions,
-        clicks: prevClicks,
-        ctr: prevImpressions > 0 ? prevClicks / prevImpressions : 0,
-        conversions: prevConversions,
-      };
-    }
-  }
+  const earlyPosition =
+    earlyTotals.impressions > 0 ? earlyTotals._posWeighted / earlyTotals.impressions : 0;
+  const latePosition =
+    lateTotals.impressions > 0 ? lateTotals._posWeighted / lateTotals.impressions : 0;
 
   // Calculate averages for all available data
   const allTimeImpressions = (weeklyMetrics as WeeklyMetric[]).reduce(
@@ -146,18 +125,29 @@ export default async function Page({ searchParams }: PageProps) {
       ? {
           impressions: allTimeImpressions / weeklyMetrics.length,
           clicks: allTimeClicks / weeklyMetrics.length,
-          ctr: allTimeImpressions > 0 ? allTimeClicks / allTimeImpressions : 0,
+          position:
+            allTimeImpressions > 0
+              ? (weeklyMetrics as WeeklyMetric[]).reduce(
+                  (acc, w) => acc + (w.gsc_position || 0) * (w.gsc_impressions || 0),
+                  0,
+                ) / allTimeImpressions
+              : 0,
           conversions: allTimeConversions / weeklyMetrics.length,
         }
       : undefined;
 
   // Prepare metrics object for SectionCards
   const metricsData = {
-    impressions: totalImpressions,
-    clicks: totalClicks,
-    ctr: totalCTR,
-    conversions: totalConversions,
-    previousPeriod: previousPeriodMetrics || undefined,
+    impressions: lateTotals.impressions,
+    clicks: lateTotals.clicks,
+    position: latePosition,
+    conversions: lateTotals.conversions,
+    previousPeriod: {
+      impressions: earlyTotals.impressions,
+      clicks: earlyTotals.clicks,
+      conversions: earlyTotals.conversions,
+      position: earlyPosition,
+    },
     averages: averages || undefined,
   };
 
@@ -180,7 +170,11 @@ export default async function Page({ searchParams }: PageProps) {
               <div className="px-4 lg:px-6">
                 <ChartAreaInteractive data={weeklyMetrics} selectedWeeks={selectedWeeks} />
               </div>
-              <DataTable data={clusterLeaderboard} clusterCreatedAt={formattedClusterDate} />
+              <DataTable
+                data={clusterLeaderboard}
+                clusterCreatedAt={formattedClusterDate}
+                selectedWeeks={selectedWeeks}
+              />
             </div>
           </div>
         </div>

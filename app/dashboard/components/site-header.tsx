@@ -1,22 +1,27 @@
 "use client";
 
-import { IconCalendar, IconRefresh } from "@tabler/icons-react";
-import { format, parseISO, startOfWeek } from "date-fns";
-import { useRouter } from "next/navigation";
-import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { IconCalendar, IconRefresh } from "@tabler/icons-react";
+import { format, parseISO, startOfWeek } from "date-fns";
+import { useRouter } from "next/navigation";
+import * as React from "react";
 
 interface SiteHeaderProps {
   availableWeeks?: string[];
   currentWeeks?: string[];
+  basePath?: string; // default "/dashboard"
 }
 
-export function SiteHeader({ availableWeeks = [], currentWeeks = [] }: SiteHeaderProps) {
+export function SiteHeader({
+  availableWeeks = [],
+  currentWeeks = [],
+  basePath = "/dashboard",
+}: SiteHeaderProps) {
   const router = useRouter();
   const [isNavigating, setIsNavigating] = React.useState(false);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
@@ -46,7 +51,7 @@ export function SiteHeader({ availableWeeks = [], currentWeeks = [] }: SiteHeade
       // This makes the actual navigation feel faster when user clicks Apply
       if (newSelection.length > 0) {
         const weekParams = newSelection.join(",");
-        router.prefetch(`/dashboard?weeks=${weekParams}`);
+        router.prefetch(`${basePath}?weeks=${weekParams}`);
       }
 
       return newSelection;
@@ -55,13 +60,10 @@ export function SiteHeader({ availableWeeks = [], currentWeeks = [] }: SiteHeade
 
   const handleApplySelection = () => {
     if (selectedWeeks.length > 0) {
-      // Set navigation state IMMEDIATELY for instant feedback
       setIsNavigating(true);
       setOpen(false);
-
-      // Navigate immediately after closing popover
       const weekParams = selectedWeeks.join(",");
-      router.push(`/dashboard?weeks=${weekParams}`);
+      router.push(`${basePath}?weeks=${weekParams}`);
     } else {
       setOpen(false);
     }
@@ -88,7 +90,7 @@ export function SiteHeader({ availableWeeks = [], currentWeeks = [] }: SiteHeade
               <Button
                 variant="outline"
                 size="sm"
-                className="w-80 justify-start text-left font-normal"
+                className="w-full sm:w-80 justify-start text-left font-normal"
                 disabled={isNavigating}
               >
                 {isNavigating ? (
@@ -104,7 +106,7 @@ export function SiteHeader({ availableWeeks = [], currentWeeks = [] }: SiteHeade
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[360px] p-0" align="end">
+            <PopoverContent className="w-[min(92vw,360px)] p-0" align="end">
               <div className="p-3">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-medium text-sm">Selecione as Semanas</h4>

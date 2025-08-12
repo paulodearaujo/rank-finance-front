@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import {
   Card,
   CardAction,
@@ -14,13 +12,20 @@ import type { ChartConfig } from "@/components/ui/chart";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { Tables } from "@/lib/database.types";
+import * as React from "react";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 // Constantes de configuração
 const DAYS_PER_WEEK = 7;
-const PERCENTAGE_MULTIPLIER = 100;
 
 // Usando tipo do banco de dados com campos opcionais para dados agregados
 type WeeklyMetric = Partial<Tables<"blog_articles_metrics">>;
+type NormalizedMetric = WeeklyMetric & {
+  amplitude_conversions_n: number;
+  gsc_clicks_n: number;
+  gsc_impressions_n: number;
+  gsc_position_n: number;
+};
 
 interface ChartAreaInteractiveProps {
   data?: WeeklyMetric[];
@@ -28,22 +33,10 @@ interface ChartAreaInteractiveProps {
 }
 
 const chartConfig = {
-  amplitude_conversions: {
-    label: "Vendas",
-    color: "var(--chart-2)",
-  },
-  gsc_clicks: {
-    label: "Cliques",
-    color: "var(--chart-1)",
-  },
-  gsc_ctr: {
-    label: "CTR",
-    color: "var(--chart-3)",
-  },
-  gsc_position: {
-    label: "Posição Média",
-    color: "var(--chart-4)",
-  },
+  amplitude_conversions: { label: "Conversões", color: "var(--chart-2)" },
+  gsc_clicks: { label: "Cliques", color: "var(--chart-1)" },
+  gsc_impressions: { label: "Impressões", color: "var(--chart-3)" },
+  gsc_position: { label: "Posição Média", color: "var(--chart-4)" },
 } satisfies ChartConfig;
 
 export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAreaInteractiveProps) {
@@ -51,6 +44,7 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
     "amplitude_conversions",
     "gsc_clicks",
   ]);
+  // KISS: sempre mostramos escala indexada (0–100). Tooltip mostra valores absolutos.
 
   const filteredData = React.useMemo<WeeklyMetric[]>(() => {
     if (!data || data.length === 0) return [];
@@ -65,8 +59,9 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
       })
       .map((item) => ({
         ...item,
-        gsc_ctr: item.gsc_ctr ? item.gsc_ctr * PERCENTAGE_MULTIPLIER : 0, // Convert to percentage
-        gsc_position: item.gsc_position || 0, // Ensure position is never undefined
+        // Keep gsc_ctr as null to satisfy exactOptionalPropertyTypes while not using it
+        gsc_ctr: item.gsc_ctr ?? null,
+        gsc_position: item.gsc_position || 0,
       }));
 
     // Optional: Fill in missing weeks with null values to show gaps in the chart
@@ -119,13 +114,47 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
     return sortedData as WeeklyMetric[];
   }, [data]);
 
+  // Build normalized dataset (0-100) per metric for better comparison in a single scale
+  const normalizedData = React.useMemo<NormalizedMetric[]>(() => {
+    if (!filteredData || filteredData.length === 0) return [] as NormalizedMetric[];
+
+    const maxValues = {
+      amplitude_conversions: Math.max(
+        ...filteredData.map((d) => Number(d.amplitude_conversions || 0)),
+      ),
+      gsc_clicks: Math.max(...filteredData.map((d) => Number(d.gsc_clicks || 0))),
+      gsc_impressions: Math.max(...filteredData.map((d) => Number(d.gsc_impressions || 0))),
+      // handled separately for inversion
+    };
+    const posVals = filteredData.map((d) => Number(d.gsc_position || 0));
+    const maxPos = Math.max(...posVals);
+    const minPos = Math.min(...posVals.filter((v) => v > 0).concat([0]));
+    const posDen = Math.max(1, maxPos - minPos);
+
+    const clampDiv = (num: number, den: number) => (den > 0 ? (num / den) * 100 : 0);
+
+    return filteredData.map((d) => ({
+      ...d,
+      amplitude_conversions_n: clampDiv(
+        Number(d.amplitude_conversions || 0),
+        maxValues.amplitude_conversions,
+      ),
+      gsc_clicks_n: clampDiv(Number(d.gsc_clicks || 0), maxValues.gsc_clicks),
+      gsc_impressions_n: clampDiv(Number(d.gsc_impressions || 0), maxValues.gsc_impressions),
+      // Posição: menor é melhor → invertido e normalizado
+      gsc_position_n: ((maxPos - Number(d.gsc_position || 0)) / posDen) * 100,
+    }));
+  }, [filteredData]);
+
+  const chartData: NormalizedMetric[] = normalizedData;
+
   return (
     <Card className="@container/card">
       <CardHeader>
         <CardTitle>Métricas Semanais</CardTitle>
         <CardDescription>
           <span className="hidden @[540px]/card:block">
-            Vendas, Cliques, CTR e Posição Média
+            Conversões, Cliques, Impressões e Posição Média (indexado 0–100)
             {selectedWeeks.length > 0 ? ` (${selectedWeeks.length} semanas)` : ""}
             {filteredData.some((d) => d.gsc_clicks === null) && (
               <span className="ml-2 text-destructive">⚠️ Dados faltando em algumas semanas</span>
@@ -137,6 +166,7 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
           </span>
         </CardDescription>
         <CardAction>
+          {/* Escala fixa indexada para clareza visual */}
           <ToggleGroup
             type="multiple"
             value={selectedMetrics}
@@ -148,14 +178,14 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
             variant="outline"
             className="flex flex-wrap gap-0 *:data-[slot=toggle-group-item]:!px-3 *:data-[slot=toggle-group-item]:!h-8"
           >
-            <ToggleGroupItem value="amplitude_conversions" aria-label="Vendas">
-              Vendas
+            <ToggleGroupItem value="amplitude_conversions" aria-label="Conversões">
+              Conversões
             </ToggleGroupItem>
             <ToggleGroupItem value="gsc_clicks" aria-label="Cliques">
               Cliques
             </ToggleGroupItem>
-            <ToggleGroupItem value="gsc_ctr" aria-label="CTR">
-              CTR
+            <ToggleGroupItem value="gsc_impressions" aria-label="Impressões">
+              Impressões
             </ToggleGroupItem>
             <ToggleGroupItem value="gsc_position" aria-label="Posição">
               Posição
@@ -164,8 +194,8 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
         </CardAction>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
-          <LineChart data={filteredData}>
+        <ChartContainer config={chartConfig} className="aspect-auto h-[220px] sm:h-[250px] w-full">
+          <LineChart data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="week_ending"
@@ -179,43 +209,8 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
                 return `Sem ${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1).toString().padStart(2, "0")}`;
               }}
             />
-            {/* Left Y-axis for Vendas and Cliques */}
-            {(selectedMetrics.includes("amplitude_conversions") ||
-              selectedMetrics.includes("gsc_clicks")) && (
-              <YAxis
-                yAxisId="left"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                tickFormatter={(value: number) => {
-                  return Number(value).toLocaleString("pt-BR");
-                }}
-              />
-            )}
-            {/* Right Y-axis for CTR */}
-            {selectedMetrics.includes("gsc_ctr") && (
-              <YAxis
-                yAxisId="ctr"
-                orientation="right"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                tickFormatter={(value: number) => `${Number(value).toFixed(1)}%`}
-              />
-            )}
-            {/* Another right Y-axis for Position (inverted) */}
-            {selectedMetrics.includes("gsc_position") && !selectedMetrics.includes("gsc_ctr") && (
-              <YAxis
-                yAxisId="position"
-                orientation="right"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                reversed
-                domain={[1, "dataMax"]}
-                tickFormatter={(value: number) => Number(value).toFixed(1)}
-              />
-            )}
+            {/* Single Y-axis for all metrics */}
+            <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={[0, 100]} />
             <ChartTooltip
               cursor={false}
               content={
@@ -237,18 +232,17 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
                     const label = config?.label || name;
                     const color = item?.color || config?.color;
 
-                    // Format value with proper spacing
+                    // Mostrar sempre os valores absolutos no tooltip
                     let formattedValue = "";
-
-                    if (name === "gsc_ctr") {
-                      const n = Number(value);
-                      formattedValue = `${n.toFixed(2)}%`;
-                    } else if (name === "gsc_position") {
-                      const n = Number(value);
+                    const baseKey = (name as string).replace(/_n$/, "");
+                    const original = item?.payload?.[baseKey as keyof typeof item.payload] as
+                      | number
+                      | undefined;
+                    if ((name as string).startsWith("gsc_position")) {
+                      const n = Number(original ?? 0);
                       formattedValue = n.toFixed(1);
                     } else {
-                      // For clicks and conversions
-                      const n = Number(value);
+                      const n = Number(original ?? 0);
                       formattedValue = n.toLocaleString("pt-BR");
                     }
 
@@ -274,8 +268,8 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
             />
             {selectedMetrics.includes("amplitude_conversions") && (
               <Line
-                yAxisId="left"
-                dataKey="amplitude_conversions"
+                dataKey="amplitude_conversions_n"
+                name="amplitude_conversions"
                 type="monotone"
                 stroke="var(--color-amplitude_conversions)"
                 strokeWidth={2}
@@ -285,8 +279,8 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
             )}
             {selectedMetrics.includes("gsc_clicks") && (
               <Line
-                yAxisId="left"
-                dataKey="gsc_clicks"
+                dataKey="gsc_clicks_n"
+                name="gsc_clicks"
                 type="monotone"
                 stroke="var(--color-gsc_clicks)"
                 strokeWidth={2}
@@ -294,12 +288,12 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
                 connectNulls={false}
               />
             )}
-            {selectedMetrics.includes("gsc_ctr") && (
+            {selectedMetrics.includes("gsc_impressions") && (
               <Line
-                yAxisId="ctr"
-                dataKey="gsc_ctr"
+                dataKey="gsc_impressions_n"
+                name="gsc_impressions"
                 type="monotone"
-                stroke="var(--color-gsc_ctr)"
+                stroke="var(--color-gsc_impressions)"
                 strokeWidth={2}
                 dot={false}
                 connectNulls={false}
@@ -307,8 +301,8 @@ export function ChartAreaInteractive({ data = [], selectedWeeks = [] }: ChartAre
             )}
             {selectedMetrics.includes("gsc_position") && (
               <Line
-                yAxisId={selectedMetrics.includes("gsc_ctr") ? "ctr" : "position"}
-                dataKey="gsc_position"
+                dataKey="gsc_position_n"
+                name="gsc_position"
                 type="monotone"
                 stroke="var(--color-gsc_position)"
                 strokeWidth={2}

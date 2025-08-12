@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
 import type { Tables } from "@/lib/database.types";
 import { createClient } from "@/lib/supabase/server";
+import { NextResponse } from "next/server";
 
 type BlogClusters = Tables<"blog_clusters">;
 type BlogClusterMetrics = Tables<"blog_cluster_metrics">;

@@ -1,17 +1,7 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import type { Tables } from "@/lib/database.types";
+import { Delta } from "@/components/ui/delta";
 import { IconArrowDown, IconArrowUp, IconSearch } from "@tabler/icons-react";
 import type {
   Cell,
@@ -29,13 +19,23 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
+// removed column toggle UI per request
+import { Input } from "@/components/ui/input";
+// removed pagination controls per request
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import type { Tables } from "@/lib/database.types";
 
-// Thresholds para badges de coerência
-const COHERENCE_THRESHOLDS = {
-  HIGH: 0.7,
-  MEDIUM: 0.5,
-} as const;
+// Coerência não exibida no momento; thresholds removidos por ora (YAGNI)
 
 // Tipo combinando métricas do cluster com campos agregados de outras tabelas
 interface ClusterData
@@ -50,155 +50,144 @@ interface ClusterData
   gsc_clicks: number; // Agregado de blog_articles_metrics
   gsc_impressions: number; // Agregado de blog_articles_metrics
   gsc_ctr: number; // Calculado
+  gsc_position: number; // Calculado (média ponderada)
   amplitude_conversions: number; // Agregado de blog_articles_metrics
+  // Deltas (segunda metade vs primeira metade do período)
+  gsc_clicks_delta?: number;
+  gsc_clicks_delta_pct?: number;
+  gsc_impressions_delta?: number;
+  gsc_impressions_delta_pct?: number;
+  amplitude_conversions_delta?: number;
+  amplitude_conversions_delta_pct?: number;
+  gsc_position_delta?: number;
+  gsc_position_delta_pct?: number;
 }
-
-const columns: ColumnDef<ClusterData>[] = [
-  {
-    accessorKey: "cluster_name",
-    header: "Cluster",
-    cell: ({ row }: { row: Row<ClusterData> }) => (
-      <div className="font-medium">
-        {row.original.cluster_name || `Cluster ${row.original.cluster_id}`}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "cluster_size",
-    header: ({ column }: { column: Column<ClusterData> }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-medium"
-        >
-          Tamanho
-          {column.getIsSorted() === "asc" ? (
-            <IconArrowUp className="ml-1 size-3" />
-          ) : column.getIsSorted() === "desc" ? (
-            <IconArrowDown className="ml-1 size-3" />
-          ) : null}
-        </Button>
-      );
-    },
-    cell: ({ row }: { row: Row<ClusterData> }) => (
-      <div className="text-center">{row.getValue("cluster_size")}</div>
-    ),
-  },
-  {
-    accessorKey: "gsc_clicks",
-    header: ({ column }: { column: Column<ClusterData> }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-medium"
-        >
-          Clicks
-          {column.getIsSorted() === "asc" ? (
-            <IconArrowUp className="ml-1 size-3" />
-          ) : column.getIsSorted() === "desc" ? (
-            <IconArrowDown className="ml-1 size-3" />
-          ) : null}
-        </Button>
-      );
-    },
-    cell: ({ row }: { row: Row<ClusterData> }) => {
-      const clicks = row.getValue("gsc_clicks") as number;
-      return <div className="text-right font-medium">{clicks.toLocaleString("pt-BR")}</div>;
-    },
-  },
-  {
-    accessorKey: "amplitude_conversions",
-    header: ({ column }: { column: Column<ClusterData> }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-medium"
-        >
-          Conversões
-          {column.getIsSorted() === "asc" ? (
-            <IconArrowUp className="ml-1 size-3" />
-          ) : column.getIsSorted() === "desc" ? (
-            <IconArrowDown className="ml-1 size-3" />
-          ) : null}
-        </Button>
-      );
-    },
-    cell: ({ row }: { row: Row<ClusterData> }) => {
-      const conversions = row.getValue("amplitude_conversions") as number;
-      return <div className="text-right font-medium">{conversions.toLocaleString("pt-BR")}</div>;
-    },
-  },
-  {
-    accessorKey: "gsc_ctr",
-    header: ({ column }: { column: Column<ClusterData> }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-medium"
-        >
-          CTR
-          {column.getIsSorted() === "asc" ? (
-            <IconArrowUp className="ml-1 size-3" />
-          ) : column.getIsSorted() === "desc" ? (
-            <IconArrowDown className="ml-1 size-3" />
-          ) : null}
-        </Button>
-      );
-    },
-    cell: ({ row }: { row: Row<ClusterData> }) => {
-      const ctr = row.getValue("gsc_ctr") as number;
-      return <div className="text-right">{(ctr * 100).toFixed(2)}%</div>;
-    },
-  },
-  {
-    accessorKey: "cluster_coherence",
-    header: ({ column }: { column: Column<ClusterData> }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-medium"
-        >
-          Coerência
-          {column.getIsSorted() === "asc" ? (
-            <IconArrowUp className="ml-1 size-3" />
-          ) : column.getIsSorted() === "desc" ? (
-            <IconArrowDown className="ml-1 size-3" />
-          ) : null}
-        </Button>
-      );
-    },
-    cell: ({ row }: { row: Row<ClusterData> }) => {
-      const coherence = row.getValue("cluster_coherence") as number;
-      const variant =
-        coherence > COHERENCE_THRESHOLDS.HIGH
-          ? "default"
-          : coherence > COHERENCE_THRESHOLDS.MEDIUM
-            ? "secondary"
-            : "destructive";
-      return (
-        <div className="text-center">
-          <Badge variant={variant}>{coherence.toFixed(2)}</Badge>
-        </div>
-      );
-    },
-  },
-];
 
 export function DataTable({
   data = [],
   clusterCreatedAt,
+  selectedWeeks,
 }: {
   data: ClusterData[];
   clusterCreatedAt?: string | null; // Already formatted date string
+  selectedWeeks?: string[];
 }) {
-  const [sorting, setSorting] = React.useState<SortingState>([{ id: "gsc_clicks", desc: true }]);
+  const router = useRouter();
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: "amplitude_conversions", desc: true },
+  ]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility] = React.useState<Record<string, boolean>>({});
   const [globalFilter, setGlobalFilter] = React.useState("");
+
+  const weeksParam =
+    selectedWeeks && selectedWeeks.length > 0 ? `?weeks=${selectedWeeks.join(",")}` : "";
+
+  // Reusable sortable header (shadcn style)
+  const SortableHeader = ({ column, title }: { column: Column<ClusterData>; title: string }) => (
+    <Button
+      variant="ghost"
+      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      className="h-auto p-0 font-medium"
+    >
+      {title}
+      {column.getIsSorted() === "asc" && <IconArrowUp className="ml-1 size-3" />}
+      {column.getIsSorted() === "desc" && <IconArrowDown className="ml-1 size-3" />}
+    </Button>
+  );
+
+  const columns: ColumnDef<ClusterData>[] = [
+    {
+      accessorKey: "cluster_name",
+      header: "Cluster",
+      cell: ({ row }: { row: Row<ClusterData> }) => (
+        <div className="font-medium">
+          <Link
+            href={`/clusters/${row.original.cluster_id}${weeksParam}`}
+            className="hover:underline"
+          >
+            {row.original.cluster_name || `Cluster ${row.original.cluster_id}`}
+          </Link>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "cluster_size",
+      header: ({ column }: { column: Column<ClusterData> }) => (
+        <SortableHeader column={column} title="Páginas" />
+      ),
+      cell: ({ row }: { row: Row<ClusterData> }) => (
+        <div className="text-center">{row.getValue("cluster_size")}</div>
+      ),
+    },
+    // Ordem dos cards: Conversões, Impressões, Cliques, Posição
+    {
+      accessorKey: "amplitude_conversions",
+      header: ({ column }: { column: Column<ClusterData> }) => (
+        <SortableHeader column={column} title="Conversões" />
+      ),
+      cell: ({ row }: { row: Row<ClusterData> }) => {
+        const conversions = row.getValue("amplitude_conversions") as number;
+        const pct = row.original.amplitude_conversions_delta_pct ?? 0;
+        return (
+          <div className="flex flex-col items-end">
+            <div className="text-right font-medium">{conversions.toLocaleString("pt-BR")}</div>
+            <Delta value={pct} variant="percent" />
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "gsc_impressions",
+      header: ({ column }: { column: Column<ClusterData> }) => (
+        <SortableHeader column={column} title="Impressões" />
+      ),
+      cell: ({ row }: { row: Row<ClusterData> }) => {
+        const impressions = row.getValue("gsc_impressions") as number;
+        const pct = row.original.gsc_impressions_delta_pct ?? 0;
+        return (
+          <div className="flex flex-col items-end">
+            <div className="text-right">{impressions.toLocaleString("pt-BR")}</div>
+            <Delta value={pct} variant="percent" />
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "gsc_clicks",
+      header: ({ column }: { column: Column<ClusterData> }) => (
+        <SortableHeader column={column} title="Cliques" />
+      ),
+      cell: ({ row }: { row: Row<ClusterData> }) => {
+        const clicks = row.getValue("gsc_clicks") as number;
+        const pct = row.original.gsc_clicks_delta_pct ?? 0;
+        return (
+          <div className="flex flex-col items-end">
+            <div className="text-right font-medium">{clicks.toLocaleString("pt-BR")}</div>
+            <Delta value={pct} variant="percent" />
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "gsc_position",
+      header: ({ column }: { column: Column<ClusterData> }) => (
+        <SortableHeader column={column} title="Posição" />
+      ),
+      cell: ({ row }: { row: Row<ClusterData> }) => {
+        const pos = row.getValue("gsc_position") as number;
+        const delta = row.original.gsc_position_delta ?? 0;
+        return (
+          <div className="flex flex-col items-end">
+            <div className="text-right">{Number(pos).toFixed(1)}</div>
+            <Delta value={delta} variant="absolute" precision={1} positiveIcon="down" />
+          </div>
+        );
+      },
+    },
+    // CTR: importado/derivado mas não exibido no momento
+    // Coerência removida do leaderboard atual (mantida apenas no back)
+  ];
 
   const table = useReactTable({
     data,
@@ -207,10 +196,12 @@ export function DataTable({
       sorting,
       columnFilters,
       globalFilter,
+      columnVisibility,
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
+    // no column toggle handlers in UI
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -218,16 +209,18 @@ export function DataTable({
 
   return (
     <div className="flex flex-col gap-4 px-4 lg:px-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Leaderboard de Clusters</h2>
-        <div className="relative w-64">
-          <IconSearch className="absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Buscar clusters..."
-            value={globalFilter ?? ""}
-            onChange={(event) => setGlobalFilter(event.target.value)}
-            className="pl-8"
-          />
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-lg font-semibold">Ranking de Clusters</h2>
+        <div className="flex items-center gap-2 ml-auto">
+          <div className="relative w-full sm:w-64">
+            <IconSearch className="absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Buscar clusters..."
+              value={globalFilter ?? ""}
+              onChange={(event) => setGlobalFilter(event.target.value)}
+              className="pl-8"
+            />
+          </div>
         </div>
       </div>
 
@@ -237,7 +230,21 @@ export function DataTable({
             {table.getHeaderGroups().map((headerGroup: HeaderGroup<ClusterData>) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header: HeaderGroup<ClusterData>["headers"][0]) => (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    className={
+                      header.column.id === "cluster_size"
+                        ? "text-center"
+                        : [
+                              "gsc_impressions",
+                              "gsc_clicks",
+                              "amplitude_conversions",
+                              "gsc_position",
+                            ].includes(header.column.id as string)
+                          ? "text-right"
+                          : "text-left"
+                    }
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}
@@ -253,9 +260,26 @@ export function DataTable({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => {
+                    router.push(`/clusters/${row.original.cluster_id}${weeksParam}`);
+                  }}
                 >
                   {row.getVisibleCells().map((cell: Cell<ClusterData, unknown>) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={
+                        cell.column.id === "cluster_size"
+                          ? "text-center"
+                          : [
+                                "gsc_impressions",
+                                "gsc_clicks",
+                                "amplitude_conversions",
+                                "gsc_position",
+                              ].includes(cell.column.id as string)
+                            ? "text-right"
+                            : "text-left"
+                      }
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -272,7 +296,7 @@ export function DataTable({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <div className="text-sm text-muted-foreground">
           {table.getFilteredRowModel().rows.length === data.length ? (
             <>Mostrando todos os {table.getFilteredRowModel().rows.length} clusters</>
@@ -284,7 +308,9 @@ export function DataTable({
           )}
         </div>
         {clusterCreatedAt && (
-          <div className="text-xs text-muted-foreground">Categorização de {clusterCreatedAt}</div>
+          <div className="text-xs text-muted-foreground ml-auto">
+            Categorização de {clusterCreatedAt}
+          </div>
         )}
       </div>
     </div>
