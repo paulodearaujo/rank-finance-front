@@ -1,20 +1,24 @@
 import { createServerClient } from "@supabase/ssr";
-import type { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { type NextRequest, NextResponse } from "next/server";
-import type { Database } from "@/lib/database.types";
+import type { Database } from "@/lib/apps-scrape.types";
 
+/**
+ * Updates the user session in Next.js middleware.
+ * This function MUST be called from middleware.ts to keep auth tokens fresh.
+ *
+ * @param request - The incoming request
+ * @returns NextResponse with updated session cookies
+ */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
 
-  // With Fluid compute, don't put this client in a global environment
-  // variable. Always create a new one on each request.
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anon =
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY;
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
   if (!url || !anon) {
+    console.warn("Supabase environment variables missing in middleware");
     return supabaseResponse;
   }
 
@@ -23,46 +27,46 @@ export async function updateSession(request: NextRequest) {
       getAll() {
         return request.cookies.getAll();
       },
-      setAll(
-        cookiesToSet: Array<{ name: string; value: string; options?: Partial<ResponseCookie> }>,
-      ) {
-        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+      setAll(cookiesToSet: Array<{ name: string; value: string; options?: object }>) {
+        // Update cookies in the request
+        cookiesToSet.forEach(({ name, value }) => {
+          request.cookies.set(name, value);
+        });
+
+        // Create new response with updated cookies
         supabaseResponse = NextResponse.next({
           request,
         });
+
+        // Set cookies in the response
         cookiesToSet.forEach(({ name, value, options }) => {
-          if (options) {
-            supabaseResponse.cookies.set(name, value, options);
-          } else {
-            supabaseResponse.cookies.set(name, value);
-          }
+          supabaseResponse.cookies.set(name, value, options || {});
         });
       },
     },
   });
 
-  // Do not run code between createServerClient and
-  // supabase.auth.getClaims(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
+  // CRITICAL: Do not add any logic between createServerClient and getUser().
+  // This could cause hard-to-debug issues with session management.
 
-  // IMPORTANT: If you remove getClaims() and you use server-side rendering
-  // with the Supabase client, your users may be randomly logged out.
-  await supabase.auth.getClaims();
+  // Use getUser() instead of getClaims() for better compatibility
+  // This validates the JWT and refreshes the session if needed
+  await supabase.auth.getUser();
 
-  // Public app: no route protection yet. Keep session refresh only.
+  // Optional: Add route protection logic here
+  // Example:
+  // if (!user && request.nextUrl.pathname.startsWith('/protected')) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = '/login';
+  //   return NextResponse.redirect(url);
+  // }
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is.
-  // If you're creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
+  // IMPORTANT: Always return the supabaseResponse object as-is.
+  // If you need to modify it:
+  // 1. Pass the request: NextResponse.next({ request })
+  // 2. Copy cookies: newResponse.cookies.setAll(supabaseResponse.cookies.getAll())
+  // 3. Make your changes (but don't touch cookies!)
+  // 4. Return the modified response
 
   return supabaseResponse;
 }

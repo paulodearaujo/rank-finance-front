@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button";
 import { IconChartBar } from "@tabler/icons-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Início",
-  description: "Dashboard para analisar clusters SEO e métricas semanais do blog.",
+  title: "Lorem Ipsum",
+  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
   alternates: {
     canonical: "/",
   },
@@ -24,16 +24,17 @@ export default function Home() {
           </div>
         </div>
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard SEO Clustering</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Lorem Ipsum Dolor</h1>
           <p className="text-muted-foreground">
-            Análise de performance e agrupamento de conteúdo do blog
+            Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+            aliqua
           </p>
         </div>
         <div className="pt-4">
           <Link href="/dashboard">
             <Button size="lg" className="gap-2">
               <IconChartBar className="size-5" />
-              Acessar Dashboard
+              Lorem Ipsum
             </Button>
           </Link>
         </div>

@@ -1,41 +1,39 @@
 import { createServerClient } from "@supabase/ssr";
-import type { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
-import type { Database } from "@/lib/database.types";
+import type { Database } from "@/lib/apps-scrape.types";
 
 /**
- * Especially important if using Fluid compute: Don't put this client in a
- * global variable. Always create a new client within each function when using
- * it.
+ * Creates a Supabase client for server-side operations in Next.js 15.
+ * Uses the new async cookies() API from Next.js 15.
+ *
+ * IMPORTANT: Always create a new client per request. Never cache globally.
+ * This is critical for Vercel Functions and edge runtime compatibility.
  */
 export async function createClient() {
+  // Next.js 15: await cookies() is now required
   const cookieStore = await cookies();
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anon =
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY;
-  if (!url || !anon) throw new Error("Missing Supabase public env vars");
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !anon) {
+    throw new Error("Missing Supabase environment variables");
+  }
+
   return createServerClient<Database>(url, anon, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
       },
-      setAll(
-        cookiesToSet: Array<{ name: string; value: string; options?: Partial<ResponseCookie> }>,
-      ) {
+      setAll(cookiesToSet: Array<{ name: string; value: string; options?: object }>) {
         try {
           cookiesToSet.forEach(({ name, value, options }) => {
-            if (options) {
-              cookieStore.set(name, value, options);
-            } else {
-              cookieStore.set(name, value);
-            }
+            cookieStore.set(name, value, options || {});
           });
         } catch {
           // The `setAll` method was called from a Server Component.
           // This can be ignored if you have middleware refreshing
-          // user sessions.
+          // user sessions. This is expected behavior in Next.js 15.
         }
       },
     },

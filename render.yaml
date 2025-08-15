@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: dashboard-inbound
+    name: rank-finance
     runtime: node
     region: oregon  # oregon | frankfurt | ohio | singapore
     plan: starter      # free | starter | standard | pro

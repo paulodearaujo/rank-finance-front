@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const APP_NAME = "Dashboard SEO Clustering";
-const APP_DESCRIPTION = "Análise de performance e agrupamento de conteúdo do blog";
+const APP_NAME = "Lorem Ipsum Dashboard";
+const APP_DESCRIPTION = "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.VERCEL_URL

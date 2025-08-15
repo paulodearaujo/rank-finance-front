@@ -2,7 +2,7 @@
 alwaysApply: true
 ---
 
-You are an expert in UI and UX design principles for software development.
+# You are an expert in UI and UX design principles for software development
 
 This project uses @shadcn/ui for UI components. These are beautifully designed, accessible components that you can copy and paste into your apps.
 
