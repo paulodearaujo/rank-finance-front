@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const APP_NAME = "Lorem Ipsum Dashboard";
-const APP_DESCRIPTION = "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+const APP_NAME = "AppTracker";
+const APP_DESCRIPTION =
+  "Track App Store and Google Play ranking and metadata changes between snapshots.";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.VERCEL_URL
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "pt_BR",
+    locale: "en_US",
     url: "/",
     siteName: APP_NAME,
     title: APP_NAME,
@@ -53,21 +54,21 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.svg",
   },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0b0b" },
-  ],
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0b" },
+  ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         {process.env.NEXT_PUBLIC_SUPABASE_URL ? (
           <>
@@ -80,7 +81,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </>
         ) : null}
       </head>
-      <body suppressHydrationWarning>{children}</body>
+      <body id="root-body" className="antialiased" suppressHydrationWarning>
+        <a
+          href="#rank-tracker-content"
+          className="fixed left-3 top-3 z-[100] -translate-y-20 focus:translate-y-0 transition-transform rounded-md bg-primary px-3 py-2 text-primary-foreground shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

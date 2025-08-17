@@ -1,5 +1,5 @@
-import { createBrowserClient } from "@supabase/ssr";
 import type { Database } from "@/lib/apps-scrape.types";
+import { createBrowserClient } from "@supabase/ssr";
 
 /**
  * Creates a Supabase client for browser/client-side operations.
@@ -15,5 +15,9 @@ export function createClient() {
     throw new Error("Missing Supabase public environment variables");
   }
 
-  return createBrowserClient<Database>(url, anon);
+  return createBrowserClient<Database>(url, anon, {
+    db: {
+      schema: "apps",
+    },
+  });
 }

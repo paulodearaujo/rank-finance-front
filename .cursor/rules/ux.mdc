@@ -1,127 +1,314 @@
 ---
+
 alwaysApply: true
+id: ux-gold-standard-2025
+-------------------------------------------------------------------
+
+# Guia de UI/UX
+
+> **Objetivo:** entregar interfaces com o rigor de Apple/Uber/Airbnb: claras, rápidas, acessíveis e consistentes, sem “gambiarras”.
+> **Regra-mãe:** preferimos menos opções, mais intenção. Todo elemento na tela precisa justificar sua existência.
+
 ---
 
-# You are an expert in UI and UX design principles for software development
+## 0) Stack e como usar
 
-This project uses @shadcn/ui for UI components. These are beautifully designed, accessible components that you can copy and paste into your apps.
+* **Componentes base:** `@shadcn/ui` (Radix + Tailwind).
+* **Onde ficam:** `src/components/ui` + aliases de `components.json`.
+* **Padrão de variação:** use `class-variance-authority (cva)` para variantes; **não** crie variantes ad‑hoc.
+* **Wrapper sem div extra:** prefira `asChild` e `Slot` (Radix) quando for compor sem quebrar semântica.
+* **Utilitários canônicos:** `cn()` para merge de classes; tokens CSS via `:root` e `data-theme` (dark, hc).
 
-## Finding and Using Components
+---
 
-Components are available in the `src/components/ui` directory, following the aliases configured in `components.json`
+## 1) **Não-negociáveis**
 
-    Visual Design
-    - Establish a clear visual hierarchy to guide user attention.
-    - Choose a cohesive color palette that reflects the brand (ask the user for guidelines).
-    - Use typography effectively for readability and emphasis.
-    - Maintain sufficient contrast for legibility (WCAG 2.1 AA standard).
-    - Design with a consistent style across the application.
+* **Acessibilidade:** WCAG **2.2 AA** no mínimo + alvo **APCA Lc ≥ 75** para texto padrão e **≥ 90** para <14 px.
+* **Performance (CWV):** LCP ≤ **1.8 s**, INP ≤ **200 ms**, CLS ≤ **0.1**, TTFB ≤ **0.8 s**, TBT ≤ **150 ms**.
+* **Resposta de UI:** **<100 ms** para ações locais; **<400 ms** (Doherty) ou mostrar “feedback de progresso” em **≤150 ms**.
+* **Motion segura:** respeitar `prefers-reduced-motion`; 60 fps (budget \~16.7 ms/frame).
+* **Consistência:** 8‑pt system, **tipografia modular**, **tokens de cor OKLCH**, densidades definidas.
 
-    Interaction Design
-    - Create intuitive navigation patterns.
-    - Use familiar UI components to reduce cognitive load.
-    - Provide clear calls-to-action to guide user behavior.
-    - Implement responsive design for cross-device compatibility.
-    - Use animations judiciously to enhance user experience.
+---
 
-    Accessibility
-    - Follow WCAG guidelines for web accessibility.
-    - Use semantic HTML to enhance screen reader compatibility.
-    - Provide alternative text for images and non-text content.
-    - Ensure keyboard navigability for all interactive elements.
-    - Test with various assistive technologies.
+## 2) **Design Tokens (fonte única da verdade)**
 
-    Performance Optimization
-    - Optimize images and assets to minimize load times.
-    - Implement lazy loading for non-critical resources.
-    - Use code splitting to improve initial load performance.
-    - Monitor and optimize Core Web Vitals (LCP, FID, CLS).
+Defina em `globals.css`
 
-    User Feedback
-    - Incorporate clear feedback mechanisms for user actions.
-    - Use loading indicators for asynchronous operations.
-    - Provide clear error messages and recovery options.
-    - Implement analytics to track user behavior and pain points.
+**Regras:**
 
-    Information Architecture
-    - Organize content logically to facilitate easy access.
-    - Use clear labeling and categorization for navigation.
-    - Implement effective search functionality.
-    - Create a sitemap to visualize overall structure.
+* **Contrast-first:** valide APCA/AA sempre que tocar em cor.
+* **Brand scale:** 10 steps (1–12) inspirados em Radix; mapeie `primary/secondary/accent`.
+* **Elevations:** sombras discretas + **overlay color**; não use blur “vidro” sem justificativa de legibilidade.
 
-    Mobile-First Design
-    - Design for mobile devices first, then scale up.
-    - Use touch-friendly interface elements.
-    - Implement gestures for common actions (swipe, pinch-to-zoom).
-    - Consider thumb zones for important interactive elements.
+---
 
-    Consistency
-    - Develop and adhere to a design system.
-    - Use consistent terminology throughout the interface.
-    - Maintain consistent positioning of recurring elements.
-    - Ensure visual consistency across different sections.
+## 3) **Tipografia**
 
-    Testing and Iteration
-    - Conduct A/B testing for critical design decisions.
-    - Use heatmaps and session recordings to analyze user behavior.
-    - Regularly gather and incorporate user feedback.
-    - Continuously iterate on designs based on data and feedback.
+* **Escala modular:** base 16 px; passos 1.125 (Minor Third).
 
-    Documentation
-    - Maintain a comprehensive style guide.
-    - Document design patterns and component usage.
-    - Create user flow diagrams for complex interactions.
-    - Keep design assets organized and accessible to the team.
+  * 12/14 (auxílio), 16 (body), 18 (body‑emphasis), 20/24/32/40/56/72 para títulos.
+* **Linha e medida:** `line-height` 1.4–1.6; largura de parágrafo 60–80 caracteres.
+* **Truncamento consciente:** `line-clamp` com tooltip/expand para conteúdo crítico.
+* **Números:** tabulares (`font-variant-numeric: tabular-nums`) em métricas, tabelas e preços.
 
-    Fluid Layouts
-    - Use relative units (%, em, rem) instead of fixed pixels.
-    - Implement CSS Grid and Flexbox for flexible layouts.
-    - Design with a mobile-first approach, then scale up.
+---
 
-    Media Queries
-    - Use breakpoints to adjust layouts for different screen sizes.
-    - Focus on content needs rather than specific devices.
-    - Test designs across a range of devices and orientations.
+## 4) **Layout & Grid**
 
-    Images and Media
-    - Use responsive images with srcset and sizes attributes.
-    - Implement lazy loading for images and videos.
-    - Use CSS to make embedded media (like iframes) responsive.
+* **Sistema:** 12 colunas, **gutter 24** desktop / **16** mobile.
+* **Contêineres:** `sm: 640, md: 768, lg: 1024, xl: 1280, 2xl: 1536`.
+* **Espaçamento:** múltiplos de 4/8; **não** usar valores mágicos.
+* **Densidades:** `comfortable` (padrão), `compact` (data‑heavy), `cozy` (marketing).
 
-    Typography
-    - Use relative units (em, rem) for font sizes.
-    - Adjust line heights and letter spacing for readability on small screens.
-    - Implement a modular scale for consistent typography across breakpoints.
+---
 
-    Touch Targets
-    - Ensure interactive elements are large enough for touch (min 44x44 pixels).
-    - Provide adequate spacing between touch targets.
-    - Consider hover states for desktop and focus states for touch/keyboard.
+## 5) **Interação & Navegação**
 
-    Performance
-    - Optimize assets for faster loading on mobile networks.
-    - Use CSS animations instead of JavaScript when possible.
-    - Implement critical CSS for above-the-fold content.
+* **Modelos canônicos:** topo (global) + lateral (seções) + breadcrumb. Evite subníveis além de 3.
+* **Busca como atalho:** `⌘K`/`Ctrl K` command palette com ações rápidas.
+* **CTAs:** 1 primário por tela; secundário claro; links estilizados como links.
+* **Modais:** só para tarefas bloqueantes. Caso contrário, **Sheet**/Drawer.
+* **Undo > confirmar:** onde possível, ação imediata com **undo** (snackbar/toast com timer).
+* **Focus management:** `focus-visible` com anel de foco: 2 px, offset 2 px, usando `--ring`.
 
-    Content Prioritization
-    - Prioritize content display for mobile views.
-    - Use progressive disclosure to reveal content as needed.
-    - Implement off-canvas patterns for secondary content on small screens.
+---
 
-    Navigation
-    - Design mobile-friendly navigation patterns (e.g., hamburger menu).
-    - Ensure navigation is accessible via keyboard and screen readers.
-    - Consider using a sticky header for easy navigation access.
+## 6) **Estados (loading, erro, vazio, offline)**
 
-    Forms
-    - Design form layouts that adapt to different screen sizes.
-    - Use appropriate input types for better mobile experiences.
-    - Implement inline validation and clear error messaging.
+* **Até 150 ms:** nada (evite “flicker”).
+* **150–800 ms:** **progress bar indeterminado** ou **skeleton** alinhado ao layout.
+* **>800 ms:** texto de contexto + tempo/benefício (“Isso leva \~2 s pois…").
+* **Erro:** mensagem humana, ação de recuperação, `aria-live="assertive"`.
+* **Vazio:** explique valor + CTA para o primeiro passo.
+* **Offline:** banner persistente, fila idempotente de ações e rótulos “sincroniza quando voltar”.
 
-    Testing
-    - Use browser developer tools to test responsiveness.
-    - Test on actual devices, not just emulators.
-    - Conduct usability testing across different device types.
+---
 
-    Stay updated with the latest responsive design techniques and browser capabilities.
-    Refer to industry-standard guidelines and stay updated with latest UI/UX trends and best practices.
+## 7) **Acessibilidade**
+
+* **Semântica primeiro:** `button` para ações, `a` para navegação; `aria-label` somente quando não houver texto visível.
+* **Teclado total:** **tudo** alcançável com Tab/Shift+Tab; diálogos travam foco; `Esc` fecha.
+* **Leitores de tela:** use `aria-live polite/assertive` para feedback; `aria-busy` em regiões carregando.
+* **Tamanho & toque:** alvos **≥44×44 px**; espaçamento entre alvos **≥8 px**.
+* **Dark/HC:** garanta contraste e **não** codifique informação apenas por cor.
+
+---
+
+## 8) **Motion & Microinterações**
+
+* **Durations:** 120–180 ms (UI micro), 200–320 ms (entradas/saídas), 400–600 ms (transições de página).
+* **Easing:** `cubic-bezier(.2,.8,.2,1)` (ease-out responsiva); springs para gestos.
+* **Princípios:** **relevância** (guia atenção), **continuidade** (preserva contexto), **contenção** (evite extravagância).
+* **Reduced motion:** substitua transformações por fades discretos.
+
+---
+
+## 9) **Conteúdo & Microcopy**
+
+* **Clareza > carisma:** frases curtas, voz ativa, verbo no início (“Conectar conta”).
+* **Erros úteis:** diga *o que houve*, *por que importa* e *como resolver*.
+* **Unidades e formatos:** localize número, moeda, data com `Intl.*`.
+* **Evite jargão** se não for domínio do usuário; forneça *hint* on‑demand (`?` / popover).
+
+---
+
+## 10) **Mobile-first & Gestos**
+
+* **Thumb zones:** ações primárias ao alcance do polegar (inferior).
+* **Gestos com salvaguarda:** swipe tem eco visual + opção equivalente por botão.
+* **Teclados corretos:** `inputmode`/`type` adequados (numérico, email, decimal).
+
+---
+
+## 11) **Desempenho na prática**
+
+* **Imagens:** formatos modernos (AVIF/WebP), `srcset/sizes`, `priority` para LCP, `loading=lazy` no resto.
+* **Código:** RSC + `Suspense`/streaming; **code‑split** por rota e por componente pesado.
+* **Cache:** `stale-while-revalidate` para listas; prefetch em hover/viewport.
+* **Evite layout shift:** reservar espaço (aspect-ratio) e carregar fontes com `font-display: swap`.
+* **Animações:** `transform/opacity` somente; jamais animar `top/left/width/height`.
+
+---
+
+## 12) **Segurança, Privacidade e Ética de UX**
+
+* **Permissões contextuais:** peça quando necessário, explique o benefício.
+* **Dados sensíveis:** mascarar por padrão, revelar sob ação explícita.
+* **Sem dark patterns:** crescimento por valor, não por truque.
+
+---
+
+## 13) **AI UX (quando aplicável)**
+
+* **Streaming de resposta** (token‑by‑token) com skeleton de parágrafo.
+* **Fontes & confiabilidade:** botão “ver fontes”/“refazer”/“editar prompt”.
+* **Estados de ambiguidade:** mostre o que a IA **não sabe**; permita correção com poucos cliques.
+
+---
+
+## 17) **Heurísticas cognitivas → Aplicação**
+
+## 17) **Heurísticas cognitivas → Aplicação (completa)**
+
+**Aesthetic–Usability Effect** — aparência limpa aumenta tolerância a falhas.
+• Aplique: polimento consistente (tokens, alinhamentos, espaços).
+• Cuidado: estética nunca sacrifica contraste (APCA) ou hierarquia.
+
+**Choice Overload** — excesso de opções paralisa.
+• Aplique: até 3 escolhas visíveis; “Mais opções” em folha lateral/filtro.
+• Defaults inteligentes com “Recomendado”.
+
+**Chunking** — agrupar reduz esforço.
+• Aplique: steps de até 6 campos; grupos com título curto; acordeões nomeados por tarefa.
+
+**Cognitive Bias** — julgamentos enviesados.
+• Aplique: rótulos literais, prévias fiéis, comparações lado a lado.
+• Mitigue: A/B com métricas objetivas; wording neutro.
+
+**Cognitive Load** — esforço mental total.
+• Aplique: menos decisões por tela; progressivo; ícones + texto.
+• Regra: 1 objetivo primário por tela.
+
+**Doherty Threshold (<400 ms)** — resposta rápida mantém ritmo.
+• Aplique: ações locais <100 ms; feedback em ≤150 ms; skeleton alinhado ao layout.
+
+**Fitts’s Law** — tamanho/distância do alvo importam.
+• Aplique: alvos ≥44×44 px; primários próximos do foco; área clicável inclui padding.
+
+**Flow** — foco sem fricção.
+• Aplique: modo imersivo em tarefas longas (distrações off, autosave, undo).
+• Ritmo: animações 120–180 ms, consistentes.
+
+**Goal-Gradient** — motivação cresce perto do fim.
+• Aplique: progresso verídico por etapas; últimos passos mais curtos; “faltam 2”.
+
+**Hick’s Law** — mais opções = mais decisão.
+• Aplique: segmentar primeiro; pesquisa/command-K; presets.
+
+**Jakob’s Law** — padrões familiares vencem.
+• Aplique: componentes shadcn padrão antes de custom; nomes canônicos (“Salvar”).
+
+**Law of Common Region (Gestalt)** — bordas criam grupos.
+• Aplique: cards com contorno/sombra leve para seções relacionadas.
+
+**Law of Proximity (Gestalt)** — proximidade agrupa.
+• Aplique: espaço interno maior entre grupos que entre itens do mesmo grupo.
+
+**Law of Prägnanz (simplicidade)**
+• Aplique: estruturas simples, grids previsíveis, ruído visual mínimo.
+
+**Law of Similarity (Gestalt)** — semelhança agrupa.
+• Aplique: mesma cor/forma/estilo para itens da mesma categoria (badges, estados).
+
+**Law of Uniform Connectedness (Gestalt)** — conexão visual > proximidade.
+• Aplique: divisórias, linhas, chips conectando filtros ativos ao resultado.
+
+**Mental Model** — alinhe com expectativa do usuário.
+• Aplique: termos do domínio do usuário; ordem de campos conforme fluxo mental.
+
+**Miller’s Law (7±2)** — histórico e controverso; use com parcimônia.
+**Working Memory** — regra prática moderna: **4±1 itens simultâneos**.
+• Aplique: menus curtos, lotes pequenos, “ver mais” progressivo.
+
+**Occam’s Razor** — solução mais simples que explica o todo.
+• Aplique: remova passos e estados supérfluos; unifique padrões.
+
+**Paradox of the Active User** — ninguém lê manual.
+• Aplique: onboarding “fazer-fazendo”, dicas contextuais no primeiro uso, exemplos preenchidos.
+
+**Pareto Principle (80/20)**
+• Aplique: otimize o top-5 fluxos; mova os raros para caminhos avançados.
+
+**Parkinson’s Law** — tarefa expande no tempo dado.
+• Aplique: timeboxes e prazos claros (ex.: sessão de 10 min), passos com duração estimada.
+
+**Peak-End Rule** — pico e final definem a memória.
+• Aplique: um momento “wow” controlado + tela final com confirmação e próximos passos.
+
+**Postel’s Law** — aceite entradas diversas, emita saídas estritas.
+• Aplique: inputs tolerantes (espaços, formatos), normalização forte ao salvar.
+• Sem abrir mão de segurança/validação.
+
+**Selective Attention** — foco em poucos estímulos.
+• Aplique: hierarquia de contraste/tamanho; esconda ruído; estados vazios didáticos.
+
+**Serial Position Effect** — início e fim lembrados melhor.
+• Aplique: itens críticos no topo; ações destrutivas isoladas no fim (com confirmação/undo).
+
+**Tesler’s Law (complexidade conservada)**
+• Aplique: defaults bons escondem parâmetros; “modo avançado” para experts.
+
+**Von Restorff Effect** — o diferente chama atenção.
+• Aplique: 1 só destaque por tela (cor/forma) para o CTA ou alerta principal.
+
+**Zeigarnik Effect** — inacabado é lembrado.
+• Aplique: lista de “a concluir” persistente; retomar onde parou; badges de pendência.
+
+---
+
+## 18) **Checklist de Review (PR/QA)**
+
+**A. Acessibilidade**
+
+* [ ] Navegação por teclado completa e previsível
+* [ ] `role`/`aria-*` corretos; `aria-live` em feedback
+* [ ] Contraste aprovado (APCA/AA) em **todas** as variantes e estados
+
+**B. Visual/Conteúdo**
+
+* [ ] Usa tokens e escala tipográfica oficial
+* [ ] CTAs hierarquizados e textos imperativos claros
+* [ ] Estados: vazio/erro/loading definidos e testados
+
+**C. Interação/Performance**
+
+* [ ] Sem CLS; placeholders reservam espaço
+* [ ] Ação principal responde <100 ms ou tem feedback em ≤150 ms
+* [ ] Imagens otimizadas; code-split onde pesa
+
+**D. Consistência/Código**
+
+* [ ] Variantes via `cva`; sem estilos inline mágicos
+* [ ] `asChild` preserva semântica quando necessário
+* [ ] Testes de acessibilidade (`@testing-library`, `getByRole`) cobrindo caminhos críticos
+
+---
+
+## 19) **Padrões de conteúdo (do/don’t rápidos)**
+
+**Do**
+
+* “Conectar conta” • “Exportar CSV” • “Remover membro”
+* Nomes curtos de seção (1–3 palavras)
+* Tooltips que explicam **por que** e **quando**
+
+**Don’t**
+
+* “Por favor, poderia…”
+* Barras de progresso falsas
+* Ícones sem rótulo quando ação é ambígua
+
+---
+
+## 21) **Decisões de design — critérios explícitos**
+
+Quando houver disputa, decidir com base nestes pesos (100 pts):
+
+* **Clareza de uso (30)**: reduz ambiguidade?
+* **Custo cognitivo (20)**: quantos passos/decisões desaparecem?
+* **Consistência sistêmica (20)**: respeita tokens e padrões?
+* **Impacto em métricas (20)**: move LCP/INP, conversão ou retenção?
+* **Acessibilidade (10)**: melhora inclusão sem trade‑offs injustificados?
+
+A opção vencedora precisa **≥80/100** e nenhum requisito não‑negociável quebrado.
+
+---
+
+## 22) **Arquitetura de informação**
+
+* **Primeiro o trabalho a ser feito (JTBD):** navegação e conteúdos organizados por tarefas, não por organograma.
+* **Search-first onde há volume:** filtro facetado + busca tolerante a erro.
+* **Rótulos literais:** evite poesia; nomes que um novo membro da equipe acerta na primeira tentativa.
+
+---

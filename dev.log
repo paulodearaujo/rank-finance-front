@@ -1,0 +1,2697 @@
+
+> @ dev /Users/pauloalexandre/rank-finance-front/rank-finance-front
+> next dev --turbo
+
+   ▲ Next.js 15.4.6 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.2.153:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ○ Compiling middleware ...
+ ✓ Compiled middleware in 1863ms
+ ✓ Ready in 4.7s
+ ○ Compiling / ...
+ ✓ Compiled / in 3.7s
+(node:65324) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 12949ms
+ ✓ Compiled in 163ms
+ ✓ Compiled / in 29ms
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 5635ms
+ ✓ Compiled in 246ms
+ ✓ Compiled / in 55ms
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 9515ms
+ ✓ Compiled in 140ms
+ ✓ Compiled in 497ms
+ ✓ Compiled in 192ms
+ ✓ Compiled in 185ms
+ ✓ Compiled in 125ms
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 17219ms
+ ○ Compiling /icon.svg ...
+ ✓ Compiled /icon.svg in 945ms
+ GET /icon.svg 200 in 1323ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking,title,subtitle,description,screenshots&stores=google 200 in 18233ms
+ ✓ Compiled in 144ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 9444ms
+Error fetching run data: {
+  code: '57014',
+  details: null,
+  hint: null,
+  message: 'canceling statement due to statement timeout'
+}
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 24352ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Cscreenshots 200 in 21536ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Cscreenshots 200 in 23234ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 21962ms
+ ✓ Compiled in 147ms
+ ✓ Compiled / in 34ms
+Error fetching runs: {
+  message: 'The schema must be one of the following: public, graphql_public',
+  details: null,
+  hint: null,
+  code: 'PGRST106'
+}
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 1411ms
+ ✓ Compiled in 101ms
+ ✓ Compiled / in 32ms
+Error fetching runs: {
+  message: 'The schema must be one of the following: public, graphql_public',
+  details: null,
+  hint: null,
+  code: 'PGRST106'
+}
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 1288ms
+ ✓ Compiled / in 21ms
+Error fetching runs: {
+  message: 'The schema must be one of the following: public, graphql_public',
+  details: null,
+  hint: null,
+  code: 'PGRST106'
+}
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 799ms
+ ✓ Compiled in 132ms
+ ✓ Compiled / in 47ms
+Error fetching runs: message=The schema must be one of the following: public, graphql_public code=PGRST106 details= hint=
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 950ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 15514ms
+ GET /icon.svg 200 in 334ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 14723ms
+ GET /icon.svg 200 in 323ms
+ ✓ Compiled in 139ms
+ ✓ Compiled / in 40ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 9103ms
+ ✓ Compiled in 542ms
+ ○ Compiling / ...
+ ✓ Compiled / in 525ms
+ ✓ Compiled in 1522ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1198ms
+ ✓ Compiled middleware in 164ms
+ ✓ Compiled in 768ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 23472ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 19506ms
+ ✓ Compiled middleware in 60ms
+ ✓ Compiled in 541ms
+ ✓ Compiled in 160ms
+ ✓ Compiled / in 67ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 11104ms
+ ✓ Compiled in 964ms
+ ✓ Compiled in 616ms
+ ✓ Compiled / in 87ms
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./lib/logger.ts:1:1
+Module not found: Can't resolve 'pino'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m pino [36mfrom[39m [32m"pino"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m isDev [33m=[39m process[33m.[39menv[33m.[39m[33mNODE_ENV[39m [33m!==[39m [32m"production"[39m[33m;[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  ./lib/logger.ts
+  ./lib/rank-tracker/data-fetcher.ts
+  ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 18946ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 21360ms
+ ✓ Compiled in 2.4s
+ ✓ Compiled / in 381ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 26512ms
+ ✓ Compiled in 1479ms
+ ✓ Compiled / in 75ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ✓ Compiled in 413ms
+ ✓ Compiled / in 317ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 18645ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 19741ms
+ ✓ Compiled in 201ms
+ ✓ Compiled / in 64ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 8109ms
+ ✓ Compiled in 446ms
+ ✓ Compiled in 469ms
+ ✓ Compiled / in 141ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ✓ Compiled in 257ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 11127ms
+ ✓ Compiled in 1206ms
+ ✓ Compiled in 3.4s
+ ✓ Compiled in 195ms
+ ✓ Compiled in 436ms
+ ✓ Compiled / in 124ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 13630ms
+ ✓ Compiled in 552ms
+ ✓ Compiled in 202ms
+ ✓ Compiled in 149ms
+ ✓ Compiled in 163ms
+ ✓ Compiled / in 132ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 7708ms
+ ✓ Compiled in 370ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 16526ms
+ GET /icon.svg 200 in 805ms
+ ✓ Compiled in 143ms
+ ✓ Compiled in 2.3s
+ ✓ Compiled in 438ms
+ ✓ Compiled / in 63ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 8750ms
+ ✓ Compiled in 1281ms
+ ✓ Compiled in 333ms
+ ✓ Compiled in 105ms
+ ✓ Compiled in 679ms
+ ✓ Compiled in 1049ms
+ ✓ Compiled in 165ms
+ ✓ Compiled in 2.5s
+ ✓ Compiled in 188ms
+ ✓ Compiled in 155ms
+ ✓ Compiled in 240ms
+ ✓ Compiled in 88ms
+ ✓ Compiled in 107ms
+ ✓ Compiled in 129ms
+ ✓ Compiled in 246ms
+ ✓ Compiled in 908ms
+ ✓ Compiled in 260ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ ⨯ ReferenceError: useState is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:31:46)
+  29 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  30 |   const { diff } = comparison;
+> 31 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+     |                                              ^
+  32 |   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  33 |
+  34 |   // Skip if no data for this state OR removed in the after state {
+  digest: '2223122807'
+}
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 16560ms
+ GET /icon.svg 200 in 1709ms
+ ✓ Compiled in 579ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 8999ms
+ ✓ Compiled in 0ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload when ./components/rank-tracker/app-state-card.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 13546ms
+ ✓ Compiled in 0ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+ ⨯ TypeError: Cannot read properties of null (reading 'useContext')
+    at RankTrackerHeader (components/rank-tracker/header.tsx:37:25)
+  35 |
+  36 | export function RankTrackerHeader({ availableRuns, initialFilters }: RankTrackerHeaderProps) {
+> 37 |   const router = useRouter();
+     |                         ^
+  38 |   const pathname = usePathname();
+  39 |   const searchParams = useSearchParams();
+  40 |   // Filter states {
+  digest: '814454955'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useRef')
+    at SectionTOC (components/rank-tracker/section-toc.tsx:24:53)
+  22 |  */
+  23 | export function SectionTOC({ items, headerId, className }: SectionTOCProps) {
+> 24 |   const containerRef = useRef<HTMLDivElement | null>(null);
+     |                                                     ^
+  25 |   const [activeId, setActiveId] = useState<string | null>(items[0]?.id ?? null);
+  26 |   const targetsRef = useRef<{ id: string; el: HTMLElement }[]>([]);
+  27 |   const topOffsetRef = useRef<number>(0); {
+  digest: '1546792207'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useRef')
+    at SectionTOC (components/rank-tracker/section-toc.tsx:24:53)
+  22 |  */
+  23 | export function SectionTOC({ items, headerId, className }: SectionTOCProps) {
+> 24 |   const containerRef = useRef<HTMLDivElement | null>(null);
+     |                                                     ^
+  25 |   const [activeId, setActiveId] = useState<string | null>(items[0]?.id ?? null);
+  26 |   const targetsRef = useRef<{ id: string; el: HTMLElement }[]>([]);
+  27 |   const topOffsetRef = useRef<number>(0); {
+  digest: '1546792207'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⨯ TypeError: Cannot read properties of null (reading 'useState')
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:29:46)
+  27 |
+  28 | export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+> 29 |   const prefersReducedMotion = useReducedMotion();
+     |                                              ^
+  30 |   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
+  31 |   const { diff } = comparison;
+  32 |   const [isLightboxOpen, setIsLightboxOpen] = useState(false); {
+  digest: '1338225397'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload when ./components/rank-tracker/app-state-card.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 29871ms
+ ✓ Compiled in 1ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 704ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 25606ms
+ GET /icon.svg 200 in 345ms
+ ✓ Compiled in 1088ms
+ ✓ Compiled in 437ms
+ ✓ Compiled in 833ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:257:9)
+  255 |       {/* Lightbox for screenshots */}
+  256 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 257 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  258 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  259 |             <div className="flex items-center justify-between px-2 py-1">
+  260 |               <div className="text-sm opacity-80"> {
+  digest: '3998991116'
+}
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 15206ms
+ GET /icon.svg 200 in 344ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 2.2s
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 15431ms
+ GET /icon.svg 200 in 347ms
+Single item size exceeds maxSize
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ⨯ ReferenceError: Dialog is not defined
+    at AppStateCard (components/rank-tracker/app-state-card.tsx:256:9)
+  254 |       {/* Lightbox for screenshots */}
+  255 |       {data.screenshots && data.screenshots.length > 0 ? (
+> 256 |         <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+      |         ^
+  257 |           <DialogContent className="max-w-[min(96vw,1200px)] p-2 sm:p-4 bg-black/90 border-black/30 text-white">
+  258 |             <div className="flex items-center justify-between px-2 py-1">
+  259 |               <div className="text-sm opacity-80"> {
+  digest: '1620420068'
+}
+ ✓ Compiled in 3.6s
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 43267ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 23822ms
+ GET /icon.svg 200 in 534ms
+ ✓ Compiled in 632ms
+ ✓ Compiled in 141ms
+ ✓ Compiled in 420ms
+ ✓ Compiled in 335ms
+ ✓ Compiled in 146ms
+ ✓ Compiled in 233ms
+ ✓ Compiled in 406ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 37691ms
+ GET /icon.svg 200 in 636ms
+ ✓ Compiled in 2.6s
+ ✓ Compiled in 176ms
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 26028ms
+ GET /icon.svg 200 in 526ms
+ ✓ Compiled in 366ms
+ ✓ Compiled in 111ms
+ ✓ Compiled in 220ms
+ ✓ Compiled in 141ms
+ ✓ Compiled in 2.3s
+ ✓ Compiled in 510ms
+ ✓ Compiled / in 136ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 15671ms
+ ✓ Compiled in 482ms
+ ✓ Compiled in 325ms
+ ✓ Compiled in 1048ms
+ ✓ Compiled in 107ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 5775ms
+ ✓ Compiled in 214ms
+ ✓ Compiled / in 88ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+Single item size exceeds maxSize
+ ✓ Compiled in 245ms
+ ✓ Compiled in 0ms
+ ✓ Compiled / in 451ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 15188ms
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 10995ms
+ ✓ Compiled in 147ms
+ ✓ Compiled / in 53ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 11965ms
+ ✓ Compiled in 222ms
+ ✓ Compiled / in 227ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 10278ms
+ ✓ Compiled in 209ms
+ ✓ Compiled / in 144ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+Single item size exceeds maxSize
+ GET /?after=20250816T142003&before=20250815T133122&changeTypes=ranking%2Ctitle%2Csubtitle%2Cscreenshots 200 in 9521ms
+ ✓ Compiled in 993ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 1637ms
+ GET /?after=20250816T142003&before=20250815T115628&stores=google 200 in 1258ms
+ GET /?after=20250816T142003&before=20250815T115628 200 in 58175ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 14069ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking,title,subtitle,description,screenshots 200 in 26920ms
+ GET /icon.svg 200 in 331ms
+ ✓ Compiled in 337ms
+ ✓ Compiled in 828ms
+ ✓ Compiled in 110ms
+ ✓ Compiled in 250ms
+ ✓ Compiled / in 219ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ✓ Compiled in 810ms
+ ✓ Compiled / in 252ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 37217ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 28194ms
+ ✓ Compiled in 162ms
+ ✓ Compiled / in 156ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ✓ Compiled in 669ms
+ ✓ Compiled / in 247ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 26049ms
+ ✓ Compiled in 308ms
+ ✓ Compiled in 0ms
+ ✓ Compiled / in 373ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 26241ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 13546ms
+ ✓ Compiled in 175ms
+ ✓ Compiled / in 218ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 10248ms
+ ✓ Compiled in 255ms
+ ✓ Compiled in 245ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking,title,subtitle,description,screenshots 200 in 39873ms
+ GET /icon.svg 200 in 646ms
+ ✓ Compiled in 276ms
+ ✓ Compiled in 360ms
+ ✓ Compiled / in 269ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 10530ms
+ ✓ Compiled in 238ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&stores=google 200 in 30727ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots&stores=google 200 in 18449ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking,title,subtitle,description,screenshots 200 in 47697ms
+ ✓ Compiled in 460ms
+ ✓ Compiled in 974ms
+ ✓ Compiled in 607ms
+ ✓ Compiled in 1045ms
+ ✓ Compiled in 294ms
+ ✓ Compiled in 523ms
+ ✓ Compiled in 397ms
+ ✓ Compiled in 1709ms
+ ✓ Compiled in 0ms
+ ✓ Compiled / in 441ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ✓ Compiled in 868ms
+ ✓ Compiled in 740ms
+ ✓ Compiled in 290ms
+ ✓ Compiled in 281ms
+ ✓ Compiled in 505ms
+ ✓ Compiled / in 409ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ✓ Compiled in 2.5s
+ ✓ Compiled / in 431ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ✓ Compiled in 722ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1510ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 90961ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 57784ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 39120ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking%2Ctitle%2Csubtitle%2Cdescription%2Cscreenshots 200 in 21312ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking,title,subtitle,description,screenshots 200 in 31978ms
+ GET /icon.svg 200 in 483ms
+ ✓ Compiled in 1013ms
+ ✓ Compiled in 267ms
+ ✓ Compiled in 337ms
+ ✓ Compiled in 740ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking,title,subtitle,description,screenshots&stores=google 200 in 3735ms
+ ✓ Compiled in 1004ms
+ ✓ Compiled in 891ms
+ ✓ Compiled in 297ms
+ ✓ Compiled in 354ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking,title,subtitle,description,screenshots 200 in 32185ms
+ GET /icon.svg 200 in 356ms
+ ✓ Compiled in 451ms
+ ✓ Compiled in 279ms
+ ✓ Compiled in 424ms
+ ✓ Compiled in 301ms
+ ✓ Compiled in 770ms
+ ✓ Compiled in 361ms
+ ✓ Compiled in 3.3s
+ ✓ Compiled in 326ms
+ ✓ Compiled in 334ms
+ ✓ Compiled in 421ms
+ ✓ Compiled in 2.4s
+ ✓ Compiled in 590ms
+ ✓ Compiled in 5s
+ ✓ Compiled in 157ms
+ ✓ Compiled in 460ms
+ ✓ Compiled in 266ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ ✓ Compiled in 724ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 3.3s
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 4ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 636ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 29ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking,title,subtitle,description,screenshots 200 in 69573ms
+ GET /icon.svg 200 in 766ms
+ ✓ Compiled in 556ms
+ ✓ Compiled in 255ms
+ ✓ Compiled in 260ms
+ ✓ Compiled in 2.5s
+ ✓ Compiled in 646ms
+ ✓ Compiled in 638ms
+ ✓ Compiled in 1008ms
+ ✓ Compiled in 625ms
+ ✓ Compiled in 206ms
+ ✓ Compiled in 568ms
+ ✓ Compiled in 185ms
+ ✓ Compiled in 224ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking,title,subtitle,description,screenshots&stores=google 200 in 32566ms
+ ✓ Compiled in 311ms
+ ✓ Compiled in 889ms
+ ✓ Compiled in 333ms
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=screenshots 200 in 462ms
+ ✓ Compiled in 510ms
+ ✓ Compiled in 724ms
+[Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException: [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+ ⨯ uncaughtException:  [Error: Cannot find module '/ROOT/node_modules/.pnpm/thread-stream@3.1.0/node_modules/thread-stream/lib/worker.js'] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+[Error: the worker thread exited]
+ ⨯ uncaughtException: [Error: the worker thread exited]
+ ⨯ uncaughtException:  [Error: the worker thread exited]
+ GET /?after=20250816T142003&before=20250815T115628&changeTypes=ranking,title,subtitle,description,screenshots&stores=google 200 in 27976ms
+ GET /icon.svg 200 in 522ms

@@ -4,57 +4,66 @@
 
 @layer base {
   :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
+    --radius: 0.625rem;
+    /* Charcoal premium theme (light) */
+    --background: oklch(0.99 0 0);
+    --foreground: oklch(0.145 0.004 49.25);
     --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
+    --card-foreground: oklch(0.147 0.004 49.25);
     --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.147 0.004 49.25);
+    --primary: oklch(0.19 0.005 49.25); /* near-black charcoal */
+    --primary-foreground: oklch(0.985 0.001 106.423);
+    --secondary: oklch(0.975 0.001 106.424);
+    --secondary-foreground: oklch(0.216 0.006 56.043);
+    --muted: oklch(0.975 0.001 106.424);
+    --muted-foreground: oklch(0.53 0.012 58.071);
+    --accent: oklch(0.975 0.001 106.424);
+    --accent-foreground: oklch(0.216 0.006 56.043);
     --destructive: oklch(0.577 0.245 27.325);
     --destructive-foreground: oklch(0.985 0 0);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.598 0.15 237);
-    --chart-2: oklch(0.628 0.14 142);
-    --chart-3: oklch(0.648 0.12 285);
-    --chart-4: oklch(0.698 0.11 55);
-    --chart-5: oklch(0.628 0.08 15);
-    --radius: 0.5rem;
+    --border: oklch(0.885 0.003 48.717); /* slightly stronger for AA */
+    --input: oklch(0.9 0.003 48.717);
+    --ring: oklch(0.62 0.012 56.259);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+
+    --success: oklch(0.56 0.14 143);
+    --warn: oklch(0.72 0.17 75);
+    --danger: oklch(0.577 0.245 27.325);
   }
   .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.269 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.707 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
+    --background: oklch(0.15 0.004 49.25);
+    --foreground: oklch(0.985 0.001 106.423);
+    --card: oklch(0.2 0.006 56.043);
+    --card-foreground: oklch(0.985 0.001 106.423);
+    --popover: oklch(0.2 0.006 56.043);
+    --popover-foreground: oklch(0.985 0.001 106.423);
+    --primary: oklch(0.92 0.003 48.717);
+    --primary-foreground: oklch(0.216 0.006 56.043);
+    --secondary: oklch(0.27 0.007 34.298);
+    --secondary-foreground: oklch(0.985 0.001 106.423);
+    --muted: oklch(0.27 0.007 34.298);
+    --muted-foreground: oklch(0.71 0.01 56.259);
+    --accent: oklch(0.27 0.007 34.298);
+    --accent-foreground: oklch(0.985 0.001 106.423);
     --destructive: oklch(0.704 0.191 22.216);
     --destructive-foreground: oklch(0 0 0);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.551 0 0);
-    --chart-1: oklch(0.65 0.18 237);
-    --chart-2: oklch(0.7 0.16 142);
-    --chart-3: oklch(0.68 0.15 285);
-    --chart-4: oklch(0.75 0.14 55);
-    --chart-5: oklch(0.68 0.12 15);
+    --border: oklch(1 0 0 / 14%);
+    --input: oklch(1 0 0 / 18%);
+    --ring: oklch(0.58 0.013 58.071);
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+
+    --success: oklch(0.66 0.15 143);
+    --warn: oklch(0.82 0.14 75);
+    --danger: oklch(0.704 0.191 22.216);
   }
 }
 
@@ -90,25 +99,25 @@
 }
 
 :root {
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.985 0.001 106.423);
+  --sidebar-foreground: oklch(0.147 0.004 49.25);
+  --sidebar-primary: oklch(0.216 0.006 56.043);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-accent: oklch(0.97 0.001 106.424);
+  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
+  --sidebar-border: oklch(0.923 0.003 48.717);
+  --sidebar-ring: oklch(0.709 0.01 56.259);
 }
 
 .dark {
-  --sidebar: oklch(0.21 0.034 264.665);
-  --sidebar-foreground: oklch(0.985 0.002 247.839);
+  --sidebar: oklch(0.216 0.006 56.043);
+  --sidebar-foreground: oklch(0.985 0.001 106.423);
   --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-accent: oklch(0.278 0.033 256.848);
-  --sidebar-accent-foreground: oklch(0.985 0.002 247.839);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-accent: oklch(0.268 0.007 34.298);
+  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --sidebar-ring: oklch(0.553 0.013 58.071);
 }
 
 @theme inline {
@@ -127,6 +136,126 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold;
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+
+  h4 {
+    @apply text-lg;
+  }
+}
+
+@layer utilities {
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .skeleton {
+    @apply animate-pulse bg-muted;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .glass {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .glass-dark {
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* liquid-glass removed */
+}
+
+@layer components {
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
+  }
+  /* Framed media: make tall screenshots feel native without heavy borders */
+  .media-frame {
+    background: color-mix(in oklch, var(--background) 92%, var(--foreground) 8%);
+    border-radius: 0.5rem;
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--border) 70%, transparent),
+      0 1px 2px color-mix(in oklch, var(--foreground) 10%, transparent);
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full;
+  }
+
+  .chip-success {
+    @apply bg-[var(--success)]/10 text-[var(--success)] dark:bg-[var(--success)]/20 dark:text-[var(--success)];
+  }
+
+  .chip-danger {
+    @apply bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive;
+  }
+
+  .chip-neutral {
+    @apply bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground;
+  }
+
+  .chip-accent {
+    @apply bg-primary/10 text-primary;
+  }
+
+  /*
+    Neutral glass surface for overlays over imagery that must keep its own
+    color identity (e.g., status badges). The background is derived from the
+    app surface color instead of the status color to avoid hue shifts caused by
+    translucency over saturated screenshots. Inspired by Apple/Uber frosted UI.
+  */
+  .badge-glass {
+    /* Slightly opaque neutral surface + strong blur to decouple from image */
+    background: color-mix(in oklch, var(--background) 82%, transparent);
+    @apply backdrop-blur-md backdrop-saturate-150 shadow-sm border-white/10 dark:border-white/15;
+  }
+  /* When backdrop-filter is available we can reduce the fill a bit more */
+  @supports (backdrop-filter: blur(4px)) {
+    .badge-glass {
+      background: color-mix(in oklch, var(--background) 70%, transparent);
+    }
+  }
+
+  /* Pointer cursor helper for clickable media */
+  .cursor-pointer {
+    cursor: pointer;
   }
 }

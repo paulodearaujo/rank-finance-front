@@ -1,6 +1,6 @@
+import type { Database } from "@/lib/apps-scrape.types";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import type { Database } from "@/lib/apps-scrape.types";
 
 /**
  * Creates a Supabase client for server-side operations in Next.js 15.
@@ -36,6 +36,9 @@ export async function createClient() {
           // user sessions. This is expected behavior in Next.js 15.
         }
       },
+    },
+    db: {
+      schema: "apps",
     },
   });
 }

@@ -1,6 +1,6 @@
+import type { Database } from "@/lib/apps-scrape.types";
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
-import type { Database } from "@/lib/apps-scrape.types";
 
 /**
  * Updates the user session in Next.js middleware.
@@ -18,7 +18,6 @@ export async function updateSession(request: NextRequest) {
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !anon) {
-    console.warn("Supabase environment variables missing in middleware");
     return supabaseResponse;
   }
 
@@ -44,29 +43,13 @@ export async function updateSession(request: NextRequest) {
         });
       },
     },
+    db: {
+      schema: "apps",
+    },
   });
 
-  // CRITICAL: Do not add any logic between createServerClient and getUser().
-  // This could cause hard-to-debug issues with session management.
-
-  // Use getUser() instead of getClaims() for better compatibility
-  // This validates the JWT and refreshes the session if needed
+  // Use getUser() to validate and refresh session if needed
   await supabase.auth.getUser();
-
-  // Optional: Add route protection logic here
-  // Example:
-  // if (!user && request.nextUrl.pathname.startsWith('/protected')) {
-  //   const url = request.nextUrl.clone();
-  //   url.pathname = '/login';
-  //   return NextResponse.redirect(url);
-  // }
-
-  // IMPORTANT: Always return the supabaseResponse object as-is.
-  // If you need to modify it:
-  // 1. Pass the request: NextResponse.next({ request })
-  // 2. Copy cookies: newResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Make your changes (but don't touch cookies!)
-  // 4. Return the modified response
 
   return supabaseResponse;
 }
