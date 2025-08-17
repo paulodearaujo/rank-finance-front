@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV !== "production";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: ["@tabler/icons-react", "framer-motion"],
+  },
   async headers() {
     if (!isDev) return [];
     return [

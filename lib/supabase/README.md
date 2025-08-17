@@ -114,11 +114,7 @@ DATABASE_URL=your_database_url
 Ensure your `middleware.ts` at the project root uses the `updateSession` function:
 
 ```tsx
-import { updateSession } from "@/lib/supabase/middleware";
-
-export async function middleware(request: NextRequest) {
-  return await updateSession(request);
-}
+// Auth middleware removed - authentication is disabled
 
 export const config = {
   matcher: [

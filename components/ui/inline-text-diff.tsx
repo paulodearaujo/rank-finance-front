@@ -1,9 +1,9 @@
 "use client";
 
+import * as React from "react";
 import type { DiffSegment } from "@/lib/rank-tracker/diff-utils";
 import { computeDiffSegments } from "@/lib/rank-tracker/diff-utils";
 import { cn } from "@/lib/utils";
-import * as React from "react";
 
 interface InlineTextDiffProps {
   before: string | null;

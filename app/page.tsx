@@ -1,8 +1,7 @@
 import { IconBrandApple, IconBrandGooglePlay } from "@tabler/icons-react";
 import { Suspense } from "react";
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const fetchCache = "force-no-store";
+// Data muda diariamente; revalida a cada 24h
+export const revalidate = 86400;
 
 import { AppComparisonPair } from "@/components/rank-tracker/app-comparison-pair";
 import { RankTrackerHeader } from "@/components/rank-tracker/header";
@@ -21,6 +20,7 @@ interface RankTrackerPageProps {
     stores?: string;
     search?: string;
     changeTypes?: string;
+    limit?: string;
   }>;
 }
 
@@ -49,6 +49,7 @@ export default async function RankTrackerPage({ searchParams }: RankTrackerPageP
   // Search removed
   const stores = (params.stores?.split(",") as ("apple" | "google")[]) || ["apple", "google"];
   const changeTypes = (params.changeTypes?.split(",") || []) as ChangeType[];
+  const limit = Math.max(1, Math.min(50, Number.parseInt(params.limit || "10", 10) || 10));
 
   // Fetch comparison data
   const comparisons = await fetchComparison(beforeRunId, afterRunId);
@@ -60,8 +61,6 @@ export default async function RankTrackerPage({ searchParams }: RankTrackerPageP
   if (stores.length === 1) {
     filteredComparisons = filteredComparisons.filter((c) => stores.includes(c.store));
   }
-
-  // Search removed
 
   // Do not filter by change types: show all apps; highlight changes in UI only
 
@@ -75,6 +74,8 @@ export default async function RankTrackerPage({ searchParams }: RankTrackerPageP
   // Show all apps, grouped by store
   const appleApps = sortedComparisons.filter((c) => c.store === "apple");
   const googleApps = sortedComparisons.filter((c) => c.store === "google");
+  const appleSlice = appleApps.slice(0, limit);
+  const googleSlice = googleApps.slice(0, limit);
 
   return (
     <div
@@ -132,7 +133,7 @@ export default async function RankTrackerPage({ searchParams }: RankTrackerPageP
                   </div>
                 </header>
                 <div id="app-store-apps" className="space-y-8">
-                  {appleApps.map((comparison, index) => (
+                  {appleSlice.map((comparison, index) => (
                     <Suspense
                       key={`${comparison.store}_${comparison.app_id}`}
                       fallback={<ComparisonPairSkeleton />}
@@ -180,7 +181,7 @@ export default async function RankTrackerPage({ searchParams }: RankTrackerPageP
                   </div>
                 </header>
                 <div id="google-play-apps" className="space-y-8">
-                  {googleApps.map((comparison, index) => (
+                  {googleSlice.map((comparison, index) => (
                     <Suspense
                       key={`${comparison.store}_${comparison.app_id}`}
                       fallback={<ComparisonPairSkeleton />}
@@ -201,8 +202,18 @@ export default async function RankTrackerPage({ searchParams }: RankTrackerPageP
 // Loading skeleton for comparison pair
 function ComparisonPairSkeleton() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 relative items-stretch">
       <ImportedAppCardSkeleton />
+      {/* Arrow indicator for desktop within skeleton */}
+      <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 opacity-100">
+        <div
+          className="rounded-full p-2 bg-secondary text-secondary-foreground ring-1 ring-border/60 shadow-sm"
+          aria-hidden="true"
+        >
+          {/* simple CSS arrow placeholder */}
+          <span className="block h-5 w-5">→</span>
+        </div>
+      </div>
       <ImportedAppCardSkeleton />
     </div>
   );

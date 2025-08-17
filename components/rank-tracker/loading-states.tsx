@@ -1,10 +1,10 @@
 "use client";
 
+import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
-import { motion, useReducedMotion } from "framer-motion";
 
 /**
  * Loading skeleton for app cards
@@ -33,10 +33,16 @@ export function AppCardSkeleton() {
           <Skeleton className="h-3 w-20" />
           <Skeleton className="h-24" />
         </div>
-        <div className="flex gap-2">
-          <Skeleton className="h-28 w-32" />
-          <Skeleton className="h-28 w-32" />
-          <Skeleton className="h-28 w-32" />
+        {/* Screenshots row placeholder: reserve same height as real component to avoid CLS */}
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-24" />
+          <div className="h-48 sm:h-56 md:h-64 w-full overflow-hidden">
+            <div className="flex items-stretch gap-3 h-full">
+              <Skeleton className="h-full w-32" />
+              <Skeleton className="h-full w-32" />
+              <Skeleton className="h-full w-32" />
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -142,31 +148,6 @@ export function RankTrackerError({
           </div>
         </CardContent>
       </Card>
-    </motion.section>
-  );
-}
-
-/**
- * No changes state
- */
-export function RankTrackerNoChanges() {
-  const prefersReducedMotion = useReducedMotion();
-  return (
-    <motion.section
-      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-      animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-      transition={{ duration: prefersReducedMotion ? 0.15 : 0.25 }}
-      className="flex flex-col items-center justify-center py-16 px-4"
-      aria-label="No changes detected"
-    >
-      <div className="text-center space-y-4 max-w-md">
-        <div className="text-6xl">✨</div>
-        <h3 className="text-lg font-medium">No changes detected</h3>
-        <p className="text-sm text-muted-foreground">
-          There are no differences between the selected snapshots. Try selecting different dates to
-          see changes.
-        </p>
-      </div>
     </motion.section>
   );
 }

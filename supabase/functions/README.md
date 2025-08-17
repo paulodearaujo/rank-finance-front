@@ -87,7 +87,7 @@ const { data, error } = await supabase.functions.invoke('analyze-app', {
   body: { app_id: 'com.example.app' }
 })
 
-console.log(data) // App com análise de sentimento
+// data contém app com análise de sentimento
 ```
 
 ## 💰 Custos

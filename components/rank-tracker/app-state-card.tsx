@@ -1,14 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ExpandableRichTextWithGradient } from "@/components/ui/expandable-text";
-import { InlineTextDiff } from "@/components/ui/inline-text-diff";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { pairScreenshots } from "@/lib/rank-tracker/diff-utils";
-import { computeDHash, hammingDistance } from "@/lib/rank-tracker/image-hash";
-import type { AppComparison, AppSnapshot } from "@/lib/rank-tracker/types";
-import { cn } from "@/lib/utils";
 import {
   IconBrandApple,
   IconBrandGooglePlay,
@@ -20,15 +11,36 @@ import {
 } from "@tabler/icons-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ExpandableRichTextWithGradient } from "@/components/ui/expandable-text";
+import { InlineTextDiff } from "@/components/ui/inline-text-diff";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { pairScreenshots } from "@/lib/rank-tracker/diff-utils";
+import { computeDHash, hammingDistance } from "@/lib/rank-tracker/image-hash";
+import type { AppComparison, AppSnapshot } from "@/lib/rank-tracker/types";
+import { cn } from "@/lib/utils";
 
 interface AppStateCardProps {
   comparison: AppComparison;
   state: "before" | "after";
   index?: number;
+  animateIn?: boolean;
 }
 
-export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps) {
+export function AppStateCard({
+  comparison,
+  state,
+  index = 0,
+  animateIn = true,
+}: AppStateCardProps) {
   const prefersReducedMotion = useReducedMotion();
+  const { ref: screenshotsRef, inView: screenshotsInView } = useInView({
+    // Start work slightly before entering viewport to hide latency
+    rootMargin: "200px",
+    triggerOnce: true,
+  });
   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
   const { diff } = comparison;
   // Resolve screenshot URLs to openable hrefs (convert data: to blob:)
@@ -36,10 +48,32 @@ export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps
   const [hashes, setHashes] = useState<Record<number, string | null>>({});
   // Hashes do estado oposto para validação de mudanças
   const [prevAllHashes, setPrevAllHashes] = useState<(string | null)[]>([]);
+  // Control loading state for each individual screenshot
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
+  const screenshotCount = data?.screenshots?.length ?? 0;
+  const allImagesLoaded = loadedImages.size >= screenshotCount && screenshotCount > 0;
+
+  // Reset loaded images when screenshots change
+  useEffect(() => {
+    setLoadedImages(new Set());
+
+    // Fallback: force remove skeletons after 3 seconds to prevent permanent overlay
+    if (screenshotCount > 0) {
+      const timer = setTimeout(() => {
+        setLoadedImages(new Set(Array.from({ length: screenshotCount }, (_, i) => i)));
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [screenshotCount]);
   useEffect(() => {
     const revoked: string[] = [];
     const urls = (data?.screenshots || []).map((s) => s.url);
+    // Always set to original URLs immediately to avoid layout shift on anchor sizes
     setScreenshotHrefs(urls);
+    if (!screenshotsInView) {
+      return () => {};
+    }
     const run = async () => {
       const hrefs = await Promise.all(
         urls.map(async (u) => {
@@ -61,43 +95,48 @@ export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps
     return () => {
       for (const u of revoked) URL.revokeObjectURL(u);
     };
-  }, [data?.screenshots]);
+  }, [data?.screenshots, screenshotsInView]);
 
-  // Precompute perceptual hashes for current and previous screenshots to suppress false positives
+  // No explicit readiness signaling; arrow is always visible on desktop
+
+  // Precompute perceptual hashes only when needed (AFTER state) to reduce main-thread work
+  // Note: this effect depends on showRowSkeleton defined below; keep the hook order consistent
   useEffect(() => {
     let cancelled = false;
     const run = async () => {
-      const list = data?.screenshots ?? [];
-      const nextHashes: Record<number, string | null> = {};
-      await Promise.all(
-        list.map(async (s, idx) => {
-          nextHashes[idx] = await computeDHash(s.url);
-        }),
-      );
-      if (!cancelled) setHashes(nextHashes);
+      if (state === "after") {
+        if (!screenshotsInView) {
+          if (!cancelled) {
+            setHashes({});
+            setPrevAllHashes([]);
+          }
+          return;
+        }
+        // Avoid heavy work until all images are loaded
+        if (!allImagesLoaded) return;
+        const list = data?.screenshots ?? [];
+        const nextHashes: Record<number, string | null> = {};
+        await Promise.all(
+          list.map(async (s, idx) => {
+            nextHashes[idx] = await computeDHash(s.url);
+          }),
+        );
+        if (!cancelled) setHashes(nextHashes);
 
-      if (state === "after" && comparison.previous?.screenshots) {
-        // Compute full list of previous hashes for visual matching
-        const prevList = comparison.previous.screenshots ?? [];
-        const all: (string | null)[] = new Array(prevList.length).fill(null);
-        await Promise.all(
-          prevList.map(async (s, idx) => {
-            all[idx] = await computeDHash(s.url);
-          }),
-        );
-        if (!cancelled) setPrevAllHashes(all);
-      } else if (state === "before" && comparison.current?.screenshots) {
-        // Compute next (after) hashes para detectar removals com precisão
-        const nextList = comparison.current.screenshots ?? [];
-        const allNext: (string | null)[] = new Array(nextList.length).fill(null);
-        await Promise.all(
-          nextList.map(async (s, idx) => {
-            allNext[idx] = await computeDHash(s.url);
-          }),
-        );
-        // no-op: next-only hashes não são utilizados no before
-        if (!cancelled) setPrevAllHashes([]);
+        if (comparison.previous?.screenshots) {
+          const prevList = comparison.previous.screenshots ?? [];
+          const all: (string | null)[] = new Array(prevList.length).fill(null);
+          await Promise.all(
+            prevList.map(async (s, idx) => {
+              all[idx] = await computeDHash(s.url);
+            }),
+          );
+          if (!cancelled) setPrevAllHashes(all);
+        } else {
+          if (!cancelled) setPrevAllHashes([]);
+        }
       } else {
+        // BEFORE state does not need hashes; keep empty to avoid layout reflows
         if (!cancelled) setPrevAllHashes([]);
       }
     };
@@ -105,9 +144,13 @@ export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps
     return () => {
       cancelled = true;
     };
-  }, [state, comparison.previous?.screenshots, comparison.current?.screenshots, data?.screenshots]);
-
-  // (moved) conditional UI for empty/removed appears below after hooks
+  }, [
+    state,
+    comparison.previous?.screenshots,
+    data?.screenshots,
+    screenshotsInView,
+    allImagesLoaded,
+  ]);
 
   // Get store icon
   const StoreIcon = comparison.store === "apple" ? IconBrandApple : IconBrandGooglePlay;
@@ -181,8 +224,6 @@ export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps
       : IconTrendingDown
     : null;
 
-  // No keyboard nav needed; images open in new tab
-
   // Skip if no data for this state OR removed in the after state
   if (!data || (state === "after" && diff.change_types.includes("removed_entry"))) {
     return (
@@ -203,11 +244,13 @@ export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps
 
   return (
     <motion.div
-      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-      animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      initial={prefersReducedMotion || !animateIn ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
       transition={
-        prefersReducedMotion ? { duration: 0.15 } : { duration: 0.3, delay: index * 0.05 }
+        prefersReducedMotion || !animateIn
+          ? { duration: 0 }
+          : { duration: 0.25, delay: index * 0.03 }
       }
       className="h-full"
     >
@@ -351,131 +394,150 @@ export function AppStateCard({ comparison, state, index = 0 }: AppStateCardProps
 
           {/* Screenshots */}
           {data.screenshots && data.screenshots.length > 0 && (
-            <div id={`screenshots-section-${comparison.app_id}-${state}`} className="space-y-2">
+            <div
+              id={`screenshots-section-${comparison.app_id}-${state}`}
+              className="space-y-2"
+              ref={screenshotsRef}
+            >
               <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 <IconPhoto className="h-3 w-3" aria-hidden="true" />
                 Screenshots
                 <span>({data.screenshots.length})</span>
-                {null}
               </div>
-              <ScrollArea className="w-full">
-                <div
-                  id={`screenshots-row-${comparison.app_id}-${state}`}
-                  className="flex items-stretch gap-3 py-1 w-max min-w-full"
-                >
-                  {(() => {
-                    const curr = comparison.current.screenshots ?? [];
-                    const prev = comparison.previous?.screenshots ?? [];
-                    const list = data.screenshots ?? [];
-                    const DHASH_THRESHOLD = 6;
-                    const pairs =
-                      state === "after" && prev.length ? pairScreenshots(curr, prev) : [];
-                    // Build mapping by content-key pairing
-                    const prevMap = new Map<number, number>();
-                    for (const p of pairs) {
-                      if (
-                        typeof p.currentIndex === "number" &&
-                        typeof p.previousIndex === "number"
-                      ) {
-                        prevMap.set(p.currentIndex, p.previousIndex);
+              <div className="relative">
+                <ScrollArea className="w-full">
+                  <div
+                    id={`screenshots-row-${comparison.app_id}-${state}`}
+                    className="flex items-stretch gap-3 py-1 w-max min-w-full"
+                  >
+                    {(() => {
+                      const curr = comparison.current.screenshots ?? [];
+                      const prev = comparison.previous?.screenshots ?? [];
+                      const list = data.screenshots ?? [];
+                      const DHASH_THRESHOLD = 6;
+                      const pairs =
+                        state === "after" && prev.length ? pairScreenshots(curr, prev) : [];
+                      const prevMap = new Map<number, number>();
+                      for (const p of pairs) {
+                        if (
+                          typeof p.currentIndex === "number" &&
+                          typeof p.previousIndex === "number"
+                        ) {
+                          prevMap.set(p.currentIndex, p.previousIndex);
+                        }
                       }
-                    }
-                    return list.map((screenshot, idx) => {
-                      // Only compute and display chips in AFTER
-                      let status: "unchanged" | "moved" | "changed" | "new" = "unchanged";
-                      if (state === "after") {
-                        // Determine match index and status
-                        let matchIdx: number | null = prevMap.get(idx) ?? null;
-                        const hi = hashes[idx];
-                        if (matchIdx === null) {
-                          // Try to find visually similar previous by dHash
-                          if (hi && prevAllHashes.length) {
-                            let best = Number.POSITIVE_INFINITY;
-                            let bestJ = -1;
-                            for (let j = 0; j < prevAllHashes.length; j++) {
-                              const h = prevAllHashes[j];
-                              if (!h) continue;
-                              const d = hammingDistance(hi, h);
-                              if (d < best) {
-                                best = d;
-                                bestJ = j;
+                      return list.map((screenshot, idx) => {
+                        let status: "unchanged" | "moved" | "changed" | "new" = "unchanged";
+                        if (state === "after") {
+                          let matchIdx: number | null = prevMap.get(idx) ?? null;
+                          const hi = hashes[idx];
+                          if (matchIdx === null) {
+                            if (hi && prevAllHashes.length) {
+                              let best = Number.POSITIVE_INFINITY;
+                              let bestJ = -1;
+                              for (let j = 0; j < prevAllHashes.length; j++) {
+                                const h = prevAllHashes[j];
+                                if (!h) continue;
+                                const d = hammingDistance(hi, h);
+                                if (d < best) {
+                                  best = d;
+                                  bestJ = j;
+                                }
+                              }
+                              if (bestJ >= 0 && best <= DHASH_THRESHOLD) {
+                                matchIdx = bestJ;
                               }
                             }
-                            if (bestJ >= 0 && best <= DHASH_THRESHOLD) {
-                              matchIdx = bestJ;
+                          }
+                          if (matchIdx === null) {
+                            status = "new";
+                          } else {
+                            if (hi && typeof matchIdx === "number") {
+                              const hPrev = prevAllHashes[matchIdx];
+                              if (hPrev) {
+                                const d = hammingDistance(hi, hPrev);
+                                if (d > DHASH_THRESHOLD) status = "changed";
+                              }
                             }
+                            if (status === "unchanged" && matchIdx !== idx) status = "moved";
                           }
                         }
-                        if (matchIdx === null) {
-                          status = "new";
-                        } else {
-                          if (hi && typeof matchIdx === "number") {
-                            const hPrev = prevAllHashes[matchIdx];
-                            if (hPrev) {
-                              const d = hammingDistance(hi, hPrev);
-                              if (d > DHASH_THRESHOLD) status = "changed";
-                            }
-                          }
-                          if (status === "unchanged" && matchIdx !== idx) status = "moved";
-                        }
-                      }
-
-                      const badgeProps = (() => {
-                        // Color token lives on text/icon only; background remains neutral glass
-                        if (status === "changed") {
-                          return {
-                            variant: "outline" as const,
-                            className: "badge-glass text-destructive border-white/15",
-                          };
-                        }
-                        if (status === "new") {
-                          return {
-                            variant: "outline" as const,
-                            className: "badge-glass text-[var(--success)] border-white/15",
-                          };
-                        }
-                        if (status === "moved") {
-                          return {
-                            variant: "outline" as const,
-                            className: "badge-glass text-foreground border-white/15",
-                          };
-                        }
-                        return null;
-                      })();
-
-                      return (
-                        <a
-                          key={screenshot.url || `${idx}`}
-                          href={screenshotHrefs[idx] || screenshot.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="relative h-48 sm:h-56 md:h-64 rounded-xl overflow-hidden shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 cursor-pointer media-frame"
-                          title={`Open screenshot ${idx + 1} in new tab`}
-                        >
-                          <img
-                            src={screenshot.url}
-                            alt={`${data.title} screenshot ${idx + 1}`}
-                            className="object-contain h-full w-auto mx-auto"
-                            loading="lazy"
-                            decoding="async"
-                            draggable={false}
-                          />
-                          {state === "after" && badgeProps && (
-                            <Badge
-                              variant={badgeProps.variant}
-                              className={cn("absolute left-2 top-2 z-10", badgeProps.className)}
+                        const badgeProps =
+                          status !== "unchanged"
+                            ? {
+                                variant: "outline" as const,
+                                className: `badge-glass border-white/15 ${
+                                  status === "changed"
+                                    ? "text-destructive"
+                                    : status === "new"
+                                      ? "text-[var(--success)]"
+                                      : "text-foreground"
+                                }`,
+                              }
+                            : null;
+                        const isImageLoaded = loadedImages.has(idx);
+                        return (
+                          <div
+                            key={screenshot.url || `${idx}`}
+                            className="relative h-48 sm:h-56 md:h-64 rounded-xl overflow-hidden shrink-0"
+                          >
+                            {/* Individual skeleton for each image */}
+                            {!isImageLoaded && (
+                              <div
+                                className="absolute inset-0 bg-muted animate-pulse rounded-xl"
+                                aria-hidden="true"
+                              />
+                            )}
+                            <a
+                              href={screenshotHrefs[idx] || screenshot.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="relative block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 cursor-pointer media-frame"
+                              title={`Open screenshot ${idx + 1} in new tab`}
                             >
-                              {status}
-                            </Badge>
-                          )}
-                          {null}
-                        </a>
-                      );
-                    });
-                  })()}
-                </div>
-                <ScrollBar orientation="horizontal" />
-              </ScrollArea>
+                              <img
+                                src={screenshotHrefs[idx] || screenshot.url}
+                                alt={`${data.title} screenshot ${idx + 1}`}
+                                className={cn(
+                                  "object-contain h-full w-auto mx-auto transition-opacity duration-200",
+                                  isImageLoaded ? "opacity-100" : "opacity-0",
+                                )}
+                                loading="lazy"
+                                decoding="async"
+                                draggable={false}
+                                onLoad={() => {
+                                  setLoadedImages((prev) => {
+                                    const next = new Set(prev);
+                                    next.add(idx);
+                                    return next;
+                                  });
+                                }}
+                                onError={() => {
+                                  // Also mark as loaded on error to remove skeleton
+                                  setLoadedImages((prev) => {
+                                    const next = new Set(prev);
+                                    next.add(idx);
+                                    return next;
+                                  });
+                                }}
+                              />
+                              {state === "after" && badgeProps && isImageLoaded && (
+                                <Badge
+                                  variant={badgeProps.variant}
+                                  className={cn("absolute left-2 top-2 z-10", badgeProps.className)}
+                                >
+                                  {status}
+                                </Badge>
+                              )}
+                            </a>
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
+                  <ScrollBar orientation="horizontal" />
+                </ScrollArea>
+              </div>
             </div>
           )}
         </CardContent>

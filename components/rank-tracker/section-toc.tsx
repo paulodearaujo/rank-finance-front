@@ -1,9 +1,9 @@
 "use client";
 
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface SectionTOCItem {
   id: string; // DOM id of the target article
@@ -224,5 +224,3 @@ export function SectionTOC({ items, headerId, className }: SectionTOCProps) {
     </nav>
   );
 }
-
-export default SectionTOC;

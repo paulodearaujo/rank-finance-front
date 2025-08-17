@@ -16,7 +16,8 @@ export async function fetchAvailableRuns(): Promise<RunMetadata[]> {
   const { data: runs, error } = await supabase
     .from("apps_scrape")
     .select("run_id, scraped_at, store")
-    .order("scraped_at", { ascending: false });
+    .order("scraped_at", { ascending: false })
+    .limit(50);
 
   if (error) {
     logger.error({ scope: "data-fetcher.fetchAvailableRuns", err: error });
@@ -53,7 +54,9 @@ export async function fetchRunData(runId: string): Promise<AppScrape[]> {
 
   const { data, error } = await supabase
     .from("apps_scrape")
-    .select("*")
+    .select(
+      "id, run_id, app_id, store, title, subtitle, description, url, ranking_position, screenshots",
+    )
     .eq("run_id", runId)
     .order("ranking_position", { ascending: true });
 
@@ -87,15 +90,12 @@ export async function fetchComparison(
   }
 
   // Hard assert with early return (type guard for TS)
-  if (!effectiveBeforeId || !effectiveAfterId) return [] as AppComparison[];
+  if (!effectiveBeforeId || !effectiveAfterId) return [];
 
   // Fetch both datasets in parallel
-  // Fetch in parallel using the resolved IDs
-  const afterId: string = effectiveAfterId;
-  const beforeId: string = effectiveBeforeId;
   const [afterData, beforeData] = await Promise.all([
-    fetchRunData(afterId),
-    fetchRunData(beforeId),
+    fetchRunData(effectiveAfterId),
+    fetchRunData(effectiveBeforeId),
   ]);
 
   // Create comparisons

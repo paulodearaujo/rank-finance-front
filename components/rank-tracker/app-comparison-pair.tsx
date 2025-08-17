@@ -1,8 +1,8 @@
 "use client";
 
+import { IconArrowRight } from "@tabler/icons-react";
 import type { AppComparison } from "@/lib/rank-tracker/types";
 import { cn } from "@/lib/utils";
-import { IconArrowRight } from "@tabler/icons-react";
 import { AppStateCard } from "./app-state-card";
 
 interface AppComparisonPairProps {
@@ -11,8 +11,6 @@ interface AppComparisonPairProps {
 }
 
 export function AppComparisonPair({ comparison, index }: AppComparisonPairProps) {
-  // Change list now rendered inside each AppStateCard header; remove local summary
-
   return (
     <article
       id={`app-comparison-${comparison.store}-${comparison.app_id}`}
@@ -27,12 +25,15 @@ export function AppComparisonPair({ comparison, index }: AppComparisonPairProps)
         className="grid grid-cols-1 lg:grid-cols-2 gap-4 relative items-stretch"
         aria-label={`${comparison.current.title} before and after cards`}
       >
-        <AppStateCard comparison={comparison} state="before" index={index * 2} />
+        <AppStateCard comparison={comparison} state="before" index={index * 2} animateIn={false} />
 
         {/* Arrow indicator for desktop */}
         <div
           id={`transition-arrow-${comparison.app_id}`}
-          className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+          className={cn(
+            "hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10",
+            "opacity-100",
+          )}
         >
           <div
             className={cn(
@@ -44,7 +45,12 @@ export function AppComparisonPair({ comparison, index }: AppComparisonPairProps)
           </div>
         </div>
 
-        <AppStateCard comparison={comparison} state="after" index={index * 2 + 1} />
+        <AppStateCard
+          comparison={comparison}
+          state="after"
+          index={index * 2 + 1}
+          animateIn={false}
+        />
       </section>
     </article>
   );

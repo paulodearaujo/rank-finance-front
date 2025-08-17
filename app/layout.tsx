@@ -70,6 +70,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         {process.env.NEXT_PUBLIC_SUPABASE_URL ? (
           <>
             <link
@@ -78,6 +81,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               crossOrigin="anonymous"
             />
             <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+            {/* Extra preconnect removed to avoid invalid origin; the one above is sufficient */}
           </>
         ) : null}
       </head>

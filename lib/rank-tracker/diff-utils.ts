@@ -9,9 +9,7 @@ type AppScrape = Database["apps"]["Views"]["apps_scrape"]["Row"];
  */
 function normalizeScreenshotUrl(raw: string): string {
   const value = String(raw).trim();
-  if (/^(https?:)?\/\//i.test(value) || value.startsWith("data:")) {
-    return value;
-  }
+  if (/^(https?:)?\/\//i.test(value) || value.startsWith("data:")) return value;
   // Heuristics for common base64 image signatures
   const lower = value.slice(0, 12);
   if (lower.startsWith("/9j")) {
@@ -30,6 +28,10 @@ function normalizeScreenshotUrl(raw: string): string {
     // SVG (base64)
     return `data:image/svg+xml;base64,${value}`;
   }
+  if (lower.startsWith("UklGR")) {
+    // WebP (RIFF container)
+    return `data:image/webp;base64,${value}`;
+  }
   // Fallback: assume JPEG
   return `data:image/jpeg;base64,${value}`;
 }
@@ -38,6 +40,7 @@ function normalizeScreenshotUrl(raw: string): string {
  * Creates an AppSnapshot from AppScrape data
  */
 export function createSnapshot(scrape: AppScrape): AppSnapshot {
+  const snapshots = parseScreenshots(scrape.screenshots);
   return {
     id: scrape.id,
     run_id: scrape.run_id,
@@ -47,36 +50,24 @@ export function createSnapshot(scrape: AppScrape): AppSnapshot {
     description: scrape.description,
     url: scrape.url,
     ranking_position: scrape.ranking_position,
-    screenshots: parseScreenshots(scrape.screenshots),
+    // Preserve full screenshot URLs (including data URIs) so the UI <img> src is valid
+    // If payload size becomes a concern, introduce a proper proxy endpoint instead of blanking values.
+    screenshots: snapshots,
     scraped_at: scrape.scraped_at,
   };
 }
 
 /**
- * Normalizes various store identifiers to a canonical key used by the UI.
- * Accepts values like: "apple", "app_store", "app-store", "appstore", "ios"
- * and maps them to "apple". Likewise maps Google/Android variants to "google".
+ * Map DB `store` values to the canonical UI keys.
+ * Dataset guarantees only two values: "app_store" | "play_store".
+ * Keep a tiny lowercase trim + explicit mapping; avoid broad heuristics.
  */
 function normalizeStoreIdentifier(store: string): "apple" | "google" {
   const value = store.toLowerCase().trim();
-
-  // Direct matches for common database values
-  if (value === "app_store" || value === "app-store" || value === "appstore") return "apple";
-  if (value === "play_store" || value === "play-store" || value === "playstore") return "google";
-
-  // Fallback pattern matching
-  const isApple =
-    value.includes("apple") ||
-    value.includes("ios") ||
-    (value.includes("app") && value.includes("store"));
-
-  const isGoogle = value.includes("google") || value.includes("android") || value.includes("play");
-
-  if (isApple && !isGoogle) return "apple";
-  if (isGoogle && !isApple) return "google";
-
-  // Default based on common patterns
-  return value.includes("app") ? "apple" : "google";
+  if (value === "app_store") return "apple";
+  if (value === "play_store") return "google";
+  // Conservative fallback: default to google to avoid mis-grouping crashes.
+  return "google";
 }
 
 /**
@@ -95,9 +86,14 @@ function parseScreenshots(screenshots: unknown): Screenshot[] | null {
       .map((item, index) => {
         // Handle both string and object formats
         if (typeof item === "string") {
+          // Skip empty strings
+          if (!item || item.trim() === "") return null;
           return { url: normalizeScreenshotUrl(item), index };
         } else if (hasUrl(item)) {
-          return { url: normalizeScreenshotUrl(String(item.url)), index };
+          const urlStr = String(item.url);
+          // Skip empty URLs
+          if (!urlStr || urlStr.trim() === "") return null;
+          return { url: normalizeScreenshotUrl(urlStr), index };
         }
         return null;
       })
@@ -394,7 +390,14 @@ export function createComparisons(
       store: normalizeStoreIdentifier(current.store),
       current: currentSnapshot,
       previous: previousSnapshot,
-      diff: detectChanges(currentSnapshot, previousSnapshot),
+      diff: (() => {
+        const base = detectChanges(currentSnapshot, previousSnapshot);
+        // Recompute screenshots diff using raw rows to preserve accuracy without serializing big data
+        const rawCurr = parseScreenshots(current.screenshots) || [];
+        const rawPrev = previous ? parseScreenshots(previous.screenshots) || [] : [];
+        const ss = compareScreenshots(rawCurr, rawPrev);
+        return { ...base, screenshots: ss };
+      })(),
       comparison_date: new Date().toISOString(),
     });
   }
@@ -500,8 +503,8 @@ function tokenizeForDiff(input: string): string[] {
  * Note: Optimized for typical app metadata lengths. Avoids heavy deps.
  */
 export function computeDiffSegments(before: string | null, after: string | null): DiffSegment[] {
-  const a = tokenizeForDiff(before ?? "");
-  const b = tokenizeForDiff(after ?? "");
+  const a = tokenizeForDiff(before || "");
+  const b = tokenizeForDiff(after || "");
 
   const n = a.length;
   const m = b.length;
@@ -513,24 +516,24 @@ export function computeDiffSegments(before: string | null, after: string | null)
   // Guardrail to avoid quadratic blow-up on pathological inputs
   const LIMIT = 4000; // tokens, very conservative for our use-case
   if (n * m > LIMIT * LIMIT) {
-    if (before === after) return [{ value: after ?? "", type: "equal" }];
+    if (before === after) return [{ value: after || "", type: "equal" }];
     return [
-      { value: before ?? "", type: "removed" },
-      { value: after ?? "", type: "added" },
+      { value: before || "", type: "removed" },
+      { value: after || "", type: "added" },
     ];
   }
 
   // Build LCS length table
   const dp: number[][] = Array.from({ length: n + 1 }, () => new Array<number>(m + 1).fill(0));
   for (let i = 1; i <= n; i++) {
-    const ai = a[i - 1] ?? "";
-    const row: number[] = dp[i] as number[];
-    const prevRow: number[] = dp[i - 1] as number[];
+    const ai = a[i - 1] || "";
+    const row = dp[i] || [];
+    const prevRow = dp[i - 1] || [];
     for (let j = 1; j <= m; j++) {
-      const bj = b[j - 1] ?? "";
-      const up = prevRow[j] ?? 0;
-      const left = row[j - 1] ?? 0;
-      const diag = prevRow[j - 1] ?? 0;
+      const bj = b[j - 1] || "";
+      const up = prevRow[j] || 0;
+      const left = row[j - 1] || 0;
+      const diag = prevRow[j - 1] || 0;
       row[j] = ai === bj ? diag + 1 : up >= left ? up : left;
     }
   }
@@ -540,12 +543,12 @@ export function computeDiffSegments(before: string | null, after: string | null)
   let i = n;
   let j = m;
   while (i > 0 && j > 0) {
-    const aiTok = a[i - 1] ?? "";
-    const bjTok = b[j - 1] ?? "";
-    const row: number[] = dp[i] as number[];
-    const prevRow: number[] = dp[i - 1] as number[];
-    const up = prevRow[j] ?? 0;
-    const left = row[j - 1] ?? 0;
+    const aiTok = a[i - 1] || "";
+    const bjTok = b[j - 1] || "";
+    const row = dp[i] || [];
+    const prevRow = dp[i - 1] || [];
+    const up = prevRow[j] || 0;
+    const left = row[j - 1] || 0;
     if (aiTok === bjTok) {
       segments.push({ value: aiTok, type: "equal" });
       i--;
@@ -559,13 +562,11 @@ export function computeDiffSegments(before: string | null, after: string | null)
     }
   }
   while (i > 0) {
-    const ai = a[i - 1] ?? "";
-    segments.push({ value: ai, type: "removed" });
+    segments.push({ value: a[i - 1] || "", type: "removed" });
     i--;
   }
   while (j > 0) {
-    const bj = b[j - 1] ?? "";
-    segments.push({ value: bj, type: "added" });
+    segments.push({ value: b[j - 1] || "", type: "added" });
     j--;
   }
 
@@ -575,7 +576,7 @@ export function computeDiffSegments(before: string | null, after: string | null)
   for (const seg of segments) {
     const prev = merged[merged.length - 1];
     if (prev && prev.type === seg.type) prev.value += seg.value;
-    else merged.push({ value: seg.value ?? "", type: seg.type });
+    else merged.push(seg);
   }
   return merged;
 }

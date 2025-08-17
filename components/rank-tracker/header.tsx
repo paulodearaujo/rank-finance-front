@@ -1,5 +1,14 @@
 "use client";
 
+import {
+  IconAdjustmentsHorizontal,
+  IconBrandApple,
+  IconBrandGooglePlay,
+  IconChevronRight,
+  IconFlask,
+} from "@tabler/icons-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,15 +26,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { ChangeType, RankTrackerFilters, RunMetadata } from "@/lib/rank-tracker/types";
-import {
-  IconAdjustmentsHorizontal,
-  IconBrandApple,
-  IconBrandGooglePlay,
-  IconChevronRight,
-  IconFlask,
-} from "@tabler/icons-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
 
 interface RankTrackerHeaderProps {
   availableRuns: RunMetadata[];

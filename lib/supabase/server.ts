@@ -1,6 +1,6 @@
-import type { Database } from "@/lib/apps-scrape.types";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { AUTH_CONFIG, type Database, DB_CONFIG, getSupabaseConfig } from "./shared";
 
 /**
  * Creates a Supabase client for server-side operations in Next.js 15.
@@ -12,15 +12,14 @@ import { cookies } from "next/headers";
 export async function createClient() {
   // Next.js 15: await cookies() is now required
   const cookieStore = await cookies();
+  const { url, anonKey } = getSupabaseConfig();
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!url || !anon) {
-    throw new Error("Missing Supabase environment variables");
-  }
-
-  return createServerClient<Database>(url, anon, {
+  return createServerClient<Database>(url, anonKey, {
+    global: {
+      // Ensure Next.js enhanced fetch is used (HTTP/2 + keep-alive by undici)
+      fetch: (...args) => fetch(...(args as [RequestInfo, RequestInit?])),
+    },
+    auth: AUTH_CONFIG,
     cookies: {
       getAll() {
         return cookieStore.getAll();
@@ -37,8 +36,6 @@ export async function createClient() {
         }
       },
     },
-    db: {
-      schema: "apps",
-    },
+    db: DB_CONFIG,
   });
 }
