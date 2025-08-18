@@ -10,14 +10,16 @@ services:
     # Comandos de build e start com pnpm via Corepack
     buildCommand: |
       corepack enable
-      corepack prepare pnpm@latest --activate
-      pnpm install --no-frozen-lockfile
-      pnpm build
+      corepack prepare pnpm@10.14.0 --activate
+      pnpm install --frozen-lockfile --prefer-offline --prod=false
+      pnpm run typecheck
+      pnpm run build
 
     startCommand: |
       corepack enable
-      corepack prepare pnpm@latest --activate
-      pnpm start
+      corepack prepare pnpm@10.14.0 --activate
+      pnpm prune --prod
+      pnpm run start
 
     # Variáveis de ambiente
     envVars:
@@ -28,6 +30,10 @@ services:
       # Configuração de produção
       - key: NODE_ENV
         value: production
+
+      # Permitir que Next.js compacte respostas e use SWC minify
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
 
       # Credenciais do Supabase (configurar via dashboard do Render)
       # sync: false significa que o valor deve ser configurado manualmente no dashboard
