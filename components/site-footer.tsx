@@ -8,7 +8,7 @@ import * as React from "react";
 const INLAB_MEMBERS: readonly string[] = [
   "Carlos Moura",
   "Dhiuly Silva",
-  "Gabriela Fiorentino",
+  "Gabriela Florentino",
   "Paulo Alexandre",
   "Pedro Barreto",
   "Viviane Alvarez",
