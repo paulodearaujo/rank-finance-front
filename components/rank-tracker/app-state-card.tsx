@@ -1,5 +1,14 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ExpandableRichTextWithGradient } from "@/components/ui/expandable-text";
+import { InlineTextDiff } from "@/components/ui/inline-text-diff";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { pairScreenshots } from "@/lib/rank-tracker/diff-utils";
+import { computeDHash, hammingDistance } from "@/lib/rank-tracker/image-hash";
+import type { AppComparison, AppSnapshot } from "@/lib/rank-tracker/types";
+import { cn } from "@/lib/utils";
 import {
   IconBrandApple,
   IconBrandGooglePlay,
@@ -12,15 +21,6 @@ import {
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ExpandableRichTextWithGradient } from "@/components/ui/expandable-text";
-import { InlineTextDiff } from "@/components/ui/inline-text-diff";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { pairScreenshots } from "@/lib/rank-tracker/diff-utils";
-import { computeDHash, hammingDistance } from "@/lib/rank-tracker/image-hash";
-import type { AppComparison, AppSnapshot } from "@/lib/rank-tracker/types";
-import { cn } from "@/lib/utils";
 
 interface AppStateCardProps {
   comparison: AppComparison;
@@ -43,8 +43,6 @@ export function AppStateCard({
   });
   const data: AppSnapshot | null = state === "before" ? comparison.previous : comparison.current;
   const { diff } = comparison;
-  // Resolve screenshot URLs to openable hrefs (convert data: to blob:)
-  const [screenshotHrefs, setScreenshotHrefs] = useState<string[]>([]);
   const [hashes, setHashes] = useState<Record<number, string | null>>({});
   // Hashes do estado oposto para validação de mudanças
   const [prevAllHashes, setPrevAllHashes] = useState<(string | null)[]>([]);
@@ -66,36 +64,6 @@ export function AppStateCard({
     }
     return undefined;
   }, [screenshotCount]);
-  useEffect(() => {
-    const revoked: string[] = [];
-    const urls = (data?.screenshots || []).map((s) => s.url);
-    // Always set to original URLs immediately to avoid layout shift on anchor sizes
-    setScreenshotHrefs(urls);
-    if (!screenshotsInView) {
-      return () => {};
-    }
-    const run = async () => {
-      const hrefs = await Promise.all(
-        urls.map(async (u) => {
-          try {
-            if (typeof u === "string" && u.startsWith("data:")) {
-              const res = await fetch(u);
-              const blob = await res.blob();
-              const obj = URL.createObjectURL(blob);
-              revoked.push(obj);
-              return obj;
-            }
-          } catch {}
-          return u;
-        }),
-      );
-      setScreenshotHrefs(hrefs);
-    };
-    run();
-    return () => {
-      for (const u of revoked) URL.revokeObjectURL(u);
-    };
-  }, [data?.screenshots, screenshotsInView]);
 
   // No explicit readiness signaling; arrow is always visible on desktop
 
@@ -450,7 +418,13 @@ export function AppStateCard({
                             }
                           }
                           if (matchIdx === null) {
-                            status = "new";
+                            // Evita "new" provisório: só marca como novo quando temos hashes
+                            // (ou quando não havia nenhum screenshot anterior)
+                            if ((hi && prevAllHashes.length) || prev.length === 0) {
+                              status = "new";
+                            } else {
+                              status = "unchanged";
+                            }
                           } else {
                             if (hi && typeof matchIdx === "number") {
                               const hPrev = prevAllHashes[matchIdx];
@@ -489,14 +463,14 @@ export function AppStateCard({
                               />
                             )}
                             <a
-                              href={screenshotHrefs[idx] || screenshot.url}
+                              href={screenshot.url}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="relative block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 cursor-pointer media-frame"
                               title={`Open screenshot ${idx + 1} in new tab`}
                             >
                               <img
-                                src={screenshotHrefs[idx] || screenshot.url}
+                                src={screenshot.url}
                                 alt={`${data.title} screenshot ${idx + 1}`}
                                 className={cn(
                                   "object-contain h-full w-auto mx-auto transition-opacity duration-200",

@@ -55,7 +55,7 @@ export async function fetchRunData(runId: string): Promise<AppScrape[]> {
   const { data, error } = await supabase
     .from("apps_scrape")
     .select(
-      "id, run_id, app_id, store, title, subtitle, description, url, ranking_position, screenshots",
+      "id, run_id, app_id, store, title, subtitle, description, url, ranking_position, screenshots, scraped_at",
     )
     .eq("run_id", runId)
     .order("ranking_position", { ascending: true });

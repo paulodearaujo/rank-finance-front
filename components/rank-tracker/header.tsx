@@ -117,6 +117,8 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "UTC",
+      timeZoneName: "short",
     });
   };
 

@@ -2,39 +2,6 @@ import type { Database } from "@/lib/apps-scrape.types";
 import type { AppComparison, AppSnapshot, ChangeType, DiffResult, Screenshot } from "./types";
 
 type AppScrape = Database["apps"]["Views"]["apps_scrape"]["Row"];
-/**
- * Normalizes screenshot URL strings.
- * - If already http(s) or data URI, return as-is
- * - If string looks like base64 image data, prefix with appropriate data URI
- */
-function normalizeScreenshotUrl(raw: string): string {
-  const value = String(raw).trim();
-  if (/^(https?:)?\/\//i.test(value) || value.startsWith("data:")) return value;
-  // Heuristics for common base64 image signatures
-  const lower = value.slice(0, 12);
-  if (lower.startsWith("/9j")) {
-    // JPEG
-    return `data:image/jpeg;base64,${value}`;
-  }
-  if (lower.startsWith("iVBORw0KGgo")) {
-    // PNG
-    return `data:image/png;base64,${value}`;
-  }
-  if (lower.startsWith("R0lGOD")) {
-    // GIF
-    return `data:image/gif;base64,${value}`;
-  }
-  if (lower.startsWith("PHN2Zy")) {
-    // SVG (base64)
-    return `data:image/svg+xml;base64,${value}`;
-  }
-  if (lower.startsWith("UklGR")) {
-    // WebP (RIFF container)
-    return `data:image/webp;base64,${value}`;
-  }
-  // Fallback: assume JPEG
-  return `data:image/jpeg;base64,${value}`;
-}
 
 /**
  * Creates an AppSnapshot from AppScrape data
@@ -50,8 +17,7 @@ export function createSnapshot(scrape: AppScrape): AppSnapshot {
     description: scrape.description,
     url: scrape.url,
     ranking_position: scrape.ranking_position,
-    // Preserve full screenshot URLs (including data URIs) so the UI <img> src is valid
-    // If payload size becomes a concern, introduce a proper proxy endpoint instead of blanking values.
+    // Preserve full screenshot URLs so the UI <img> src is valid
     screenshots: snapshots,
     scraped_at: scrape.scraped_at,
   };
@@ -71,7 +37,7 @@ function normalizeStoreIdentifier(store: string): "apple" | "google" {
 }
 
 /**
- * Parses screenshots from JSON to structured array
+ * Parses screenshots (array of public URL strings) to structured array
  */
 function parseScreenshots(screenshots: unknown): Screenshot[] | null {
   if (!screenshots || typeof screenshots !== "object") return null;
@@ -84,16 +50,16 @@ function parseScreenshots(screenshots: unknown): Screenshot[] | null {
     }
     return screenshots
       .map((item, index) => {
-        // Handle both string and object formats
+        // Handle string (preferred) and object formats
         if (typeof item === "string") {
           // Skip empty strings
           if (!item || item.trim() === "") return null;
-          return { url: normalizeScreenshotUrl(item), index };
+          return { url: item.trim(), index };
         } else if (hasUrl(item)) {
           const urlStr = String(item.url);
           // Skip empty URLs
           if (!urlStr || urlStr.trim() === "") return null;
-          return { url: normalizeScreenshotUrl(urlStr), index };
+          return { url: urlStr.trim(), index };
         }
         return null;
       })
@@ -248,8 +214,8 @@ export function getScreenshotKey(url: string): string {
     const comma = value.indexOf(",");
     return comma !== -1 ? value.slice(comma + 1).trim() : value.trim();
   }
-  // Normalize http(s) by dropping hash only
-  return value.replace(/#.*$/, "").trim();
+  // Normalize http(s) by dropping query and hash to avoid false diffs on cache-busting params
+  return value.replace(/[?#].*$/, "").trim();
 }
 
 function compareScreenshots(current: Screenshot[], previous: Screenshot[]) {
