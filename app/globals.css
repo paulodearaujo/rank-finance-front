@@ -188,6 +188,34 @@
     display: none;
   }
 
+  /* Elegant loading blur overlay */
+  @keyframes blurPulse {
+    0%,
+    100% {
+      backdrop-filter: blur(8px) saturate(120%);
+      background: color-mix(in oklch, var(--background) 26%, transparent);
+    }
+    50% {
+      backdrop-filter: blur(14px) saturate(140%);
+      background: color-mix(in oklch, var(--background) 38%, transparent);
+    }
+  }
+
+  .overlay-blur-strong {
+    backdrop-filter: blur(10px) saturate(130%);
+    background: color-mix(in oklch, var(--background) 32%, transparent);
+  }
+
+  .animate-blur-pulse {
+    animation: blurPulse 1.25s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-blur-pulse {
+      animation: none;
+    }
+  }
+
   .glass {
     backdrop-filter: blur(10px);
     background: rgba(255, 255, 255, 0.1);

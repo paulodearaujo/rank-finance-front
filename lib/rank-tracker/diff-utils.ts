@@ -423,30 +423,6 @@ export function createComparisons(
 /**
  * Formats ranking display
  */
-export function formatRankingDisplay(
-  current: number | null,
-  previous: number | null,
-  delta: number | null,
-): string {
-  if (previous === null && current !== null) {
-    return `NEW → #${current}`;
-  }
-
-  if (current === null && previous !== null) {
-    return `#${previous} → REMOVED`;
-  }
-
-  if (current === null || previous === null) {
-    return "-";
-  }
-
-  if (delta === 0 || delta === null) {
-    return `#${current} (―)`;
-  }
-
-  const arrow = delta > 0 ? "↑" : "↓";
-  return `#${previous} → #${current} (${arrow}${Math.abs(delta)})`;
-}
 
 /**
  * Diff segment representing a contiguous run of tokens

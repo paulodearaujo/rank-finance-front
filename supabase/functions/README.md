@@ -78,7 +78,8 @@ npx supabase functions deploy analyze-app
 
 ```typescript
 // No seu componente React
-import { createClient } from '@/lib/supabase/client'
+// This frontend does not ship a browser Supabase client.
+// Use server utilities when integrating with Next.js routes.
 
 const supabase = createClient()
 

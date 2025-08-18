@@ -37,9 +37,5 @@ services:
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
         sync: false
 
-      # Opcional: URL de conexão direta ao banco (se necessário)
-      - key: DATABASE_URL
-        sync: false
-
     # Health check endpoint
     healthCheckPath: /

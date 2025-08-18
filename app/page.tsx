@@ -98,7 +98,7 @@ export default async function RankTrackerPage({ searchParams }: RankTrackerPageP
           }}
         />
       </header>
-      <main id="rank-tracker-content" className="container mx-auto py-6">
+      <main id="rank-tracker-content" className="container mx-auto py-6 relative">
         {filteredComparisons.length === 0 ? (
           <RankTrackerEmpty />
         ) : (

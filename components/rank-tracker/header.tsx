@@ -8,7 +8,8 @@ import {
   IconFlask,
 } from "@tabler/icons-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -37,6 +38,8 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+  const [showOverlay, setShowOverlay] = useState(false);
   // Filter states
   const VISIBLE_CHANGE_TYPES: ChangeType[] = [
     "ranking",
@@ -96,12 +99,31 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
       if (next === current) return;
       // Avoid exploding headers: do not write excessively long params
       if (next.length > 1500) return; // safe cap for query length
-      router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
+      const href = next ? `${pathname}?${next}` : pathname;
+      // Prefetch para reduzir tempo de espera percebido
+      try {
+        router.prefetch(href);
+      } catch {}
+      // Transição concorrente para sinalizar UI pendente (skeleton/overlay)
+      startTransition(() => {
+        router.replace(href, { scroll: false });
+      });
     }, 200);
     return () => clearTimeout(timer);
   }, [beforeRunId, afterRunId, selectedStores, changeTypes, pathname, router, searchParams]);
 
-  // No reset button; users can toggle back their selections
+  // Delay overlay to avoid flicker for quick navigations (<150ms)
+  useEffect(() => {
+    if (!isPending) {
+      setShowOverlay(false);
+      return;
+    }
+    const t = setTimeout(() => setShowOverlay(true), 150);
+    return () => {
+      clearTimeout(t);
+      setShowOverlay(false);
+    };
+  }, [isPending]);
 
   const toggleChangeType = useCallback((type: ChangeType) => {
     setChangeTypes((prev) =>
@@ -140,6 +162,7 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
       id="rank-tracker-filters"
       className="rounded-xl border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 shadow-sm p-2.5 md:p-3 grid grid-cols-1 items-center gap-2.5 md:grid-cols-[1fr_auto_1fr]"
       aria-label="Filter controls"
+      aria-busy={isPending}
     >
       {/* Mobile: brand + filters */}
       <div className="flex md:hidden items-center justify-between gap-2">
@@ -365,9 +388,16 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        {null}
       </div>
+      {/* Pending overlay scoped to main content: blur only the list area */}
+      {showOverlay
+        ? createPortal(
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-40">
+              <div className="absolute inset-0 overlay-blur-strong animate-blur-pulse" />
+            </div>,
+            document.getElementById("rank-tracker-content") ?? document.body,
+          )
+        : null}
     </nav>
   );
 }

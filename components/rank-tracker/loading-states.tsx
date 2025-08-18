@@ -1,8 +1,6 @@
 "use client";
 
-import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -100,51 +98,6 @@ export function RankTrackerEmpty() {
               There are no app snapshots to compare. Please check back later when new data is
               available.
             </p>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.section>
-  );
-}
-
-/**
- * Error state with retry
- */
-export function RankTrackerError({
-  error,
-  onRetryAction,
-}: {
-  error?: string;
-  onRetryAction?: () => void;
-}) {
-  const prefersReducedMotion = useReducedMotion();
-  return (
-    <motion.section
-      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-      animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-      transition={{ duration: prefersReducedMotion ? 0.15 : 0.25 }}
-      className="flex flex-col items-center justify-center py-16 px-4"
-      role="alert"
-      aria-label="Error loading data"
-    >
-      <Card className="max-w-md w-full">
-        <CardContent className="pt-6">
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-destructive/10">
-              <IconAlertTriangle className="h-6 w-6 text-destructive" />
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium">Failed to load data</h3>
-              <p className="text-sm text-muted-foreground">
-                {error || "An error occurred while fetching app comparisons. Please try again."}
-              </p>
-            </div>
-            {onRetryAction && (
-              <Button onClick={onRetryAction} variant="outline" className="gap-2">
-                <IconRefresh className="h-4 w-4" />
-                Try again
-              </Button>
-            )}
           </div>
         </CardContent>
       </Card>

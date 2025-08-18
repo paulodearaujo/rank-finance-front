@@ -15,7 +15,8 @@ This directory contains the Supabase client configuration following the latest N
 ```tsx
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
+// Note: client-side Supabase is not used in this app.
+// Prefer server client from `./server` when needed.
 
 export default function ClientComponent() {
   const supabase = createClient();

@@ -49,7 +49,7 @@ export async function fetchAvailableRuns(): Promise<RunMetadata[]> {
 /**
  * Fetches app data for a specific run
  */
-export async function fetchRunData(runId: string): Promise<AppScrape[]> {
+async function fetchRunData(runId: string): Promise<AppScrape[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
