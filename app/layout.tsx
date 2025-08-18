@@ -1,5 +1,5 @@
-import SiteFooter from "@/components/site-footer";
 import type { Metadata, Viewport } from "next";
+import SiteFooter from "@/components/site-footer";
 import "./globals.css";
 
 const APP_NAME = "AppTracker";

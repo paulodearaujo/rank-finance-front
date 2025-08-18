@@ -17,7 +17,6 @@ services:
     startCommand: |
       corepack enable
       corepack prepare pnpm@10.14.0 --activate
-      pnpm prune --prod
       pnpm run start
 
     # Variáveis de ambiente
@@ -42,5 +41,5 @@ services:
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
         sync: false
 
-    # Health check endpoint
-    healthCheckPath: /
+    # Health check endpoint (use a lightweight static route to avoid SSR on deploy)
+    healthCheckPath: /robots.txt
