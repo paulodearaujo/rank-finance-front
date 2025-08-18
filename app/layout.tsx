@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import SiteFooter from "@/components/site-footer";
 import "./globals.css";
 
 const APP_NAME = "AppTracker";
@@ -93,6 +94,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           Skip to content
         </a>
         {children}
+        {/* Global footer */}
+        <SiteFooter />
       </body>
     </html>
   );
