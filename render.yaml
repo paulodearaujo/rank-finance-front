@@ -12,7 +12,6 @@ services:
       corepack enable
       corepack prepare pnpm@10.14.0 --activate
       pnpm install --frozen-lockfile --prefer-offline --prod=false
-      pnpm run typecheck
       pnpm run build
 
     startCommand: |

@@ -12,33 +12,43 @@ type AppScrape = Database["apps"]["Views"]["apps_scrape"]["Row"];
 export async function fetchAvailableRuns(): Promise<RunMetadata[]> {
   const supabase = await createClient();
 
-  // Read directly from public schema to avoid PostgREST schema restrictions
-  const { data: runs, error } = await supabase
-    .from("apps_scrape")
-    .select("run_id, scraped_at, store")
-    .order("scraped_at", { ascending: false })
-    .limit(50);
-
-  if (error) {
-    logger.error({ scope: "data-fetcher.fetchAvailableRuns", err: error });
-    return [];
-  }
-
-  // Group by run_id and get metadata
+  // Paginated scan to avoid large memory spikes while returning all runs
+  const PAGE_SIZE = 500; // rows (per-app records), safe chunk
+  let offset = 0;
   const runMap = new Map<string, RunMetadata>();
 
-  for (const run of runs || []) {
-    if (!runMap.has(run.run_id)) {
-      runMap.set(run.run_id, {
-        run_id: run.run_id,
-        scraped_at: run.scraped_at,
-        app_count: 0,
-        store: run.store,
-      });
+  // Cap max pages as a safety guard against infinite loops
+  const MAX_PAGES = 200; // 100k rows scanned max
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const { data: rows, error } = await supabase
+      .from("apps_scrape")
+      .select("run_id, scraped_at, store")
+      .order("scraped_at", { ascending: false })
+      .range(offset, offset + PAGE_SIZE - 1);
+
+    if (error) {
+      logger.error({ scope: "data-fetcher.fetchAvailableRuns", err: error });
+      break;
     }
-    const metadata = runMap.get(run.run_id);
-    if (!metadata) continue;
-    metadata.app_count++;
+
+    const batch = rows || [];
+    if (batch.length === 0) break;
+
+    for (const run of batch) {
+      if (!runMap.has(run.run_id)) {
+        runMap.set(run.run_id, {
+          run_id: run.run_id,
+          scraped_at: run.scraped_at,
+          app_count: 0,
+          store: run.store,
+        });
+      }
+      const metadata = runMap.get(run.run_id);
+      if (metadata) metadata.app_count++;
+    }
+
+    offset += PAGE_SIZE;
+    if (batch.length < PAGE_SIZE) break; // reached the end
   }
 
   return Array.from(runMap.values()).sort(
@@ -49,8 +59,42 @@ export async function fetchAvailableRuns(): Promise<RunMetadata[]> {
 /**
  * Fetches app data for a specific run
  */
-async function fetchRunData(runId: string): Promise<AppScrape[]> {
+async function fetchRunData(runId: string, limitPerStore?: number): Promise<AppScrape[]> {
   const supabase = await createClient();
+
+  // If a per-store limit is provided, fetch top N per store separately to cap payload size
+  if (typeof limitPerStore === "number" && Number.isFinite(limitPerStore) && limitPerStore > 0) {
+    const baseSelect =
+      "id, run_id, app_id, store, title, subtitle, description, url, ranking_position, screenshots, scraped_at";
+
+    const [appleRes, googleRes] = await Promise.all([
+      supabase
+        .from("apps_scrape")
+        .select(baseSelect)
+        .eq("run_id", runId)
+        .eq("store", "app_store")
+        .order("ranking_position", { ascending: true })
+        .limit(limitPerStore),
+      supabase
+        .from("apps_scrape")
+        .select(baseSelect)
+        .eq("run_id", runId)
+        .eq("store", "play_store")
+        .order("ranking_position", { ascending: true })
+        .limit(limitPerStore),
+    ]);
+
+    const errs = [appleRes.error, googleRes.error].filter(Boolean);
+    if (errs.length) {
+      logger.error({ scope: "data-fetcher.fetchRunData", err: errs[0], runId });
+      return [];
+    }
+
+    const apple = (appleRes.data as AppScrape[] | null) ?? [];
+    const google = (googleRes.data as AppScrape[] | null) ?? [];
+    // Keep stable order by ranking within each store; concat preserves grouping
+    return [...apple, ...google];
+  }
 
   const { data, error } = await supabase
     .from("apps_scrape")
@@ -74,6 +118,7 @@ async function fetchRunData(runId: string): Promise<AppScrape[]> {
 export async function fetchComparison(
   beforeRunId: string | null,
   afterRunId: string | null,
+  limitPerStore?: number,
 ): Promise<AppComparison[]> {
   // Resolve effective run IDs (fallback to latest two)
   let effectiveBeforeId = beforeRunId;
@@ -94,8 +139,8 @@ export async function fetchComparison(
 
   // Fetch both datasets in parallel
   const [afterData, beforeData] = await Promise.all([
-    fetchRunData(effectiveAfterId),
-    fetchRunData(effectiveBeforeId),
+    fetchRunData(effectiveAfterId, limitPerStore),
+    fetchRunData(effectiveBeforeId, limitPerStore),
   ]);
 
   // Create comparisons

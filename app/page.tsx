@@ -1,7 +1,7 @@
 import { IconBrandApple, IconBrandGooglePlay } from "@tabler/icons-react";
 import { Suspense } from "react";
-// Data muda diariamente; revalida a cada 24h
-export const revalidate = 86400;
+// Força renderização dinâmica para evitar SSG pesado no build do Render
+export const dynamic = "force-dynamic";
 
 import { AppComparisonPair } from "@/components/rank-tracker/app-comparison-pair";
 import { RankTrackerHeader } from "@/components/rank-tracker/header";
@@ -51,8 +51,8 @@ export default async function RankTrackerPage({ searchParams }: RankTrackerPageP
   const changeTypes = (params.changeTypes?.split(",") || []) as ChangeType[];
   const limit = Math.max(1, Math.min(50, Number.parseInt(params.limit || "10", 10) || 10));
 
-  // Fetch comparison data
-  const comparisons = await fetchComparison(beforeRunId, afterRunId);
+  // Fetch comparison data (limitado por store para reduzir memória)
+  const comparisons = await fetchComparison(beforeRunId, afterRunId, limit);
 
   // Apply filters
   let filteredComparisons = comparisons;
