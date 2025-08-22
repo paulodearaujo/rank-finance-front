@@ -1,10 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import SiteFooter from "@/components/site-footer";
 import "./globals.css";
 
-const APP_NAME = "AppTracker";
-const APP_DESCRIPTION =
-  "Track App Store and Google Play ranking and metadata changes between snapshots.";
+const APP_NAME = "My Application";
+const APP_DESCRIPTION = "A modern web application built with Next.js and shadcn/ui components";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.VERCEL_URL
@@ -86,16 +84,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </>
         ) : null}
       </head>
-      <body id="root-body" className="antialiased" suppressHydrationWarning>
+      <body className="antialiased" suppressHydrationWarning>
         <a
-          href="#rank-tracker-content"
+          href="#main-content"
           className="fixed left-3 top-3 z-[100] -translate-y-20 focus:translate-y-0 transition-transform rounded-md bg-primary px-3 py-2 text-primary-foreground shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           Skip to content
         </a>
-        {children}
-        {/* Global footer */}
-        <SiteFooter />
+        <main id="main-content">{children}</main>
       </body>
     </html>
   );
