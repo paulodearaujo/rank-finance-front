@@ -31,7 +31,7 @@
   },
   "overrides": [
     {
-      "includes": ["components/ui/**"],
+      "includes": ["components/ui/**", "components/ai-elements/**"],
       "linter": { "enabled": false }
     }
   ],

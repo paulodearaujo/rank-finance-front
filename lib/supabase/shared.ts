@@ -1,4 +1,5 @@
-import type { Database } from "@/lib/apps-scrape.types";
+// Database type placeholder - replace with actual generated types when needed
+export type Database = any;
 
 export interface SupabaseConfig {
   url: string;
@@ -34,5 +35,3 @@ export const AUTH_CONFIG = {
 export const DB_CONFIG = {
   schema: "apps",
 } as const;
-
-export type { Database };

@@ -3,6 +3,34 @@
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
+  /* Remove default focus outlines globally */
+  *:focus {
+    outline: none !important;
+  }
+
+  /* Custom focus styles for better UX */
+  button:focus-visible,
+  a:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Remove all focus/ring styles from tabs */
+  [role="tab"] {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  [role="tab"]:focus,
+  [role="tab"]:focus-visible,
+  [role="tab"]:active {
+    outline: none !important;
+    box-shadow: none !important;
+    ring: none !important;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -181,5 +209,104 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Custom scrollbar styles */
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(var(--muted-foreground) / 0.3) oklch(var(--muted) / 0.1);
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    @apply bg-muted/10 rounded-lg;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-lg;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+
+  .dark .scrollbar-custom::-webkit-scrollbar-track {
+    @apply bg-muted/20;
+  }
+
+  .dark .scrollbar-custom::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20;
+  }
+
+  .dark .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+
+    /* Light sweep animation - subtle */
+  @keyframes light-sweep {
+    0%, 80% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(200%);
+    }
+  }
+
+  .animate-light-sweep {
+    animation: light-sweep 6s ease-out infinite;
+  }
+
+  /* Elegant gradient patterns for cards
+   * PADRÃO ESTABELECIDO:
+   * - card-gradient-subtle: usado em TODOS os cards de conteúdo (objetivos, interesses, skills, etc)
+   * - Consistência visual em toda aplicação
+   * - Hover sempre com: border-accent + shadow-sm + duration-300
+   */
+  .card-gradient-subtle {
+    @apply bg-gradient-to-br from-card to-background/50;
+  }
+
+  .card-gradient-primary {
+    @apply bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5;
+  }
+
+  .card-gradient-muted {
+    @apply bg-gradient-to-br from-background via-background to-muted/30;
+  }
+
+  .card-gradient-accent {
+    @apply bg-gradient-to-br from-accent/10 via-accent/5 to-transparent;
+  }
+
+  /* Interactive gradient states */
+  .card-gradient-hover {
+    @apply transition-all duration-300 hover:shadow-sm hover:border-accent;
+  }
+
+  /* Badge/Icon gradients */
+  .icon-gradient-primary {
+    @apply bg-gradient-to-br from-primary/25 to-primary/15;
+  }
+
+  .icon-gradient-subtle {
+    @apply bg-gradient-to-br from-muted/20 to-muted/10;
+  }
+
+  /* Blink animation for typing cursor */
+  @keyframes blink {
+    0%, 50% {
+      opacity: 1;
+    }
+    51%, 100% {
+      opacity: 0;
+    }
+  }
+
+  .animate-blink {
+    animation: blink 1s infinite;
   }
 }
