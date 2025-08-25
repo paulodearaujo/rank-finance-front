@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { AUTH_CONFIG, type Database, DB_CONFIG, getSupabaseConfig } from "./shared";
+import { AUTH_CONFIG, getSupabaseConfig, type Database } from "./shared";
 
 /**
  * Creates a Supabase client for server-side operations in Next.js 15.
@@ -36,6 +36,5 @@ export async function createClient() {
         }
       },
     },
-    db: DB_CONFIG,
   });
 }

@@ -1,222 +1,390 @@
-import { IconBrandApple, IconBrandGooglePlay } from "@tabler/icons-react";
-import { Suspense } from "react";
-// Força renderização dinâmica para evitar SSG pesado no build do Render
-export const dynamic = "force-dynamic";
+"use client";
 
-import { AppComparisonPair } from "@/components/rank-tracker/app-comparison-pair";
-import { RankTrackerHeader } from "@/components/rank-tracker/header";
+import { ABTestCreator } from "@/components/tinytroupe/ab-test-creator";
+import { ExperimentChat } from "@/components/tinytroupe/experiment-chat";
+import { Button } from "@/components/ui/button";
 import {
-  AppCardSkeleton as ImportedAppCardSkeleton,
-  RankTrackerEmpty,
-} from "@/components/rank-tracker/loading-states";
-import { SectionTOC } from "@/components/rank-tracker/section-toc";
-import { fetchAvailableRuns, fetchComparison } from "@/lib/rank-tracker/data-fetcher";
-import type { ChangeType } from "@/lib/rank-tracker/types";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useExperiment } from "@/hooks/use-experiment";
+import type { ExperimentConfig } from "@/lib/api/types";
+import { cn } from "@/lib/utils";
+import { ChevronDown, MessageSquare, PanelLeft, Settings, Sparkles, Users } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
-interface RankTrackerPageProps {
-  searchParams: Promise<{
-    before?: string;
-    after?: string;
-    stores?: string;
-    search?: string;
-    changeTypes?: string;
-    limit?: string;
-  }>;
+interface CurrentTest {
+  context: string;
+  messages: Record<string, { hook: string; body: string }>;
 }
 
-export default async function RankTrackerPage({ searchParams }: RankTrackerPageProps) {
-  const params = await searchParams;
+export default function TinyTroupeChatPage() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isABTestModalOpen, setIsABTestModalOpen] = useState(false);
+  const [currentTest, setCurrentTest] = useState<CurrentTest | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Fetch available runs for the header
-  const availableRuns = await fetchAvailableRuns();
+  // Hook para gerenciar experimentos
+  const {
+    createAndRunExperiment,
+    experiment,
+    status,
+    agents,
+    results,
+    error,
+    clearError,
+    getProgress,
+    currentVariant,
+    totalAgents,
+    totalVariants,
+    loadExperiments,
+    experiments,
+  } = useExperiment();
 
-  if (availableRuns.length === 0) {
-    return (
-      <div
-        id="rank-tracker-page-empty"
-        className="min-h-screen bg-gradient-to-b from-background to-muted/20"
-      >
-        <div id="empty-state-container" className="container mx-auto">
-          <RankTrackerEmpty />
-        </div>
-      </div>
-    );
-  }
+  // Carrega experimentos existentes ao montar
+  useEffect(() => {
+    loadExperiments();
+  }, [loadExperiments]);
 
-  // Get filter values from URL params or defaults
-  const beforeRunId = params.before || availableRuns[1]?.run_id || null;
-  const afterRunId = params.after || availableRuns[0]?.run_id || null;
-  // Search removed
-  const stores = (params.stores?.split(",") as ("apple" | "google")[]) || ["apple", "google"];
-  const changeTypes = (params.changeTypes?.split(",") || []) as ChangeType[];
-  const limit = Math.max(1, Math.min(50, Number.parseInt(params.limit || "10", 10) || 10));
+  const handleABTestSubmit = async (scenario: {
+    context: string;
+    messages: Record<string, { hook: string; body: string }>;
+  }) => {
+    // Salva o teste atual localmente
+    setCurrentTest({
+      context: scenario.context,
+      messages: scenario.messages,
+    });
 
-  // Fetch comparison data (limitado por store para reduzir memória)
-  const comparisons = await fetchComparison(beforeRunId, afterRunId, limit);
+    // Prepara configuração para a API
+    const config: ExperimentConfig = {
+      name: `Teste A/B - ${new Date().toLocaleDateString("pt-BR")}`,
+      description: "Teste criado via interface",
+      context: scenario.context,
+      control: scenario.messages.control!,
+      variant_a: scenario.messages.variant_a!,
+      ...(scenario.messages.variant_b && { variant_b: scenario.messages.variant_b }),
+      ...(scenario.messages.variant_c && { variant_c: scenario.messages.variant_c }),
+      ...(scenario.messages.variant_d && { variant_d: scenario.messages.variant_d }),
+      ...(scenario.messages.variant_e && { variant_e: scenario.messages.variant_e }),
+      sample_size: 10, // Por padrão usa 10 agentes
+    };
 
-  // Apply filters
-  let filteredComparisons = comparisons;
-
-  // Filter by store
-  if (stores.length === 1) {
-    filteredComparisons = filteredComparisons.filter((c) => stores.includes(c.store));
-  }
-
-  // Do not filter by change types: show all apps; highlight changes in UI only
-
-  // Sort comparisons strictly by current rank (best rank first)
-  const sortedComparisons = [...filteredComparisons].sort((a, b) => {
-    const aRank = a.diff.ranking.current ?? 999;
-    const bRank = b.diff.ranking.current ?? 999;
-    return aRank - bRank;
-  });
-
-  // Show all apps, grouped by store
-  const appleApps = sortedComparisons.filter((c) => c.store === "apple");
-  const googleApps = sortedComparisons.filter((c) => c.store === "google");
-  const appleSlice = appleApps.slice(0, limit);
-  const googleSlice = googleApps.slice(0, limit);
+    // Cria e executa o experimento
+    try {
+      await createAndRunExperiment(config);
+    } catch (error) {
+      console.error("Erro ao criar experimento:", error);
+    }
+  };
 
   return (
-    <div
-      id="rank-tracker-page"
-      className="min-h-screen bg-gradient-to-b from-background to-muted/20"
-    >
-      {/* Sticky floating header */}
-      <header
-        id="rank-tracker-header"
-        className="sticky top-0 z-50 p-4 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b"
-      >
-        <h1 className="sr-only">App Rank Tracker</h1>
-        <RankTrackerHeader
-          availableRuns={availableRuns}
-          initialFilters={{
-            before_run_id: beforeRunId,
-            after_run_id: afterRunId,
-            stores,
-            change_types: changeTypes as ChangeType[],
-          }}
-        />
-      </header>
-      <main id="rank-tracker-content" className="container mx-auto py-6 relative">
-        {filteredComparisons.length === 0 ? (
-          <RankTrackerEmpty />
-        ) : (
-          <div id="apps-container" className="space-y-10">
-            {/* App Store Section */}
-            {appleApps.length > 0 ? (
-              <section id="app-store-section" className="space-y-4">
-                <header
-                  id="app-store-header"
-                  className="sticky top-[calc(var(--sticky-offset,72px))] z-30 bg-background/95 backdrop-blur-sm border-b"
-                >
-                  <div id="app-store-header-content" className="container mx-auto px-4 py-4">
-                    <div id="app-store-header-info" className="flex items-center gap-3">
-                      <IconBrandApple className="h-5 w-5 text-foreground/60" aria-hidden="true" />
-                      <h2 id="app-store-title" className="text-base font-semibold text-foreground">
-                        App Store
-                      </h2>
-                      <div className="ml-2 hidden md:block flex-1 min-w-0">
-                        <SectionTOC
-                          headerId="app-store-header"
-                          className="mt-0"
-                          items={appleApps.map((c) => ({
-                            id: `app-comparison-${c.store}-${c.app_id}`,
-                            label: c.current.title,
-                          }))}
-                        />
-                      </div>
-                      <span id="app-store-count" className="text-sm text-muted-foreground ml-2">
-                        {appleApps.length} {appleApps.length === 1 ? "app" : "apps"}
-                      </span>
-                    </div>
-                  </div>
-                </header>
-                <div id="app-store-apps" className="space-y-8">
-                  {appleSlice.map((comparison, index) => (
-                    <Suspense
-                      key={`${comparison.store}_${comparison.app_id}`}
-                      fallback={<ComparisonPairSkeleton />}
-                    >
-                      <AppComparisonPair comparison={comparison} index={index} />
-                    </Suspense>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-
-            {/* Google Play Section */}
-            {googleApps.length > 0 ? (
-              <section id="google-play-section" className="space-y-4">
-                <header
-                  id="google-play-header"
-                  className="sticky top-[calc(var(--sticky-offset,72px))] z-30 bg-background/95 backdrop-blur-sm border-b"
-                >
-                  <div id="google-play-header-content" className="container mx-auto px-4 py-4">
-                    <div id="google-play-header-info" className="flex items-center gap-3">
-                      <IconBrandGooglePlay
-                        className="h-5 w-5 text-foreground/60"
-                        aria-hidden="true"
-                      />
-                      <h2
-                        id="google-play-title"
-                        className="text-base font-semibold text-foreground"
-                      >
-                        Google Play
-                      </h2>
-                      <div className="ml-2 hidden md:block flex-1 min-w-0">
-                        <SectionTOC
-                          headerId="google-play-header"
-                          className="mt-0"
-                          items={googleApps.map((c) => ({
-                            id: `app-comparison-${c.store}-${c.app_id}`,
-                            label: c.current.title,
-                          }))}
-                        />
-                      </div>
-                      <span id="google-play-count" className="text-sm text-muted-foreground ml-2">
-                        {googleApps.length} {googleApps.length === 1 ? "app" : "apps"}
-                      </span>
-                    </div>
-                  </div>
-                </header>
-                <div id="google-play-apps" className="space-y-8">
-                  {googleSlice.map((comparison, index) => (
-                    <Suspense
-                      key={`${comparison.store}_${comparison.app_id}`}
-                      fallback={<ComparisonPairSkeleton />}
-                    >
-                      <AppComparisonPair comparison={comparison} index={index} />
-                    </Suspense>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-          </div>
+    <div id="tinytroupe-container" className="flex h-screen bg-sidebar text-foreground dark">
+      {/* Sidebar */}
+      <aside
+        id="sidebar"
+        className={cn(
+          "flex flex-col bg-sidebar transition-[width] duration-300 ease-in-out",
+          isSidebarOpen ? "w-64" : "w-0 overflow-hidden",
         )}
-      </main>
-    </div>
-  );
-}
-
-// Loading skeleton for comparison pair
-function ComparisonPairSkeleton() {
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 relative items-stretch">
-      <ImportedAppCardSkeleton />
-      {/* Arrow indicator for desktop within skeleton */}
-      <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 opacity-100">
-        <div
-          className="rounded-full p-2 bg-secondary text-secondary-foreground ring-1 ring-border/60 shadow-sm"
-          aria-hidden="true"
+      >
+        {/* Sidebar Header */}
+        <header
+          id="sidebar-header"
+          className={cn(
+            "px-3 pt-4 pb-3 transition-opacity duration-300",
+            isSidebarOpen ? "opacity-100" : "opacity-0",
+          )}
         >
-          {/* simple CSS arrow placeholder */}
-          <span className="block h-5 w-5">→</span>
-        </div>
-      </div>
-      <ImportedAppCardSkeleton />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button id="new-chat-button" variant="secondary" className="w-full justify-between">
+                Nova conversa
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 dark" align="start">
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsABTestModalOpen(true);
+                }}
+                className="cursor-pointer"
+              >
+                <Sparkles className="mr-2 h-4 w-4" />
+                <span>Teste A/B</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled>
+                <MessageSquare className="mr-2 h-4 w-4" />
+                <span>Conversa livre</span>
+                <span className="ml-auto text-xs text-muted-foreground">Em breve</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled>
+                <Users className="mr-2 h-4 w-4" />
+                <span>Grupo focal</span>
+                <span className="ml-auto text-xs text-muted-foreground">Em breve</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </header>
+
+        {/* Sidebar Navigation */}
+        <nav id="sidebar-nav" className="flex-1 flex flex-col">
+          <section id="main-navigation" className="p-3 space-y-1">
+            <Button
+              id="nav-chat"
+              variant="ghost"
+              className="w-full justify-start gap-2 text-sidebar-foreground hover:bg-sidebar-accent"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span className="text-sm">Chat</span>
+            </Button>
+            <Link href="/agents">
+              <Button
+                id="nav-agents"
+                variant="ghost"
+                className="w-full justify-start gap-2 text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+              >
+                <Users className="w-4 h-4" />
+                <span className="text-sm">Agentes</span>
+              </Button>
+            </Link>
+          </section>
+
+          <section id="conversations-section" className="flex-1 px-3 mt-6">
+            <h3 className="px-3 mb-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+              Histórico
+            </h3>
+            <ScrollArea id="conversations-list" className="h-full">
+              <div className="space-y-1 pr-2">
+                {/* Experimento atual */}
+                {experiment && (
+                  <Button
+                    id={`conversation-current-${experiment.id}`}
+                    variant="ghost"
+                    className="w-full justify-start px-3 py-2 text-sm bg-sidebar-accent text-sidebar-foreground transition-all"
+                  >
+                    <div className="flex items-center gap-2 truncate">
+                      <Sparkles className="w-3 h-3 flex-shrink-0" />
+                      <span className="truncate">{experiment.name}</span>
+                    </div>
+                  </Button>
+                )}
+
+                {/* Experimentos anteriores */}
+                {experiments
+                  .filter((exp) => exp.id !== experiment?.id)
+                  .slice(0, 5)
+                  .map((exp) => (
+                    <Button
+                      key={exp.id}
+                      id={`conversation-${exp.id}`}
+                      variant="ghost"
+                      className="w-full justify-start px-3 py-2 text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all"
+                      onClick={() => {
+                        // TODO: Carregar experimento anterior
+                        console.log("Carregar experimento:", exp.id);
+                      }}
+                    >
+                      <div className="flex items-center gap-2 truncate">
+                        <Sparkles className="w-3 h-3 flex-shrink-0" />
+                        <span className="truncate">{exp.name}</span>
+                      </div>
+                    </Button>
+                  ))}
+              </div>
+            </ScrollArea>
+          </section>
+        </nav>
+
+        {/* Sidebar Footer */}
+        <footer id="sidebar-footer" className="p-3 mt-auto">
+          <Button
+            id="settings-button"
+            variant="ghost"
+            className="w-full justify-start gap-3 px-3 py-2 text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all"
+          >
+            <Settings className="w-4 h-4" />
+            <span>Configurações</span>
+          </Button>
+        </footer>
+      </aside>
+
+      {/* Main Content Area */}
+      <main
+        id="main-content"
+        className={cn(
+          "flex-1 flex flex-col bg-background relative overflow-hidden rounded-xl m-3",
+          "shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)]",
+          "transition-all duration-300 ease-in-out",
+        )}
+      >
+        {/* Sidebar Toggle Button - Inside Main Content */}
+        <Button
+          id="sidebar-toggle-button"
+          variant="ghost"
+          size="icon"
+          className="absolute top-3 left-3 z-50 hover:bg-accent rounded-lg transition-colors"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          <PanelLeft className="w-4 h-4" />
+        </Button>
+
+        {/* Chat Area */}
+        <section id="chat-area" className="flex-1 overflow-hidden">
+          {/* Mostra o ExperimentChat quando há um experimento ativo */}
+          {experiment || status === "running" || status === "completed" ? (
+            <ExperimentChat className="h-full" />
+          ) : (
+            <ScrollArea id="messages-scroll-area" className="h-full">
+              <div id="messages-container" className="max-w-3xl mx-auto px-4 py-8">
+                {!currentTest ? (
+                  <div
+                    id="empty-state"
+                    className="flex flex-col items-center justify-center min-h-[60vh]"
+                  >
+                    <div className="flex flex-col items-center">
+                      {/* Minimalist icon with light sweep effect - AAA compliant */}
+                      <div className="relative mb-8">
+                        {/* Main icon container */}
+                        <div className="relative w-12 h-12 rounded-full bg-muted/20 border border-muted/30 flex items-center justify-center overflow-hidden">
+                          {/* Light sweep effect - auto plays */}
+                          <div className="absolute inset-0 -translate-x-full animate-light-sweep bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+
+                          {/* Icon - higher contrast for AAA */}
+                          <MessageSquare
+                            className="w-4 h-4 text-muted-foreground/70"
+                            strokeWidth={1.5}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Refined typography - AAA contrast ratios */}
+                      <div className="space-y-1.5 text-center">
+                        <p className="text-sm text-muted-foreground/90 font-medium">
+                          Inicie algo novo
+                        </p>
+
+                        {/* Subtle hint - improved contrast */}
+                        <p className="text-xs text-muted-foreground/70">
+                          Clique em "nova conversa" para começar
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    id="test-display"
+                    className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-3 duration-500"
+                  >
+                    {/* Context Card */}
+                    <div className="bg-gradient-to-br from-background via-background to-muted/30 rounded-xl p-5 border border-border shadow-sm">
+                      <div className="flex items-center gap-3 mb-3.5">
+                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary/25 to-primary/15 border border-primary/40 flex items-center justify-center">
+                          <Sparkles className="w-4 h-4 text-primary" />
+                        </div>
+                        <div className="space-y-0.5">
+                          <h3 className="text-sm font-bold text-foreground">Contexto do teste</h3>
+                          <p className="text-xs text-muted-foreground font-medium">
+                            Como os agentes interpretarão as mensagens
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-foreground leading-relaxed">
+                        {currentTest.context}
+                      </p>
+                    </div>
+
+                    {/* Variants Display */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between px-1">
+                        <h3 className="text-sm font-bold text-foreground">
+                          Variantes configuradas
+                        </h3>
+                        <span className="text-xs text-muted-foreground font-medium">
+                          {Object.keys(currentTest.messages).length} variantes • 10 agentes cada
+                        </span>
+                      </div>
+
+                      <div className="grid gap-3">
+                        {Object.entries(currentTest.messages).map(([variant, message], index) => (
+                          <div
+                            key={variant}
+                            className={cn(
+                              "rounded-xl border transition-all duration-300",
+                              "hover:shadow-sm animate-in fade-in-0 slide-in-from-left-3",
+                              variant === "control"
+                                ? "p-5 bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 border-primary/40 ring-1 ring-primary/20"
+                                : "p-4 bg-gradient-to-br from-card to-background/50 border-border hover:border-accent",
+                            )}
+                            style={{ animationDelay: `${index * 60}ms` }}
+                          >
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-2.5">
+                                <div
+                                  className={cn(
+                                    "w-2 h-2 rounded-full",
+                                    variant === "control"
+                                      ? "bg-gradient-to-br from-primary to-primary/60 animate-pulse shadow-sm"
+                                      : "bg-muted-foreground",
+                                  )}
+                                />
+                                <span className="text-sm font-medium text-foreground">
+                                  {variant === "control"
+                                    ? "Controle"
+                                    : `Variante ${variant.split("_")[1]?.toUpperCase()}`}
+                                </span>
+                                {variant === "control" && (
+                                  <span className="px-1.5 py-0.5 text-[10px] font-bold bg-gradient-to-r from-primary/20 to-primary/10 text-primary rounded">
+                                    BASE
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="space-y-3">
+                              <div className="space-y-1">
+                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">
+                                  HOOK
+                                </span>
+                                <p className="text-[13px] text-foreground font-medium leading-relaxed">
+                                  {message.hook}
+                                </p>
+                              </div>
+
+                              <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+
+                              <div className="space-y-1">
+                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">
+                                  MENSAGEM
+                                </span>
+                                <p className="text-[13px] text-foreground/85 leading-relaxed">
+                                  {message.body}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div id="scroll-anchor" ref={scrollRef} />
+              </div>
+            </ScrollArea>
+          )}
+        </section>
+      </main>
+
+      {/* A/B Test Creator Modal */}
+      <ABTestCreator
+        isOpen={isABTestModalOpen}
+        onClose={() => setIsABTestModalOpen(false)}
+        onSubmit={handleABTestSubmit}
+      />
     </div>
   );
 }
-
-// Removed local AppCardSkeleton in favor of shared component
