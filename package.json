@@ -2,8 +2,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
+    "dev:3001": "next dev --turbo -p 3001",
     "build": "next build",
     "start": "next start",
+    "start:3001": "next start -p 3001",
     "lint": "biome check --write .",
     "format": "biome format --write .",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -21,6 +23,9 @@
     "db:sync-types:local": "pnpm db:reset:local && pnpm db:types:local"
   },
   "dependencies": {
+    "@clerk/elements": "^0.23.57",
+    "@clerk/nextjs": "^6.31.4",
+    "@clerk/themes": "^2.4.13",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",

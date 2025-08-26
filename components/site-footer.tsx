@@ -1,26 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
-const INLAB_MEMBERS: readonly string[] = [
+const INLAB_MEMBERS = [
   "Carlos Moura",
   "Dhiuly Silva",
   "Gabriela Florentino",
   "Paulo Alexandre",
   "Pedro Barreto",
   "Viviane Alvarez",
-]
-  .slice()
-  .sort((a, b) => a.localeCompare(b));
+].sort();
 
-export function SiteFooter(): React.ReactElement {
-  const members = React.useMemo(() => INLAB_MEMBERS, []);
-
+export function SiteFooter() {
   return (
-    <footer className="border-t py-8 text-sm sm:text-[0.9375rem] text-muted-foreground">
+    <footer className="border-t bg-card py-8 text-sm sm:text-[0.9375rem] text-muted-foreground">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center">
           <p className="text-center leading-relaxed text-balance">
@@ -39,11 +34,17 @@ export function SiteFooter(): React.ReactElement {
               <HoverCardContent align="center" className="w-80">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <Image src="/postcss.svg" alt="InLab Logo" width={20} height={20} />
+                    <Image
+                      src="/postcss.svg"
+                      alt="InLab Logo"
+                      width={20}
+                      height={20}
+                      loading="lazy"
+                    />
                     <h4 className="text-sm font-semibold">InLab Mafia</h4>
                   </div>
                   <ul className="grid grid-cols-1 gap-1 text-sm">
-                    {members.map((name) => (
+                    {INLAB_MEMBERS.map((name) => (
                       <li key={name} className="truncate" title={name}>
                         {name}
                       </li>
@@ -58,5 +59,3 @@ export function SiteFooter(): React.ReactElement {
     </footer>
   );
 }
-
-export default SiteFooter;

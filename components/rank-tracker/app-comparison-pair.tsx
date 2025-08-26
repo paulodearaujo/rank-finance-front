@@ -37,7 +37,7 @@ export function AppComparisonPair({ comparison, index }: AppComparisonPairProps)
         >
           <div
             className={cn(
-              "rounded-full p-2 bg-secondary text-secondary-foreground ring-1 ring-border/60 shadow-sm",
+              "rounded-full p-2 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 text-secondary-foreground ring-1 ring-border/60 shadow-sm",
             )}
             aria-hidden="true"
           >

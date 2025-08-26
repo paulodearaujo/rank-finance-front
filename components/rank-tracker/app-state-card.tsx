@@ -1,5 +1,16 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ExpandableRichTextWithGradient } from "@/components/ui/expandable-text";
+import { InlineTextDiff } from "@/components/ui/inline-text-diff";
+import { computeDHash } from "@/lib/rank-tracker/image-hash";
+import {
+  areScreenshotsVisuallySame,
+  compareScreenshot,
+} from "@/lib/rank-tracker/screenshot-comparison";
+import type { AppComparison, AppSnapshot } from "@/lib/rank-tracker/types";
+import { cn } from "@/lib/utils";
 import {
   IconBrandApple,
   IconBrandGooglePlay,
@@ -12,15 +23,6 @@ import {
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ExpandableRichTextWithGradient } from "@/components/ui/expandable-text";
-import { InlineTextDiff } from "@/components/ui/inline-text-diff";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { pairScreenshots } from "@/lib/rank-tracker/diff-utils";
-import { computeDHash, hammingDistance } from "@/lib/rank-tracker/image-hash";
-import type { AppComparison, AppSnapshot } from "@/lib/rank-tracker/types";
-import { cn } from "@/lib/utils";
 
 interface AppStateCardProps {
   comparison: AppComparison;
@@ -45,7 +47,8 @@ export function AppStateCard({
   const { diff } = comparison;
   const [hashes, setHashes] = useState<Record<number, string | null>>({});
   // Hashes do estado oposto para validação de mudanças
-  const [prevAllHashes, setPrevAllHashes] = useState<(string | null)[]>([]);
+  // undefined = não calculado ainda, array = calculado (pode ser vazio)
+  const [prevAllHashes, setPrevAllHashes] = useState<(string | null)[] | undefined>(undefined);
   // Control loading state for each individual screenshot
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const screenshotCount = data?.screenshots?.length ?? 0;
@@ -65,10 +68,7 @@ export function AppStateCard({
     return undefined;
   }, [screenshotCount]);
 
-  // No explicit readiness signaling; arrow is always visible on desktop
-
   // Precompute perceptual hashes only when needed (AFTER state) to reduce main-thread work
-  // Note: this effect depends on showRowSkeleton defined below; keep the hook order consistent
   useEffect(() => {
     let cancelled = false;
     const run = async () => {
@@ -76,7 +76,7 @@ export function AppStateCard({
         if (!screenshotsInView) {
           if (!cancelled) {
             setHashes({});
-            setPrevAllHashes([]);
+            setPrevAllHashes(undefined); // Não calculado ainda
           }
           return;
         }
@@ -101,11 +101,12 @@ export function AppStateCard({
           );
           if (!cancelled) setPrevAllHashes(all);
         } else {
+          // Não há screenshots anteriores - confirma array vazio
           if (!cancelled) setPrevAllHashes([]);
         }
       } else {
-        // BEFORE state does not need hashes; keep empty to avoid layout reflows
-        if (!cancelled) setPrevAllHashes([]);
+        // BEFORE state does not need hashes
+        if (!cancelled) setPrevAllHashes(undefined);
       }
     };
     run();
@@ -141,51 +142,34 @@ export function AppStateCard({
     },
   );
 
-  // Change summary chips
-  // Visual verification for screenshot diffs using dHash to suppress false positives
-  const DHASH_THRESHOLD = 6; // <=6 bits difference = visually identical
+  // Visual verification for screenshot diffs
   const visuallySameScreenshots = (() => {
     if (state !== "after") return false;
-    const curr = comparison.current.screenshots ?? [];
-    const prev = comparison.previous?.screenshots ?? [];
-    if (curr.length !== prev.length) return false;
-    if (curr.length === 0) return true;
-    // Require all hashes to be available to make a strong claim; otherwise fall back to backend flag
-    for (let i = 0; i < curr.length; i++) if (hashes[i] == null) return false;
-    for (let j = 0; j < prev.length; j++) if (prevAllHashes[j] == null) return false;
-    // Greedy matching by nearest hash to detect reorder without changes
-    const used = new Set<number>();
-    for (let i = 0; i < curr.length; i++) {
-      const hi = hashes[i] as string;
-      let best = Number.POSITIVE_INFINITY;
-      let bestJ = -1;
-      for (let j = 0; j < prev.length; j++) {
-        if (used.has(j)) continue;
-        const hj = prevAllHashes[j] as string;
-        const d = hammingDistance(hi, hj);
-        if (d < best) {
-          best = d;
-          bestJ = j;
-        }
-      }
-      if (bestJ === -1 || best > DHASH_THRESHOLD) return false;
-      used.add(bestJ);
-    }
-    return true;
-  })();
 
-  // No longer used to gate a DIFF overlay
+    // Se ainda não calculou os hashes anteriores, retorna null (calculando)
+    if (prevAllHashes === undefined) return null;
+
+    const currentHashes = Object.values(hashes);
+    // Convert undefined to null for consistency
+    const normalizedCurrentHashes = currentHashes.map((h) => h ?? null);
+
+    return areScreenshotsVisuallySame(normalizedCurrentHashes, prevAllHashes);
+  })();
 
   const changes = {
     title: diff.title.changed,
     subtitle: diff.subtitle.changed,
     description: diff.description.changed,
-    screenshots: diff.screenshots.changed && !visuallySameScreenshots,
+    // Only show screenshots changed if we've verified they're different
+    // If still calculating (null), don't show the badge to avoid flashing
+    screenshots: diff.screenshots.changed && visuallySameScreenshots === false,
     ranking: diff.ranking.delta !== null && diff.ranking.delta !== 0,
     newEntry: isNew,
   };
+  // Só mostra "No content changes" quando temos certeza (não está calculando)
   const hasContentChanges =
     changes.title || changes.subtitle || changes.description || changes.screenshots;
+  const isCalculatingScreenshots = state === "after" && visuallySameScreenshots === null;
   const RankingIcon = diff.ranking.delta
     ? diff.ranking.delta > 0
       ? IconTrendingUp
@@ -255,11 +239,15 @@ export function AppStateCard({
                       : diff.ranking.delta}
                   </Badge>
                 )}
-                {state === "after" && !hasContentChanges && !isNew && !isRemoved && (
-                  <Badge variant="secondary" className="text-xs">
-                    No content changes
-                  </Badge>
-                )}
+                {state === "after" &&
+                  !hasContentChanges &&
+                  !isNew &&
+                  !isRemoved &&
+                  !isCalculatingScreenshots && (
+                    <Badge variant="secondary" className="text-xs">
+                      No content changes
+                    </Badge>
+                  )}
                 {state === "after" && changes.title && (
                   <Badge variant="outline" className="text-xs">
                     Title changed
@@ -275,7 +263,7 @@ export function AppStateCard({
                     Description changed
                   </Badge>
                 )}
-                {state === "after" && changes.screenshots && (
+                {state === "after" && changes.screenshots && !isCalculatingScreenshots && (
                   <Badge variant="outline" className="text-xs">
                     Screenshots updated
                   </Badge>
@@ -373,67 +361,34 @@ export function AppStateCard({
                 <span>({data.screenshots.length})</span>
               </div>
               <div className="relative">
-                <ScrollArea className="w-full">
+                <div className="w-full overflow-x-auto">
                   <div
                     id={`screenshots-row-${comparison.app_id}-${state}`}
                     className="flex items-stretch gap-3 py-1 w-max min-w-full"
                   >
                     {(() => {
-                      const curr = comparison.current.screenshots ?? [];
-                      const prev = comparison.previous?.screenshots ?? [];
                       const list = data.screenshots ?? [];
-                      const DHASH_THRESHOLD = 6;
-                      const pairs =
-                        state === "after" && prev.length ? pairScreenshots(curr, prev) : [];
-                      const prevMap = new Map<number, number>();
-                      for (const p of pairs) {
-                        if (
-                          typeof p.currentIndex === "number" &&
-                          typeof p.previousIndex === "number"
-                        ) {
-                          prevMap.set(p.currentIndex, p.previousIndex);
-                        }
-                      }
+
                       return list.map((screenshot, idx) => {
                         let status: "unchanged" | "moved" | "changed" | "new" = "unchanged";
                         if (state === "after") {
-                          let matchIdx: number | null = prevMap.get(idx) ?? null;
-                          const hi = hashes[idx];
-                          if (matchIdx === null) {
-                            if (hi && prevAllHashes.length) {
-                              let best = Number.POSITIVE_INFINITY;
-                              let bestJ = -1;
-                              for (let j = 0; j < prevAllHashes.length; j++) {
-                                const h = prevAllHashes[j];
-                                if (!h) continue;
-                                const d = hammingDistance(hi, h);
-                                if (d < best) {
-                                  best = d;
-                                  bestJ = j;
-                                }
-                              }
-                              if (bestJ >= 0 && best <= DHASH_THRESHOLD) {
-                                matchIdx = bestJ;
-                              }
-                            }
-                          }
-                          if (matchIdx === null) {
-                            // Evita "new" provisório: só marca como novo quando temos hashes
-                            // (ou quando não havia nenhum screenshot anterior)
-                            if ((hi && prevAllHashes.length) || prev.length === 0) {
-                              status = "new";
-                            } else {
-                              status = "unchanged";
-                            }
+                          const currentHash = hashes[idx];
+
+                          // Se ainda não calculou os hashes, não mostra badges (evita piscar)
+                          if (prevAllHashes === undefined) {
+                            status = "unchanged"; // Mantém sem badge até calcular
+                          } else if (prevAllHashes.length === 0) {
+                            // Confirmado que não há screenshots anteriores - todas são novas
+                            status = "new";
                           } else {
-                            if (hi && typeof matchIdx === "number") {
-                              const hPrev = prevAllHashes[matchIdx];
-                              if (hPrev) {
-                                const d = hammingDistance(hi, hPrev);
-                                if (d > DHASH_THRESHOLD) status = "changed";
-                              }
+                            // Há screenshots anteriores - compara se todos os hashes estão prontos
+                            const allHashesReady =
+                              currentHash !== undefined && prevAllHashes.every((h) => h !== null);
+
+                            if (allHashesReady) {
+                              const comparison = compareScreenshot(idx, currentHash, prevAllHashes);
+                              status = comparison.status;
                             }
-                            if (status === "unchanged" && matchIdx !== idx) status = "moved";
                           }
                         }
                         const badgeProps =
@@ -453,31 +408,44 @@ export function AppStateCard({
                         return (
                           <div
                             key={screenshot.url || `${idx}`}
-                            className="relative h-48 sm:h-56 md:h-64 rounded-xl overflow-hidden shrink-0"
+                            className="relative h-48 sm:h-56 md:h-64 w-[108px] sm:w-[126px] md:w-[144px] rounded-xl overflow-hidden shrink-0"
                           >
-                            {/* Individual skeleton for each image */}
-                            {!isImageLoaded && (
-                              <div
-                                className="absolute inset-0 bg-muted animate-pulse rounded-xl"
-                                aria-hidden="true"
-                              />
-                            )}
                             <a
                               href={screenshot.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="relative block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 cursor-pointer media-frame"
+                              className={cn(
+                                "relative block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 cursor-pointer",
+                                isImageLoaded && "media-frame",
+                              )}
                               title={`Open screenshot ${idx + 1} in new tab`}
                             >
+                              {/* Skeleton consistente com o loading-states */}
+                              {!isImageLoaded && (
+                                <div
+                                  className="absolute inset-0 z-10 bg-muted rounded-xl animate-pulse"
+                                  aria-hidden="true"
+                                />
+                              )}
+                              {/* Background blur elegante para App Store - preenche espaços sem cortar */}
+                              {isImageLoaded && comparison.store === "apple" && (
+                                <img
+                                  src={screenshot.url}
+                                  alt=""
+                                  aria-hidden="true"
+                                  className="absolute inset-0 h-full w-full object-cover scale-110 blur-xl opacity-30 saturate-150"
+                                />
+                              )}
                               <img
                                 src={screenshot.url}
                                 alt={`${data.title} screenshot ${idx + 1}`}
                                 className={cn(
-                                  "object-contain h-full w-auto mx-auto transition-opacity duration-200",
+                                  "relative z-20 h-full w-full object-contain transition-opacity duration-200",
                                   isImageLoaded ? "opacity-100" : "opacity-0",
                                 )}
-                                loading="lazy"
+                                loading={index < 4 ? "eager" : "lazy"}
                                 decoding="async"
+                                fetchPriority={index < 4 ? "high" : "low"}
                                 draggable={false}
                                 onLoad={() => {
                                   setLoadedImages((prev) => {
@@ -498,7 +466,7 @@ export function AppStateCard({
                               {state === "after" && badgeProps && isImageLoaded && (
                                 <Badge
                                   variant={badgeProps.variant}
-                                  className={cn("absolute left-2 top-2 z-10", badgeProps.className)}
+                                  className={cn("absolute left-2 top-2 z-30", badgeProps.className)}
                                 >
                                   {status}
                                 </Badge>
@@ -509,8 +477,7 @@ export function AppStateCard({
                       });
                     })()}
                   </div>
-                  <ScrollBar orientation="horizontal" />
-                </ScrollArea>
+                </div>
               </div>
             </div>
           )}

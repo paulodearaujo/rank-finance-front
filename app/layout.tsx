@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import SiteFooter from "@/components/site-footer";
+import { ClerkProvider } from "@/components/clerk-provider";
 import "./globals.css";
 
 const APP_NAME = "AppTracker";
@@ -69,34 +69,34 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-        {process.env.NEXT_PUBLIC_SUPABASE_URL ? (
-          <>
-            <link
-              rel="preconnect"
-              href={process.env.NEXT_PUBLIC_SUPABASE_URL}
-              crossOrigin="anonymous"
-            />
-            <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
-            {/* Extra preconnect removed to avoid invalid origin; the one above is sufficient */}
-          </>
-        ) : null}
-      </head>
-      <body id="root-body" className="antialiased" suppressHydrationWarning>
-        <a
-          href="#rank-tracker-content"
-          className="fixed left-3 top-3 z-[100] -translate-y-20 focus:translate-y-0 transition-transform rounded-md bg-primary px-3 py-2 text-primary-foreground shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          Skip to content
-        </a>
-        {children}
-        {/* Global footer */}
-        <SiteFooter />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+          {process.env.NEXT_PUBLIC_SUPABASE_URL ? (
+            <>
+              <link
+                rel="preconnect"
+                href={process.env.NEXT_PUBLIC_SUPABASE_URL}
+                crossOrigin="anonymous"
+              />
+              <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+              {/* Extra preconnect removed to avoid invalid origin; the one above is sufficient */}
+            </>
+          ) : null}
+        </head>
+        <body id="root-body" className="antialiased" suppressHydrationWarning>
+          <a
+            href="#rank-tracker-content"
+            className="fixed left-3 top-3 z-[100] -translate-y-20 focus:translate-y-0 transition-transform rounded-md bg-primary px-3 py-2 text-primary-foreground shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            Skip to content
+          </a>
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

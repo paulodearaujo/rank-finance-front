@@ -31,14 +31,26 @@ export function AppCardSkeleton() {
           <Skeleton className="h-3 w-20" />
           <Skeleton className="h-24" />
         </div>
-        {/* Screenshots row placeholder: reserve same height as real component to avoid CLS */}
+        {/* Screenshots row placeholder: matches real component exactly */}
         <div className="space-y-2">
           <Skeleton className="h-3 w-24" />
-          <div className="h-48 sm:h-56 md:h-64 w-full overflow-hidden">
-            <div className="flex items-stretch gap-3 h-full">
-              <Skeleton className="h-full w-32" />
-              <Skeleton className="h-full w-32" />
-              <Skeleton className="h-full w-32" />
+          <div className="relative">
+            <div className="w-full overflow-x-auto">
+              <div className="flex items-stretch gap-3 py-1">
+                {/* 4 screenshots como na Play Store - largura fixa para evitar shift */}
+                <div className="relative h-48 sm:h-56 md:h-64 w-[108px] sm:w-[126px] md:w-[144px] rounded-xl overflow-hidden shrink-0 bg-muted">
+                  <div className="absolute inset-0 animate-pulse" />
+                </div>
+                <div className="relative h-48 sm:h-56 md:h-64 w-[108px] sm:w-[126px] md:w-[144px] rounded-xl overflow-hidden shrink-0 bg-muted">
+                  <div className="absolute inset-0 animate-pulse" />
+                </div>
+                <div className="relative h-48 sm:h-56 md:h-64 w-[108px] sm:w-[126px] md:w-[144px] rounded-xl overflow-hidden shrink-0 bg-muted">
+                  <div className="absolute inset-0 animate-pulse" />
+                </div>
+                <div className="relative h-48 sm:h-56 md:h-64 w-[108px] sm:w-[126px] md:w-[144px] rounded-xl overflow-hidden shrink-0 bg-muted">
+                  <div className="absolute inset-0 animate-pulse" />
+                </div>
+              </div>
             </div>
           </div>
         </div>

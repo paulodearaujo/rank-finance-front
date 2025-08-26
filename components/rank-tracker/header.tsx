@@ -9,7 +9,7 @@ import {
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useId, useState, useTransition } from "react";
-import { createPortal } from "react-dom";
+import { UserMenu } from "@/components/auth/user-menu";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -39,7 +39,6 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
-  const [showOverlay, setShowOverlay] = useState(false);
 
   // Generate unique IDs for elements
   const navId = useId();
@@ -69,6 +68,28 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
       ? (initialFilters.change_types as ChangeType[])
       : VISIBLE_CHANGE_TYPES,
   );
+
+  // Handle date selection with validation
+  const handleBeforeRunChange = useCallback(
+    (newBeforeRunId: string) => {
+      setBeforeRunId(newBeforeRunId);
+
+      // If afterRunId is equal to or after the new beforeRunId, reset it
+      const beforeIndex = availableRuns.findIndex((r) => r.run_id === newBeforeRunId);
+      const afterIndex = availableRuns.findIndex((r) => r.run_id === afterRunId);
+
+      if (afterRunId && afterIndex >= beforeIndex) {
+        // Find the first available run before the new beforeRunId
+        const firstValidAfter = availableRuns.find((_, index) => index < beforeIndex);
+        setAfterRunId(firstValidAfter?.run_id ?? null);
+      }
+    },
+    [afterRunId, availableRuns],
+  );
+
+  const handleAfterRunChange = useCallback((newAfterRunId: string) => {
+    setAfterRunId(newAfterRunId);
+  }, []);
 
   // Store filter moved into Filters menu; ensure pelo menos 1 selecionado
   const toggleStore = useCallback((store: "apple" | "google") => {
@@ -119,36 +140,25 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
     return () => clearTimeout(timer);
   }, [beforeRunId, afterRunId, selectedStores, changeTypes, pathname, router, searchParams]);
 
-  // Delay overlay to avoid flicker for quick navigations (<150ms)
-  useEffect(() => {
-    if (!isPending) {
-      setShowOverlay(false);
-      return;
-    }
-    const t = setTimeout(() => setShowOverlay(true), 150);
-    return () => {
-      clearTimeout(t);
-      setShowOverlay(false);
-    };
-  }, [isPending]);
-
   const toggleChangeType = useCallback((type: ChangeType) => {
     setChangeTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
     );
   }, []);
 
-  // Format date for display
+  // Format date for display - São Paulo timezone
   const formatRunDate = (run: RunMetadata | undefined) => {
     if (!run) return "Select date";
-    return new Date(run.scraped_at).toLocaleDateString("en-US", {
+    const formatted = new Date(run.scraped_at).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-      timeZone: "UTC",
+      timeZone: "America/Sao_Paulo",
       timeZoneName: "short",
     });
+    // Replace GMT with BRT for clarity (Brazil Time)
+    return formatted.replace("GMT-3", "BRT");
   };
 
   // Expose sticky offset for section headers (global header height + approx section header)
@@ -172,92 +182,100 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
       aria-busy={isPending}
     >
       {/* Mobile: brand + filters */}
-      <div className="flex md:hidden items-center justify-between gap-2">
+      <div className="flex md:hidden items-center justify-between gap-2 flex-wrap">
         <span className="text-base tracking-tight text-foreground">
           <span className="font-light text-foreground">App</span>
           <span className="font-semibold text-foreground">Tracker</span>
         </span>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              id={filtersMobileId}
-              variant="outline"
-              size="sm"
-              className="gap-1.5 touch-target"
-              aria-label="Open filters"
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                id={filtersMobileId}
+                variant="outline"
+                size="sm"
+                className="touch-target"
+                aria-label="Open filters"
+              >
+                <IconAdjustmentsHorizontal className="h-4 w-4 opacity-70" aria-hidden="true" />
+                <span className="text-foreground/80">Filters</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="w-56"
+              onCloseAutoFocus={(e) => e.preventDefault()}
             >
-              <IconAdjustmentsHorizontal className="h-4 w-4" aria-hidden="true" />
-              <span>Filters</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="w-56"
-            onCloseAutoFocus={(e) => e.preventDefault()}
-          >
-            <DropdownMenuLabel>Change types</DropdownMenuLabel>
-            <DropdownMenuCheckboxItem
-              className="touch-target"
-              checked={changeTypes.includes("ranking")}
-              onCheckedChange={() => toggleChangeType("ranking")}
-            >
-              Ranking
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              className="touch-target"
-              checked={changeTypes.includes("title")}
-              onCheckedChange={() => toggleChangeType("title")}
-            >
-              Title
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              className="touch-target"
-              checked={changeTypes.includes("subtitle")}
-              onCheckedChange={() => toggleChangeType("subtitle")}
-            >
-              Subtitle
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              className="touch-target"
-              checked={changeTypes.includes("description")}
-              onCheckedChange={() => toggleChangeType("description")}
-            >
-              Description
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              className="touch-target"
-              checked={changeTypes.includes("screenshots")}
-              onCheckedChange={() => toggleChangeType("screenshots")}
-            >
-              Screenshots
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>Store</DropdownMenuLabel>
-            <DropdownMenuCheckboxItem
-              className="touch-target"
-              checked={selectedStores.includes("apple")}
-              onCheckedChange={() => toggleStore("apple")}
-            >
-              <span className="inline-flex items-center gap-2">
-                <IconBrandApple className="h-4 w-4" aria-hidden="true" /> App Store
-              </span>
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              className="touch-target"
-              checked={selectedStores.includes("google")}
-              onCheckedChange={() => toggleStore("google")}
-            >
-              <span className="inline-flex items-center gap-2">
-                <IconBrandGooglePlay className="h-4 w-4" aria-hidden="true" /> Google Play
-              </span>
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <DropdownMenuLabel>Change types</DropdownMenuLabel>
+              <DropdownMenuCheckboxItem
+                className="touch-target"
+                checked={changeTypes.includes("ranking")}
+                onCheckedChange={() => toggleChangeType("ranking")}
+              >
+                Ranking
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                className="touch-target"
+                checked={changeTypes.includes("title")}
+                onCheckedChange={() => toggleChangeType("title")}
+              >
+                Title
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                className="touch-target"
+                checked={changeTypes.includes("subtitle")}
+                onCheckedChange={() => toggleChangeType("subtitle")}
+              >
+                Subtitle
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                className="touch-target"
+                checked={changeTypes.includes("description")}
+                onCheckedChange={() => toggleChangeType("description")}
+              >
+                Description
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                className="touch-target"
+                checked={changeTypes.includes("screenshots")}
+                onCheckedChange={() => toggleChangeType("screenshots")}
+              >
+                Screenshots
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Store</DropdownMenuLabel>
+              <DropdownMenuCheckboxItem
+                className="touch-target"
+                checked={selectedStores.includes("apple")}
+                onCheckedChange={() => toggleStore("apple")}
+              >
+                <span className="inline-flex items-center gap-2">
+                  <IconBrandApple className="h-4 w-4 opacity-70" aria-hidden="true" /> App Store
+                </span>
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                className="touch-target"
+                checked={selectedStores.includes("google")}
+                onCheckedChange={() => toggleStore("google")}
+              >
+                <span className="inline-flex items-center gap-2">
+                  <IconBrandGooglePlay className="h-4 w-4 opacity-70" aria-hidden="true" /> Google
+                  Play
+                </span>
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <UserMenu />
+        </div>
       </div>
-      {/* Left: Date Selectors */}
-      <div className="hidden md:flex items-center gap-2">
-        <Select value={beforeRunId || ""} onValueChange={setBeforeRunId}>
-          <SelectTrigger id={beforeDateId} aria-label="Before run" size="sm" className="w-[200px]">
+      {/* Mobile: Date Selectors */}
+      <div className="flex md:hidden items-center gap-2 w-full">
+        <Select value={beforeRunId || ""} onValueChange={handleBeforeRunChange}>
+          <SelectTrigger
+            aria-label="Before run"
+            size="sm"
+            className="flex-1 min-w-0 [&>*]:text-foreground/80 [&_svg]:!opacity-70 bg-background hover:bg-accent hover:text-accent-foreground"
+          >
             <SelectValue placeholder="Before">
               {formatRunDate(availableRuns.find((r) => r.run_id === beforeRunId))}
             </SelectValue>
@@ -271,10 +289,14 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
           </SelectContent>
         </Select>
 
-        <IconChevronRight className="h-4 w-4 text-muted-foreground" />
+        <IconChevronRight className="h-4 w-4 text-foreground/50 flex-shrink-0" />
 
-        <Select value={afterRunId || ""} onValueChange={setAfterRunId}>
-          <SelectTrigger id={afterDateId} aria-label="After run" size="sm" className="w-[200px]">
+        <Select value={afterRunId || ""} onValueChange={handleAfterRunChange}>
+          <SelectTrigger
+            aria-label="After run"
+            size="sm"
+            className="flex-1 min-w-0 [&>*]:text-foreground/80 [&_svg]:!opacity-70 bg-background hover:bg-accent hover:text-accent-foreground"
+          >
             <SelectValue placeholder="After">
               {formatRunDate(availableRuns.find((r) => r.run_id === afterRunId))}
             </SelectValue>
@@ -284,7 +306,55 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
               <SelectItem
                 key={run.run_id}
                 value={run.run_id}
-                disabled={index > availableRuns.findIndex((r) => r.run_id === beforeRunId)}
+                disabled={index >= availableRuns.findIndex((r) => r.run_id === beforeRunId)}
+              >
+                {formatRunDate(run)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      {/* Left: Date Selectors */}
+      <div className="hidden md:flex items-center gap-2">
+        <Select value={beforeRunId || ""} onValueChange={handleBeforeRunChange}>
+          <SelectTrigger
+            id={beforeDateId}
+            aria-label="Before run"
+            size="sm"
+            className="w-[220px] [&>*]:text-foreground/80 [&_svg]:!opacity-70 bg-background hover:bg-accent hover:text-accent-foreground"
+          >
+            <SelectValue placeholder="Before">
+              {formatRunDate(availableRuns.find((r) => r.run_id === beforeRunId))}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {availableRuns.slice(1).map((run) => (
+              <SelectItem key={run.run_id} value={run.run_id}>
+                {formatRunDate(run)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <IconChevronRight className="h-4 w-4 text-foreground/50" />
+
+        <Select value={afterRunId || ""} onValueChange={handleAfterRunChange}>
+          <SelectTrigger
+            id={afterDateId}
+            aria-label="After run"
+            size="sm"
+            className="w-[220px] [&>*]:text-foreground/80 [&_svg]:!opacity-70 bg-background hover:bg-accent hover:text-accent-foreground"
+          >
+            <SelectValue placeholder="After">
+              {formatRunDate(availableRuns.find((r) => r.run_id === afterRunId))}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {availableRuns.map((run, index) => (
+              <SelectItem
+                key={run.run_id}
+                value={run.run_id}
+                disabled={index >= availableRuns.findIndex((r) => r.run_id === beforeRunId)}
               >
                 {formatRunDate(run)}
               </SelectItem>
@@ -310,6 +380,8 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
             height={20}
             className="relative"
             style={{ top: "2px" }}
+            priority
+            fetchPriority="high"
           />
           InLab
         </span>
@@ -320,15 +392,9 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
         {/* Filters dropdown (inclui Store) */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              id={filtersButtonId}
-              variant="outline"
-              size="sm"
-              className="gap-1.5"
-              aria-label="Open filters"
-            >
-              <IconAdjustmentsHorizontal className="h-4 w-4" aria-hidden="true" />
-              <span className="hidden md:inline">Filters</span>
+            <Button id={filtersButtonId} variant="outline" size="sm" aria-label="Open filters">
+              <IconAdjustmentsHorizontal className="h-4 w-4 opacity-70" aria-hidden="true" />
+              <span className="hidden md:inline text-foreground/80">Filters</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -375,7 +441,7 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
               onCheckedChange={() => toggleStore("apple")}
             >
               <span className="inline-flex items-center gap-2">
-                <IconBrandApple className="h-4 w-4" /> App Store
+                <IconBrandApple className="h-4 w-4 opacity-70" /> App Store
               </span>
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
@@ -383,21 +449,13 @@ export function RankTrackerHeader({ availableRuns, initialFilters }: RankTracker
               onCheckedChange={() => toggleStore("google")}
             >
               <span className="inline-flex items-center gap-2">
-                <IconBrandGooglePlay className="h-4 w-4" /> Google Play
+                <IconBrandGooglePlay className="h-4 w-4 opacity-70" /> Google Play
               </span>
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <UserMenu />
       </div>
-      {/* Pending overlay scoped to main content: blur only the list area */}
-      {showOverlay
-        ? createPortal(
-            <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-40">
-              <div className="absolute inset-0 overlay-blur-strong animate-blur-pulse" />
-            </div>,
-            document.getElementById("rank-tracker-content") ?? document.body,
-          )
-        : null}
     </nav>
   );
 }
