@@ -33,8 +33,31 @@ services:
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
 
-      # Credenciais do Supabase (configurar via dashboard do Render)
+      # ============================================
+      # Clerk Authentication (configurar via dashboard do Render)
       # sync: false significa que o valor deve ser configurado manualmente no dashboard
+      # ============================================
+      - key: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+        sync: false
+
+      - key: CLERK_SECRET_KEY
+        sync: false
+
+      - key: NEXT_PUBLIC_CLERK_SIGN_IN_URL
+        value: "/sign-in"
+
+      - key: NEXT_PUBLIC_CLERK_SIGN_UP_URL
+        value: "/sign-up"
+
+      - key: NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL
+        value: "/"
+
+      - key: NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL
+        value: "/"
+
+      # ============================================
+      # Supabase Database (configurar via dashboard do Render)
+      # ============================================
       - key: NEXT_PUBLIC_SUPABASE_URL
         sync: false
 
