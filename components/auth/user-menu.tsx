@@ -1,7 +1,5 @@
 "use client";
 
-import { useClerk, useUser } from "@clerk/nextjs";
-import { IconLogout, IconUser } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,10 +9,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useClerk, useUser } from "@clerk/nextjs";
+import { IconLogout, IconUser } from "@tabler/icons-react";
 
 export function UserMenu() {
-  const { signOut } = useClerk();
   const { user } = useUser();
+  const { signOut } = useClerk();
 
   const email = user?.emailAddresses?.[0]?.emailAddress || "";
   const name = user?.firstName || user?.username || email.split("@")[0] || "User";
@@ -26,7 +26,7 @@ export function UserMenu() {
           <IconUser className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="w-56" sideOffset={5}>
         <DropdownMenuLabel>
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium">{name}</p>
@@ -34,9 +34,16 @@ export function UserMenu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut({ redirectUrl: "/sign-in" })}>
+        <DropdownMenuItem
+          onSelect={() => {
+            setTimeout(() => {
+              void signOut({ redirectUrl: "/sign-in" });
+            }, 0);
+          }}
+          className="cursor-pointer"
+        >
           <IconLogout className="mr-2 h-4 w-4" />
-          Sign out
+          <span>Sign out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -10,8 +10,6 @@ export function ClerkProvider({ children, appearance, ...props }: ClerkProviderP
         theme: shadcn,
         ...appearance,
       }}
-      signInFallbackRedirectUrl="/"
-      signUpFallbackRedirectUrl="/"
       {...props}
     >
       {children}

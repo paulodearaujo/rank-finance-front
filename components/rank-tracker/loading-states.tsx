@@ -1,8 +1,8 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { motion, useReducedMotion } from "framer-motion";
 
 /**
  * Loading skeleton for app cards

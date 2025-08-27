@@ -1,16 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ExpandableRichTextWithGradient } from "@/components/ui/expandable-text";
-import { InlineTextDiff } from "@/components/ui/inline-text-diff";
-import { computeDHash } from "@/lib/rank-tracker/image-hash";
-import {
-  areScreenshotsVisuallySame,
-  compareScreenshot,
-} from "@/lib/rank-tracker/screenshot-comparison";
-import type { AppComparison, AppSnapshot } from "@/lib/rank-tracker/types";
-import { cn } from "@/lib/utils";
 import {
   IconBrandApple,
   IconBrandGooglePlay,
@@ -23,6 +12,17 @@ import {
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ExpandableRichTextWithGradient } from "@/components/ui/expandable-text";
+import { InlineTextDiff } from "@/components/ui/inline-text-diff";
+import { computeDHash } from "@/lib/rank-tracker/image-hash";
+import {
+  areScreenshotsVisuallySame,
+  compareScreenshot,
+} from "@/lib/rank-tracker/screenshot-comparison";
+import type { AppComparison, AppSnapshot } from "@/lib/rank-tracker/types";
+import { cn } from "@/lib/utils";
 
 interface AppStateCardProps {
   comparison: AppComparison;
