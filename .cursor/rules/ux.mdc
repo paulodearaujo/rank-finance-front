@@ -1,6 +1,6 @@
 ---
 alwaysApply: true
--------------------------------------------------------------------
+---
 
 # Regras de UI/UX deste proketo
 
@@ -38,19 +38,29 @@ Defina em `globals.css`
 * **Contrast-first:** valide APCA/AA sempre que tocar em cor.
 * **Brand scale:** 10 steps (1–12) inspirados em Radix; mapeie `primary/secondary/accent`.
 * **Elevations:** sombras discretas + **overlay color**; não use blur “vidro” sem justificativa de legibilidade.
+* **Evite** definir estilos fora de `globals.css`.
 
-Evite definir estilos fora de `globals.css`
+**Tokens φ (opt-in editorial, arredondados para o grid 4/8):**
+
+* Use somente quando ativar o **Modo Editorial** (ver §16).
+* Espaçamentos aproximando-se de φ sem quebrar o 8-pt:
+  * `--space-phi-1: 16px`  (8×1.618≈13 → 16)
+  * `--space-phi-2: 24px`  (13×1.618≈21 → 24)
+  * `--space-phi-3: 32px`  (21×1.618≈34 → 32)
+  * `--space-phi-4: 56px`  (34×1.618≈55 → 56)
+* Ritmo Fibonacci (opt-in; máx. 3 níveis por tela), sempre arredonde:
+  * `--space-f-1: 13px` → use 12/16
+  * `--space-f-2: 21px` → use 20/24
+  * `--space-f-3: 34px` → use 32/36
+  * `--space-f-4: 55px` → use 56
 
 ---
 
 ## 3) **Tipografia**
 
-* **Escala modular:** base 16 px; passos 1.125 (Minor Third).
-
-  * 12/14 (auxílio), 16 (body), 18 (body‑emphasis), 20/24/32/40/56/72 para títulos.
-* **Linha e medida:** `line-height` 1.4–1.6; largura de parágrafo 60–80 caracteres.
-* **Truncamento consciente:** `line-clamp` com tooltip/expand para conteúdo crítico.
-* **Números:** tabulares (`font-variant-numeric: tabular-nums`) em métricas, tabelas e preços.
+* **Fonte da verdade:** usar os componentes de **Typography do shadcn** (<https://ui.shadcn.com/docs/components/typography>) conforme a doc oficial; **sem CSS ad-hoc** para texto base.
+* **Legibilidade mínima:** parágrafos com **60–80 caracteres** de largura; `line-height` do corpo **1.4–1.6**; números tabulares em métricas/tabelas (`tabular-nums`).
+* **Editorial opcional:** variações de escala apenas em headings via **Modo Editorial φ** (§16); corpo permanece nos tamanhos padrão do shadcn.
 
 ---
 
@@ -59,7 +69,13 @@ Evite definir estilos fora de `globals.css`
 * **Sistema:** 12 colunas, **gutter 24** desktop / **16** mobile.
 * **Contêineres:** `sm: 640, md: 768, lg: 1024, xl: 1280, 2xl: 1536`.
 * **Espaçamento:** múltiplos de 4/8; **não** usar valores mágicos.
-* **Densidades:** `comfortable` (padrão), `compact` (data‑heavy), `cozy` (marketing).
+* **Densidades:** `comfortable` (padrão), `compact` (data-heavy), `cozy` (marketing).
+
+**4.1 Colunas φ (opt-in editorial, duas colunas):**
+
+* **Alvo aproximado:** **62/38**. Em grid 12-col, use **7/5 (~58/42)** ou **8/4 (~66/33)**.
+* **Condição:** viewport **≥1280px**. Em telas menores, **não preservar φ**: priorize leitura e ordem semântica.
+* **Alinhamento:** manter baseline 8-pt, gutters canônicos e sem “meia coluna”.
 
 ---
 
@@ -68,17 +84,17 @@ Evite definir estilos fora de `globals.css`
 * **Modelos canônicos:** topo (global) + lateral (seções) + breadcrumb. Evite subníveis além de 3.
 * **Busca como atalho:** `⌘K`/`Ctrl K` command palette com ações rápidas.
 * **CTAs:** 1 primário por tela; secundário claro; links estilizados como links.
-* **Modais:** só para tarefas bloqueantes. Caso contrário, **Sheet**/Drawer.
+* **Modais:** só para tarefas bloqueantes. Caso contrário, **Sheet/Drawer**.
 * **Undo > confirmar:** onde possível, ação imediata com **undo** (snackbar/toast com timer).
-* **Focus management:** `focus-visible` com anel de foco: 2 px, offset 2 px, usando `--ring`.
+* **Focus management:** `focus-visible` com anel de foco: 2 px, offset 2 px, usando `--ring`.
 
 ---
 
 ## 6) **Estados (loading, erro, vazio, offline)**
 
-* **Até 150 ms:** nada (evite “flicker”).
-* **150–800 ms:** **progress bar indeterminado** ou **skeleton** alinhado ao layout.
-* **>800 ms:** texto de contexto + tempo/benefício (“Isso leva \~2 s pois…").
+* **Até 150 ms:** nada (evite “flicker”).
+* **150–800 ms:** **progress bar indeterminado** ou **skeleton** alinhado ao layout.
+* **>800 ms:** texto de contexto + tempo/benefício (“Isso leva ~2 s pois…”).
 * **Erro:** mensagem humana, ação de recuperação, `aria-live="assertive"`.
 * **Vazio:** explique valor + CTA para o primeiro passo.
 * **Offline:** banner persistente, fila idempotente de ações e rótulos “sincroniza quando voltar”.
@@ -90,16 +106,16 @@ Evite definir estilos fora de `globals.css`
 * **Semântica primeiro:** `button` para ações, `a` para navegação; `aria-label` somente quando não houver texto visível.
 * **Teclado total:** **tudo** alcançável com Tab/Shift+Tab; diálogos travam foco; `Esc` fecha.
 * **Leitores de tela:** use `aria-live polite/assertive` para feedback; `aria-busy` em regiões carregando.
-* **Tamanho & toque:** alvos **≥44×44 px**; espaçamento entre alvos **≥8 px**.
+* **Tamanho & toque:** alvos **≥44×44 px**; espaçamento entre alvos **≥8 px**.
 * **Dark/HC:** garanta contraste e **não** codifique informação apenas por cor.
 
 ---
 
 ## 8) **Motion & Microinterações**
 
-* **Durations:** 120–180 ms (UI micro), 200–320 ms (entradas/saídas), 400–600 ms (transições de página).
-* **Easing:** `cubic-bezier(.2,.8,.2,1)` (ease-out responsiva); springs para gestos.
-* **Princípios:** **relevância** (guia atenção), **continuidade** (preserva contexto), **contenção** (evite extravagância).
+* **Durations:** 120–180 ms (UI micro), 200–320 ms (entradas/saídas), 400–600 ms (transições de página).
+* **Easing:** `cubic-bezier(.2,.8,.2,1)`; springs para gestos.
+* **Princípios:** relevância (guia atenção), continuidade (preserva contexto), contenção (evite extravagância).
 * **Reduced motion:** substitua transformações por fades discretos.
 
 ---
@@ -107,154 +123,211 @@ Evite definir estilos fora de `globals.css`
 ## 9) **Conteúdo & Microcopy**
 
 * **Clareza > carisma:** frases curtas, voz ativa, verbo no início (“Conectar conta”).
-* **Erros úteis:** diga *o que houve*, *por que importa* e *como resolver*.
+* **Erros úteis:** diga o que houve, por que importa e como resolver.
 * **Unidades e formatos:** localize número, moeda, data com `Intl.*`.
-* **Evite jargão** se não for domínio do usuário; forneça *hint* on‑demand (`?` / popover).
+* **Evite jargão**; forneça hints on-demand (`?` / popover).
 
 ---
 
 ## 10) **Mobile-first & Gestos**
 
 * **Thumb zones:** ações primárias ao alcance do polegar (inferior).
-* **Gestos com salvaguarda:** swipe tem eco visual + opção equivalente por botão.
+* **Gestos com salvaguarda:** swipe tem eco visual + alternativa por botão.
 * **Teclados corretos:** `inputmode`/`type` adequados (numérico, email, decimal).
 
 ---
 
 ## 11) **Desempenho**
 
-* **Imagens:** formatos modernos (AVIF/WebP), `srcset/sizes`, `priority` para LCP, `loading=lazy` no resto.
-* **Código:** RSC + `Suspense`/streaming; **code‑split** por rota e por componente pesado.
-* **Cache:** `stale-while-revalidate` para listas; prefetch em hover/viewport.
-* **Evite layout shift:** reservar espaço (aspect-ratio) e carregar fontes com `font-display: swap`.
-* **Animações:** `transform/opacity` somente; jamais animar `top/left/width/height`.
+* **Imagens:** AVIF/WebP, `srcset/sizes`, `priority` para LCP, `loading=lazy` no resto.
+* **Código:** RSC + `Suspense`/streaming; code-split por rota/componente pesado.
+* **Cache:** `stale-while-revalidate`; prefetch em hover/viewport.
+* **Sem CLS:** reservar espaço (`aspect-ratio`); `font-display: swap`.
+* **Animações:** só `transform/opacity`.
 
 ---
 
 ## 12) **Segurança, Privacidade e Ética de UX**
 
-* **Permissões contextuais:** peça quando necessário, explique o benefício.
+* **Permissões contextuais:** peça quando necessário, explique benefício.
 * **Dados sensíveis:** mascarar por padrão, revelar sob ação explícita.
 * **Sem dark patterns:** crescimento por valor, não por truque.
 
----
-
 ## 13) **Heurísticas cognitivas → Aplicação**
 
-**Aesthetic–Usability Effect** — aparência limpa aumenta tolerância a falhas.
-• Aplique: polimento consistente (tokens, alinhamentos, espaços).
-• Cuidado: estética nunca sacrifica contraste (APCA) ou hierarquia.
+Formato por item: Quando aplicar → Faça (regra com número) → Evite (anti-padrão) → Exemplo → QA/Métrica.
 
-**Choice Overload** — excesso de opções paralisa.
-• Aplique: até 3 escolhas visíveis; “Mais opções” em folha lateral/filtro.
-• Defaults inteligentes com “Recomendado”.
+**Aesthetic–Usability Effect — aparência limpa aumenta tolerância a falhas**
+• Quando: telas com alto atrito (erro, cadastro, pagamento).
+• Faça: use no máx. **2 pesos de fonte** e **3 tons** por bloco; alinhe a **grid 8-pt**.
+• Evite: “embelezar” reduzindo contraste (quebra APCA).
+• Exemplo: formulário de checkout com 1 cor de destaque (CTA), 1 cor neutra para campos, 1 para estados.
+• QA: APCA Lc ≥ 75; variação de spacing apenas em múltiplos de 4.
 
-**Chunking** — agrupar reduz esforço.
-• Aplique: steps de até 6 campos; grupos com título curto; acordeões nomeados por tarefa.
+**Choice Overload — excesso de opções paralisa**
+• Quando: menus, filtros, modais de escolha.
+• Faça: mostrar **≤3 opções primárias**; mover o resto para “Mais opções…”.
+• Evite: dropdowns com >8 opções sem busca.
+• Exemplo: plano “Básico/Pro/Empresarial” e link “Comparar todos”.
+• QA: contagem de ações visíveis ≤3; tempo-até-clique no primário ≤3 s (p95).
 
-**Cognitive Bias** — julgamentos enviesados.
-• Aplique: rótulos literais, prévias fiéis, comparações lado a lado.
-• Mitigue: A/B com métricas objetivas; wording neutro.
+**Chunking — agrupar reduz esforço**
+• Quando: formulários e onboarding.
+• Faça: **≤6 campos por passo**; títulos curtos por grupo.
+• Evite: um único passo com >10 campos.
+• Exemplo: KYC em 3 passos (Dados, Endereço, Documentos).
+• QA: taxa de abandono por passo ≤ baseline +2 p.p.
 
-**Cognitive Load** — esforço mental total.
-• Aplique: menos decisões por tela; progressivo; ícones + texto.
-• Regra: 1 objetivo primário por tela.
+**Cognitive Bias — previsões enviesadas**
+• Quando: comparações de planos, resultados, recomendações.
+• Faça: nomes literais; **comparação lado a lado** com mesmas métricas.
+• Evite: “Popular” sem critério; gráficos truncados.
+• Exemplo: tabela com preço/mês, taxas, limites, SLA.
+• QA: texto de rótulos passa revisão de clareza; nenhum eixo truncado.
 
-**Doherty Threshold (<400 ms)** — resposta rápida mantém ritmo.
-• Aplique: ações locais <100 ms; feedback em ≤150 ms; skeleton alinhado ao layout.
+**Cognitive Load — esforço mental total**
+• Quando: qualquer tela com múltiplas ações.
+• Faça: **1 objetivo primário** por tela; ícones + texto.
+• Evite: 2 CTAs de mesmo peso.
+• Exemplo: “Conectar conta” como primário; “Pular por agora” como texto.
+• QA: heatmap com foco ≥60% no CTA primário.
 
-**Fitts’s Law** — tamanho/distância do alvo importam.
-• Aplique: alvos ≥44×44 px; primários próximos do foco; área clicável inclui padding.
+**Doherty Threshold (<400 ms) — respostas ágeis mantêm ritmo**
+• Quando: cliques que disparam processamento.
+• Faça: ações locais **<100 ms**; feedback visível em **≤150 ms**; skeleton entre **150–800 ms**.
+• Evite: spinner solto sem placeholder.
+• Exemplo: enviar formulário → botão vira “Salvando…” em 120 ms.
+• QA: INP p75 ≤200 ms; atraso de feedback ≤150 ms em tracing.
 
-**Flow** — foco sem fricção.
-• Aplique: modo imersivo em tarefas longas (distrações off, autosave, undo).
-• Ritmo: animações 120–180 ms, consistentes.
+**Fitts’s Law — tamanho/distância importam**
+• Quando: botões e itens clicáveis.
+• Faça: alvos **≥44×44 px**; padding aumenta área clicável.
+• Evite: ícones de 16 px como alvo único.
+• Exemplo: ícone + label com padding X-Y de 8/12.
+• QA: auditoria automática de alvos (≥44 px) passa em 100% dos botões.
 
-**Goal-Gradient** — motivação cresce perto do fim.
-• Aplique: progresso verídico por etapas; últimos passos mais curtos; “faltam 2”.
+**Flow — foco sem fricção**
+• Quando: tarefas longas (edição, escrita, upload).
+• Faça: modo imersivo (distrações off), **autosave** e **undo**.
+• Evite: modais interruptivos durante edição.
+• Exemplo: editor com autosave a cada 3 s e toast “Alterações salvas – Desfazer”.
+• QA: queda de foco (blur) por minuto ≤2.
 
-**Hick’s Law** — mais opções = mais decisão.
-• Aplique: segmentar primeiro; pesquisa/command-K; presets.
+**Goal-Gradient — motivação cresce no fim**
+• Quando: multi-etapas.
+• Faça: **progress bar verídica** + últimos passos mais curtos.
+• Evite: barras que pulam de 10%→90%.
+• Exemplo: “Faltam 2 passos: Assinar, Confirmar”.
+• QA: abandono no penúltimo passo ≤ penúltimo-1.
 
-**Jakob’s Law** — padrões familiares vencem.
-• Aplique: componentes shadcn padrão antes de custom; nomes canônicos (“Salvar”).
+**Hick’s Law — mais opções = mais decisão**
+• Quando: configurações avançadas.
+• Faça: presets opinativos; `⌘K/Ctrl K` para power users.
+• Evite: 20 toggles sem preset.
+• Exemplo: “Recomendado: Seguro/Equilibrado/Agres.”
+• QA: tempo até concluir configuração p95 ≤ 45 s.
 
-**Law of Common Region (Gestalt)** — bordas criam grupos.
-• Aplique: cards com contorno/sombra leve para seções relacionadas.
+**Jakob’s Law — padrões familiares vencem**
+• Quando: navegação, formulários, tabelas.
+• Faça: usar componentes shadcn antes de custom.
+• Evite: renomear “Salvar” para “Concluir jornada”.
+• Exemplo: ícone de lupa para busca, engrenagem para settings.
+• QA: teste moderado: 90% dos novos acertam o fluxo sem instrução.
 
-**Law of Proximity (Gestalt)** — proximidade agrupa.
-• Aplique: espaço interno maior entre grupos que entre itens do mesmo grupo.
+**Gestalt — Common Region / Proximity / Similarity / Uniform Connectedness / Prägnanz**
+• Quando: listas, cards, grupos de filtros.
+• Faça: separar grupos com **cards/bordas leves**, espaço entre grupos **≥2×** o espaço entre itens; mesmos estilos para itens da mesma categoria; chips/linhas conectando filtros ativos ao resultado; estruturas simples e previsíveis.
+• Evite: listar conteúdos heterogêneos sem agrupamento.
+• Exemplo: filtros ativos em chips acima da lista, card com header e ações no rodapé.
+• QA: leitura em Z clara em review; contraste e hierarquia verificados.
 
-**Law of Prägnanz (simplicidade)**
-• Aplique: estruturas simples, grids previsíveis, ruído visual mínimo.
+**Mental Model — alinhar expectativa**
+• Quando: domínios específicos (finanças, logística).
+• Faça: termos do domínio do usuário; ordem de campos conforme o fluxo mental.
+• Evite: jargão interno da empresa.
+• Exemplo: “Taxa por transação” em vez de “MDR interno”.
+• QA: teste de 5 usuários: ≥4 interpretam sem ajuda.
 
-**Law of Similarity (Gestalt)** — semelhança agrupa.
-• Aplique: mesma cor/forma/estilo para itens da mesma categoria (badges, estados).
+**Working Memory (4±1) — limite de itens simultâneos**
+• Quando: menus e painéis.
+• Faça: **até 5 itens** por grupo; “Ver mais” progressivo.
+• Evite: mega-menus com 12 itens planos.
+• Exemplo: 5 links no header; o resto em menu “Mais”.
+• QA: taxa de erro de navegação ≤ baseline.
 
-**Law of Uniform Connectedness (Gestalt)** — conexão visual > proximidade.
-• Aplique: divisórias, linhas, chips conectando filtros ativos ao resultado.
+**Occam’s Razor — simplicidade suficiente**
+• Quando: decidir entre duas soluções.
+• Faça: preferência por menos passos/estados mantendo requisitos.
+• Evite: adicionar wizard se 1 tela resolve.
+• Exemplo: upload com arrastar-e-soltar + botão “Selecionar arquivo” (sem modal).
+• QA: contagem de estados/rotas não aumenta sem ganho.
 
-**Mental Model** — alinhe com expectativa do usuário.
-• Aplique: termos do domínio do usuário; ordem de campos conforme fluxo mental.
+**Paradox of the Active User — ninguém lê manual**
+• Quando: onboarding e primeiras ações.
+• Faça: exemplos preenchidos + dicas contextuais na ação.
+• Evite: tutorial de 8 telas antes de uso.
+• Exemplo: campo com placeholder “ex: 123.456.789-00”.
+• QA: tempo até primeira ação ≤ 10 s.
 
-**Miller’s Law (7±2)** — histórico e controverso; use com parcimônia.
-**Working Memory** — regra prática moderna: **4±1 itens simultâneos**.
-• Aplique: menus curtos, lotes pequenos, “ver mais” progressivo.
+**Pareto (80/20) — foque no que importa**
+• Quando: priorização de backlog/UI.
+• Faça: otimizar top-5 fluxos; raros vão pro avançado.
+• Evite: polir tela pouco usada antes do core.
+• Exemplo: priorizar checkout, não tema de perfil.
+• QA: 80% dos eventos pertencem aos fluxos otimizados.
 
-**Occam’s Razor** — solução mais simples que explica o todo.
-• Aplique: remova passos e estados supérfluos; unifique padrões.
+**Parkinson’s Law — tarefa expande no tempo disponível**
+• Quando: configurações longas.
+• Faça: timeboxes visíveis (“~2 min”), passos com duração estimada.
+• Evite: flows sem previsão de esforço.
+• Exemplo: “Este passo leva ~30 s”.
+• QA: tempo real vs. estimado dentro de ±30%.
 
-**Paradox of the Active User** — ninguém lê manual.
-• Aplique: onboarding “fazer-fazendo”, dicas contextuais no primeiro uso, exemplos preenchidos.
+**Peak-End Rule — pico e final ficam na memória**
+• Quando: conclusão de tarefa.
+• Faça: 1 momento “wow” controlado + tela final com próximos passos claros.
+• Evite: fim sem confirmação.
+• Exemplo: “Cartão criado 🎉 — Adicionar ao Apple Pay”.
+• QA: CES (Customer Effort Score) no fim ≥ baseline +10%.
 
-**Pareto Principle (80/20)**
-• Aplique: otimize o top-5 fluxos; mova os raros para caminhos avançados.
+**Postel’s Law — entrada tolerante, saída estrita**
+• Quando: inputs variados.
+• Faça: aceitar formatos flexíveis; normalizar ao salvar.
+• Evite: erro por espaço/traço.
+• Exemplo: aceitar “(31) 99999-9999” e salvar `+5531999999999`.
+• QA: taxa de erro de formatação <1%.
 
-**Parkinson’s Law** — tarefa expande no tempo dado.
-• Aplique: timeboxes e prazos claros (ex.: sessão de 10 min), passos com duração estimada.
+**Selective Attention — só alguns estímulos vencem**
+• Quando: dashboards/listas densas.
+• Faça: hierarquia por tamanho/contraste; esconder ruído por padrão.
+• Evite: 4 destaques simultâneos.
+• Exemplo: 1 badge de status com cor; resto cinza.
+• QA: rastreio ocular: 1° fixação no KPI certo.
 
-**Peak-End Rule** — pico e final definem a memória.
-• Aplique: um momento “wow” controlado + tela final com confirmação e próximos passos.
+**Serial Position Effect — início/fim lembrados melhor**
+• Quando: listas/menus longos.
+• Faça: colocar itens críticos no topo; destrutivos no final.
+• Evite: ação “Excluir tudo” no meio.
+• Exemplo: “Novo” e “Importar” no topo; “Excluir” no fim.
+• QA: cliques corretos em teste moderado ≥90%.
 
-**Postel’s Law** — aceite entradas diversas, emita saídas estritas.
-• Aplique: inputs tolerantes (espaços, formatos), normalização forte ao salvar.
-• Sem abrir mão de segurança/validação.
+**Tesler’s Law — complexidade não evapora**
+• Quando: expor parâmetros.
+• Faça: defaults bons + “Avançado” dobrável.
+• Evite: despejar 15 parâmetros de uma vez.
+• Exemplo: “Mostrar opções avançadas” com 6 controles.
+• QA: p95 de tempo para concluir tarefa não piora.
 
-**Selective Attention** — foco em poucos estímulos.
-• Aplique: hierarquia de contraste/tamanho; esconda ruído; estados vazios didáticos.
+**Von Restorff — o diferente chama atenção**
+• Quando: CTA principal/alerta.
+• Faça: **1 destaque por tela** (cor/forma).
+• Evite: dois botões primários.
+• Exemplo: CTA primário colorido; secundário contornado.
+• QA: 70%+ dos cliques no CTA certo.
 
-**Serial Position Effect** — início e fim lembrados melhor.
-• Aplique: itens críticos no topo; ações destrutivas isoladas no fim (com confirmação/undo).
-
-**Tesler’s Law (complexidade conservada)**
-• Aplique: defaults bons escondem parâmetros; “modo avançado” para experts.
-
-**Von Restorff Effect** — o diferente chama atenção.
-• Aplique: 1 só destaque por tela (cor/forma) para o CTA ou alerta principal.
-
-**Zeigarnik Effect** — inacabado é lembrado.
-• Aplique: lista de “a concluir” persistente; retomar onde parou; badges de pendência.
-
----
-
-## 14) **Decisões de design — critérios explícitos**
-
-Quando houver disputa, decidir com base nestes pesos (100 pts):
-
-* **Clareza de uso (30)**: reduz ambiguidade?
-* **Custo cognitivo (20)**: quantos passos/decisões desaparecem?
-* **Consistência sistêmica (20)**: respeita tokens e padrões?
-* **Impacto em métricas (20)**: move LCP/INP, conversão ou retenção?
-* **Acessibilidade (10)**: melhora inclusão sem trade‑offs injustificados?
-
-A opção vencedora precisa **≥80/100** e nenhum requisito não‑negociável quebrado.
-
----
-
-## 15) **Arquitetura de informação**
-
-* **Primeiro o trabalho a ser feito (JTBD):** navegação e conteúdos organizados por tarefas, não por organograma.
-* **Search-first onde há volume:** filtro facetado + busca tolerante a erro.
-* **Rótulos literais:** evite poesia; nomes que um novo membro da equipe acerta na primeira tentativa.
-
----
+**Zeigarnik — inacabado é lembrado**
+• Quando: tarefas que podem ser interrompidas.
+• Faça: lista persistente “A concluir” + retomar onde parou.
+• Evite: perder contexto ao sair.
+• Exemplo: “3 pendências — Continuar cadastro”.
+• QA: retomadas bem-sucedidas ≥80% em 24 h.

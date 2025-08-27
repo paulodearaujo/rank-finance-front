@@ -8,11 +8,11 @@ services:
     autoDeploy: true
 
     # Comandos de build e start com pnpm via Corepack
-    buildCommand: |
-      corepack enable
-      corepack prepare pnpm@10.14.0 --activate
-      pnpm install --frozen-lockfile --prefer-offline --prod=false
-      pnpm run build
+    buildCommand: >
+      corepack enable &&
+      corepack prepare pnpm@10.14.0 --activate &&
+      pnpm install --frozen-lockfile --prefer-offline --prod=false &&
+      pnpm run build:standalone
 
     startCommand: node .next/standalone/server.js
 
@@ -25,6 +25,12 @@ services:
       # Configuração de produção
       - key: NODE_ENV
         value: production
+
+      # Bind to all interfaces for Render deployment (required for health checks)
+      - key: HOSTNAME
+        value: "0.0.0.0"
+
+      # Note: PORT is automatically set by Render, no need to define it
 
       # Permitir que Next.js compacte respostas e use SWC minify
       - key: NEXT_TELEMETRY_DISABLED
@@ -61,5 +67,5 @@ services:
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
         sync: false
 
-    # Health check endpoint (use a lightweight static route to avoid SSR on deploy)
-    healthCheckPath: /robots.txt
+    # Health check endpoint (dedicated lightweight API route)
+    healthCheckPath: /api/health

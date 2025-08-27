@@ -4,6 +4,8 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
+  "/robots.txt",
+  "/api/health",
   // Remove "/" from public routes to protect the home page
 ]);
 
