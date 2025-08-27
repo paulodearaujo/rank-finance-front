@@ -10,10 +10,17 @@ interface ScreenshotComparisonResult {
 }
 
 const DHASH_THRESHOLD = 6; // <=6 bits difference = visually identical
+const CHANGED_THRESHOLD = 20; // <=20 bits difference = similar but changed (ex: texto alterado)
 
 /**
  * Compara uma screenshot atual com as screenshots anteriores
  * usando hash visual como fonte primária de verdade.
+ *
+ * Lógica:
+ * 1. Imagem idêntica na mesma posição = unchanged
+ * 2. Imagem idêntica em posição diferente = moved
+ * 3. Imagem similar mas com mudanças = changed
+ * 4. Imagem completamente nova = new
  *
  * @param currentIndex - Índice da screenshot atual
  * @param currentHash - Hash visual da screenshot atual
@@ -25,7 +32,7 @@ export function compareScreenshot(
   currentHash: string | null | undefined,
   previousHashes: (string | null)[],
 ): ScreenshotComparisonResult {
-  // Se não há screenshots anteriores, é nova
+  // Se não há screenshots anteriores, todas são novas
   if (previousHashes.length === 0) {
     return {
       status: "new",
@@ -50,50 +57,68 @@ export function compareScreenshot(
     };
   }
 
-  // Procura a melhor correspondência visual
-  let bestMatch = -1;
-  let bestDistance = Number.POSITIVE_INFINITY;
+  // Procura todas as correspondências e suas distâncias
+  const matches: Array<{ index: number; distance: number }> = [];
 
   for (let i = 0; i < previousHashes.length; i++) {
     const prevHash = previousHashes[i];
     if (!prevHash) continue;
 
     const distance = hammingDistance(currentHash, prevHash);
-    if (distance < bestDistance) {
-      bestDistance = distance;
-      bestMatch = i;
-    }
+    matches.push({ index: i, distance });
   }
 
-  // Determina o status baseado na correspondência visual
-  if (bestMatch >= 0 && bestDistance <= DHASH_THRESHOLD) {
-    // Encontrou match visual
-    if (bestMatch === currentIndex) {
-      // Mesma imagem, mesma posição
-      return {
-        status: "unchanged",
-        matchIndex: bestMatch,
-      };
-    } else {
-      // Mesma imagem, posição diferente
-      return {
-        status: "moved",
-        matchIndex: bestMatch,
-      };
-    }
-  } else if (bestMatch >= 0 && bestDistance <= DHASH_THRESHOLD * 2) {
-    // Mudança significativa mas ainda reconhecível
-    return {
-      status: "changed",
-      matchIndex: bestMatch,
-    };
-  } else {
-    // Nenhuma correspondência visual - é nova
+  // Ordena por distância (menor primeiro)
+  matches.sort((a, b) => a.distance - b.distance);
+
+  // Se não há matches, é nova
+  if (matches.length === 0) {
     return {
       status: "new",
       matchIndex: null,
     };
   }
+
+  const bestMatch = matches[0];
+  if (!bestMatch) {
+    // Não deveria acontecer pois já verificamos matches.length > 0
+    return {
+      status: "new",
+      matchIndex: null,
+    };
+  }
+
+  // 1. Imagem idêntica (ou quase idêntica)?
+  if (bestMatch.distance <= DHASH_THRESHOLD) {
+    // É a mesma imagem, verifica posição
+    if (bestMatch.index === currentIndex) {
+      // Mesma imagem, mesma posição = unchanged
+      return {
+        status: "unchanged",
+        matchIndex: bestMatch.index,
+      };
+    } else {
+      // Mesma imagem, posição diferente = moved
+      return {
+        status: "moved",
+        matchIndex: bestMatch.index,
+      };
+    }
+  }
+
+  // 2. Imagem similar mas com mudanças?
+  if (bestMatch.distance <= CHANGED_THRESHOLD) {
+    return {
+      status: "changed",
+      matchIndex: bestMatch.index,
+    };
+  }
+
+  // 3. Nenhuma correspondência significativa = nova
+  return {
+    status: "new",
+    matchIndex: null,
+  };
 }
 
 /**
