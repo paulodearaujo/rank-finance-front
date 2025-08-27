@@ -14,10 +14,7 @@ services:
       pnpm install --frozen-lockfile --prefer-offline --prod=false
       pnpm run build
 
-    startCommand: |
-      corepack enable
-      corepack prepare pnpm@10.14.0 --activate
-      pnpm run start
+    startCommand: node .next/standalone/server.js
 
     # Variáveis de ambiente
     envVars:
